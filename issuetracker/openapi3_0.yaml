@@ -1,0 +1,63 @@
+openapi: 3.0.3
+info:
+  title: Issue Tracker - OpenAPI 3.0.3
+  description: |-
+    Issue Tracker OpenAPI 3.0 specification.
+
+    Some useful links:
+    - [Github repository](https://github.com/orojas12/issue-tracker)
+    - [OpenAPI 3.0 definition file](https://github.com/orojas12/issue-tracker/blob/master/backend/openapi.yaml)
+
+  termsOfService: http://swagger.io/terms/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.0.1
+
+tags:
+  - name: pet
+    description: Everything about your Pets
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+  - name: auth
+    description: Authentication endpoints
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - login
+      summary: Log in
+      requestBody:
+        required: true
+        description: Username and password
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        '200':
+          description: Logged in successfully
+        '401':
+          description: Invalid credentials
+        '500':
+          description: Authentication error
+
+components:
+  schemas:
+    Login:
+      required:
+        - username
+        - password
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: JSESSIONID
