@@ -3,7 +3,7 @@ package dev.oscarrojas.issuetracker.team;
 import java.time.Instant;
 import java.util.Set;
 
-import dev.oscarrojas.issuetracker.exceptions.DuplicateUserException;
+import dev.oscarrojas.issuetracker.exceptions.DuplicateElementException;
 import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
 import dev.oscarrojas.issuetracker.user.User;
 
@@ -23,31 +23,20 @@ public class Team {
         this.members = members;
     }
 
-    public User getMember(String username) throws NotFoundException {
-        User member = null;
-        for (User user : members) {
-            if (user.getUsername() == username) {
-                member = user;
-                break;
+    public boolean hasMember(String username) {
+        for (User member : members) {
+            if (member.getUsername() == username) {
+                return true;
             }
         }
-        if (member == null) {
-            throw new NotFoundException(
-                String.format(
-                    "User '%s' not found in team '%s'",
-                    username,
-                    name
-                )
-            );
-        }
-        return member;
+        return false;
     }
 
-    public void addMember(User user) throws DuplicateUserException {
+    public void addMember(User user) throws DuplicateElementException {
         if (!members.contains(user)) {
             members.add(user);
         } else {
-            throw new DuplicateUserException(
+            throw new DuplicateElementException(
                 String.format(
                     "User '%s' is already a member of team '%s'",
                     user.getUsername(),

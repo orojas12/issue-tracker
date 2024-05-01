@@ -6,7 +6,7 @@ import dev.oscarrojas.issuetracker.team.TeamEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -17,8 +17,8 @@ public class ProjectEntity {
     private String id;
     private String name;
     private Instant creationDate;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private TeamEntity team;
+    @OneToMany(fetch = FetchType.LAZY)
+    private TeamEntity teams;
 
     public ProjectEntity() {}
 

@@ -3,51 +3,22 @@ package dev.oscarrojas.issuetracker.project;
 import java.time.Instant;
 import java.util.Set;
 
-import dev.oscarrojas.issuetracker.exceptions.DuplicateUserException;
-import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
-import dev.oscarrojas.issuetracker.user.User;
+import dev.oscarrojas.issuetracker.team.Team;
 
 public class Project {
 
     private String name;
     private Instant creationDate;
-    private Set<User> members;
+    private Set<Team> teams;
 
     public Project() {}
 
-    public Project(String name, Instant creationDate, Set<User> members) {
+    public Project(String name, Instant creationDate, Set<Team> teams) {
         this.name = name;
         this.creationDate = creationDate;
-        this.members = members;
+        this.teams = teams;
     }
     
-    public void addMember(User user) throws DuplicateUserException {
-        if (!members.contains(user)) {
-            members.add(user);
-        } else {
-            throw new DuplicateUserException(
-                String.format(
-                    "User '%s' is already a member of project '%s'",
-                    user.getUsername(),
-                    name
-                )
-            );
-        }
-    }
-
-    public void removeMember(String username) throws NotFoundException {
-        boolean found = members.removeIf((user) -> user.getUsername() == username);
-        if (!found) {
-            throw new NotFoundException(
-                String.format(
-                    "User '%s' not found in project '%s'",
-                    username,
-                    name
-                )
-            );
-        }
-    }
-
     public String getName() {
         return name;
     }
@@ -64,12 +35,12 @@ public class Project {
         this.creationDate = creationDate;
     }
 
-    public Set<User> getMembers() {
-        return members;
+    public Set<Team> getTeams() {
+        return teams;
     }
 
-    public void setMembers(Set<User> members) {
-        this.members = members;
+    public void setTeams(Set<Team> teams) {
+        this.teams = teams;
     }
 
 }
