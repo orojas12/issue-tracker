@@ -7,23 +7,23 @@ import org.springframework.stereotype.Service;
 import dev.oscarrojas.issuetracker.exceptions.DuplicateElementException;
 import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
 import dev.oscarrojas.issuetracker.user.User;
-import dev.oscarrojas.issuetracker.user.UserDao;
+import dev.oscarrojas.issuetracker.user.UserManager;
 
 @Service
 public class TeamManager {
     
     private final TeamDao teamDao;
-    private final UserDao userDao;
+    private final UserManager userManager;
 
-    public TeamManager(TeamDao teamDao, UserDao userDao) {
+    public TeamManager(TeamDao teamDao, UserManager userManager) {
         this.teamDao = teamDao;
-        this.userDao = userDao;
+        this.userManager = userManager;
     }
 
     public void addUserToTeam(String username, String teamId) throws NotFoundException, DuplicateElementException {
-        Optional<User> userOpt = userDao.findByUsername(username);
+        Optional<User> user = userManager.getUser(username);
 
-        if (userOpt.isEmpty()) {
+        if (user.isEmpty()) {
             throw new NotFoundException(String.format("User '%s' not found", username));
         }
 
@@ -33,22 +33,21 @@ public class TeamManager {
             throw new NotFoundException(String.format("Team '%s' not found", teamId));
         }
 
-        User user = userOpt.get();
         Team team = teamOpt.get();
-        team.addMember(user);
-        teamDao.update(team);
+        team.addMember(user.get());
+        teamDao.update(teamId, team);
     }
 
     public void removeUserFromTeam(String username, String teamId) throws NotFoundException {
-        Optional<Team> teamOpt = teamDao.findById(teamId);
+        Optional<Team> opt = teamDao.findById(teamId);
         
-        if (teamOpt.isEmpty()) {
+        if (opt.isEmpty()) {
             throw new NotFoundException(String.format("Team '%s' not found", teamId));
         }
 
-        Team team = teamOpt.get();
+        Team team = opt.get();
         team.removeMember(username);
-        teamDao.update(team);
+        teamDao.update(teamId, team);
     }
 
 }

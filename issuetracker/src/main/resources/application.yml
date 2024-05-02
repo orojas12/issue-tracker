@@ -1,10 +1,7 @@
 server:
   port: 8080
-  forward-headers-strategy: FRAMEWORK
   servlet:
-    context-path: /api
-  thymeleaf:
-    cache: false
+    context-path: /issuetracker
 
 logging:
   level:
@@ -14,16 +11,12 @@ logging:
 
 spring:
   datasource:
-    url: ${POSTGRES_URL}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: admin
+    password: password
+
   jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: validate
-
-oauth2:
-  authorization-server:
-    keyid: 216d75d6-1971-4ce7-9e90-89ed9080705c
-
-ishiko:
-  base_url: ${BASE_URL}
+      ddl-auto: create-drop

@@ -11,15 +11,15 @@ public class Team {
 
     private String id;
     private String name;
-    private Instant creationDate;
+    private Instant dateCreated;
     private Set<User> members;
 
     public Team() {}
 
-    public Team(String id, String name, Instant creationDate, Set<User> members) {
+    public Team(String id, String name, Instant dateCreated, Set<User> members) {
         this.id = id;
         this.name = name;
-        this.creationDate = creationDate;
+        this.dateCreated = dateCreated;
         this.members = members;
     }
 
@@ -75,12 +75,12 @@ public class Team {
         this.name = name;
     }
 
-    public Instant getCreationDate() {
-        return creationDate;
+    public Instant getDateCreated() {
+        return dateCreated;
     }
 
-    public void setCreationDate(Instant creationDate) {
-        this.creationDate = creationDate;
+    public void setDateCreated(Instant creationDate) {
+        this.dateCreated = creationDate;
     }
 
     public Set<User> getMembers() {
