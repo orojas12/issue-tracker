@@ -23,14 +23,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-@Import(TeamDaoJpa.class)
-public class TeamDaoJpaIT {
+@Import(TeamJpaDao.class)
+public class TeamJpaDaoIT {
     
     @Autowired
     TestEntityManager entityManager;
 
     @Autowired
-    TeamDaoJpa teamDao;
+    TeamJpaDao teamDao;
 
     private UserModel modelWithUsername(String username) {
         return new UserModel(username, "password", new HashSet<>(), Instant.now());

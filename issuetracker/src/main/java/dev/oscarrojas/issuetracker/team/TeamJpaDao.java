@@ -1,19 +1,18 @@
 package dev.oscarrojas.issuetracker.team;
 
+import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
+import dev.oscarrojas.issuetracker.user.UserEntityModelMapper;
+import org.springframework.stereotype.Component;
+
 import java.util.HashSet;
 import java.util.Optional;
 
-import org.springframework.stereotype.Component;
-
-import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
-import dev.oscarrojas.issuetracker.user.UserEntityModelMapper;
-
 @Component
-public class TeamDaoJpa implements TeamDao {
+public class TeamJpaDao implements TeamDao {
 
     private final TeamRepository repository;
 
-    public TeamDaoJpa(TeamRepository repository) {
+    public TeamJpaDao(TeamRepository repository) {
         this.repository = repository;
     }
 
