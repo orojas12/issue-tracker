@@ -8,26 +8,166 @@ info:
     - [Github repository](https://github.com/orojas12/issue-tracker)
     - [OpenAPI 3.0 definition file](https://github.com/orojas12/issue-tracker/blob/master/backend/openapi.yaml)
 
-  termsOfService: http://swagger.io/terms/
   license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
+    name: MIT License
+    url: https://github.com/orojas12/issue-tracker/blob/main/LICENSE
   version: 0.0.1
 
 tags:
-  - name: pet
-    description: Everything about your Pets
-    externalDocs:
-      description: Find out more
-      url: http://swagger.io
   - name: auth
-    description: Authentication endpoints
+  - name: teams
 
 paths:
+  /teams/{id}:
+    get:
+      tags:
+        - teams
+      summary: Get details about a particular team
+      parameters: 
+        - in: path
+          name: id
+          required: true
+          description: Team id
+          schema:
+            type: string
+          example: GGAI7
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+              examples:
+                qa-team:
+                  value:
+                    id: GGAI7
+                    name: QA Team
+                    date_created: 2024-05-04T00:09:26Z
+                    team_members:
+                      - username: oscar
+                        roles:
+                          - role_user
+                      - username: sarah
+                        roles:
+                          - role_user
+                          - role_team_lead
+                      - username: john
+                        roles:
+                          - role_user
+                      - username: eric
+                        roles:
+                          - role_user
+                          - role_assistant
+        404:
+          description: Team id not found
+    put:
+      tags:
+        - teams
+      summary: Edit team details
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Team id
+          schema:
+            type: string
+          example: GGAI7
+      requestBody:
+        description: Only the team name can be modified
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+            examples:
+              qa-team:
+                value:
+                  name: Quality Assurance
+      responses:
+        200:
+          description: Returns updated team details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+              example:
+                id: GGAI7
+                name: Quality Assurance
+                team_members:
+                  - username: oscar
+                    team_roles:
+                      - member
+                  - username: sarah
+                    team_roles:
+                      - member
+                      - lead
+                  - username: john
+                    team_roles:
+                      - member
+                      - assistant
+
+  /teams/{team_id}/members:
+    post:
+      tags:
+        - teams
+      summary: Add a user to this team
+      parameters:
+        - in: path
+          name: team_id
+          required: true
+          description: Team id
+          schema:
+            type: string
+          example: GGAI7
+        - in: query
+          name: username
+          required: true
+          description: Username of the user to be added
+          schema:
+            type: string
+          example: kate
+      responses:
+        200:
+          description: Returns the new team member
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamMember'
+              example:
+                username: kate
+                team_id: GGAI7
+                team_roles:
+                  - member
+    delete:
+      tags:
+        - teams
+      summary: Remove a user from this team
+      parameters:
+        - in: path
+          name: team_id
+          required: true
+          description: Team id
+          schema:
+            type: string
+          example: GGAI7
+        - in: query
+          name: username
+          required: true
+          description: Username of the user to be added
+          schema:
+            type: string
+          example: kate
+      responses:
+        204:
+          description: Removed team member successfully
+
   /auth/login:
     post:
       tags:
-        - login
+        - auth
       summary: Log in
       requestBody:
         required: true
@@ -46,6 +186,33 @@ paths:
 
 components:
   schemas:
+    Team:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Team id
+        name:
+          type: string
+          description: Team name
+        date_created:
+          type: string
+          description: Team creation date in ISO 8601 format
+        team_members:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamMember'
+    TeamMember:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Username
+        team_roles:
+          type: array
+          description: Roles in this team
+          items:
+            type: string
     Login:
       required:
         - username

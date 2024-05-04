@@ -1,15 +1,10 @@
 package dev.oscarrojas.issuetracker.user;
 
+import dev.oscarrojas.issuetracker.team.TeamModel;
+import jakarta.persistence.*;
+
 import java.time.Instant;
 import java.util.Set;
-
-import dev.oscarrojas.issuetracker.team.TeamModel;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "user")
@@ -19,7 +14,7 @@ public class UserModel {
     private String username;
     private String password;
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role")
+    @JoinTable(name = "account_role")
     private Set<RoleModel> roles;
     private Instant dateCreated;
     @ManyToMany(mappedBy = "members")

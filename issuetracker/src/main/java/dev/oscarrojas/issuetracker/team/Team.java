@@ -1,11 +1,12 @@
 package dev.oscarrojas.issuetracker.team;
 
-import java.time.Instant;
-import java.util.Set;
-
 import dev.oscarrojas.issuetracker.exceptions.DuplicateElementException;
 import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
 import dev.oscarrojas.issuetracker.user.User;
+
+import java.time.Instant;
+import java.util.Optional;
+import java.util.Set;
 
 public class Team {
 
@@ -25,7 +26,7 @@ public class Team {
 
     public boolean hasMember(String username) {
         for (User member : members) {
-            if (member.getUsername() == username) {
+            if (member.getUsername().equals(username)) {
                 return true;
             }
         }
@@ -46,8 +47,19 @@ public class Team {
         }
     }
 
+    public Optional<User> getMember(String username) {
+        User user = null;
+        for (User member : members) {
+            if (member.getUsername().equals(username)) {
+                user = member;
+                break;
+            }
+        }
+        return Optional.ofNullable(user);
+    }
+
     public void removeMember(String username) throws NotFoundException {
-        boolean found = members.removeIf((user) -> user.getUsername() == username);
+        boolean found = members.removeIf((user) -> user.getUsername().equals(username));
         if (!found) {
             throw new NotFoundException(
                 String.format(

@@ -1,14 +1,10 @@
 package dev.oscarrojas.issuetracker.team;
 
+import dev.oscarrojas.issuetracker.user.UserModel;
+import jakarta.persistence.*;
+
 import java.time.Instant;
 import java.util.Set;
-
-import dev.oscarrojas.issuetracker.user.UserModel;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "team")

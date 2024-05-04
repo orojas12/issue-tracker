@@ -1,25 +1,23 @@
 package dev.oscarrojas.issuetracker.team;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.Instant;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-
+import dev.oscarrojas.issuetracker.exceptions.DuplicateElementException;
+import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
+import dev.oscarrojas.issuetracker.user.User;
+import dev.oscarrojas.issuetracker.user.UserManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import dev.oscarrojas.issuetracker.exceptions.DuplicateElementException;
-import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
-import dev.oscarrojas.issuetracker.user.User;
-import dev.oscarrojas.issuetracker.user.UserManager;
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class TeamManagerTest {
@@ -36,12 +34,14 @@ public class TeamManagerTest {
         Team team = new Team("id", "name", Instant.now(), new HashSet<>());
 
         when(teamDao.findById(team.getId())).thenReturn(Optional.of(team));
+        when(teamDao.update(team.getId(), team)).thenReturn(team);
         when(userManager.getUser(user.getUsername())).thenReturn(Optional.of(user));
 
         TeamManager manager = new TeamManager(teamDao, userManager);
-        manager.addUserToTeam(user.getUsername(), team.getId());
+        List<TeamMember> teamMembers = manager.addUserToTeam(user.getUsername(), team.getId());
 
         assertTrue(team.hasMember(user.getUsername()));
+        assertEquals(teamMembers.getFirst().username(), user.getUsername());
         verify(teamDao).update(team.getId(), team);
     }
 
@@ -118,7 +118,7 @@ public class TeamManagerTest {
         );
     }
     
-    class TestTeamDao implements TeamDao {
+    static class TestTeamDao implements TeamDao {
 
         @Override
         public Team create(Team team) {
@@ -126,7 +126,7 @@ public class TeamManagerTest {
         }
 
         @Override
-        public void delete(String id) throws NotFoundException {
+        public void delete(String id) {
             throw new RuntimeException("Unimplemented method");
         }
 
@@ -136,7 +136,7 @@ public class TeamManagerTest {
         }
 
         @Override
-        public Team update(String id, Team team) throws NotFoundException {
+        public Team update(String id, Team team) {
             throw new RuntimeException("Unimplemented method");
         }
 

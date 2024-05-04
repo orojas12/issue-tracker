@@ -29,7 +29,7 @@ public class TeamDaoJpa implements TeamDao {
         model.setName(team.getName());
         model.setMembers(new HashSet<>(UserEntityModelMapper.getModels(team.getMembers())));
         model = repository.save(model);
-        return TeamEntityModelMapper.getEntity(model);
+        return TeamEntityModelMapper.toEntity(model);
     }
 
     @Override
@@ -47,11 +47,7 @@ public class TeamDaoJpa implements TeamDao {
     @Override
     public Optional<Team> findById(String id) {
         Optional<TeamModel> model = repository.findById(id);
-        if (model.isPresent()) {
-            return Optional.of(TeamEntityModelMapper.getEntity(model.get()));
-        } else {
-            return Optional.empty();
-        }
+        return model.map(TeamEntityModelMapper::toEntity);
     }
 
 }

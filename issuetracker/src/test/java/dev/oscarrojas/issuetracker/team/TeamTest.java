@@ -1,19 +1,17 @@
 package dev.oscarrojas.issuetracker.team;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.junit.jupiter.api.Test;
-
 import dev.oscarrojas.issuetracker.exceptions.DuplicateElementException;
 import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
 import dev.oscarrojas.issuetracker.user.User;
+import org.junit.jupiter.api.Test;
+
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TeamTest {
     
@@ -42,6 +40,22 @@ public class TeamTest {
     }
 
     @Test
+    void getMember_Username_returnsMember() {
+        User user1 = new User();
+        user1.setUsername("user1");
+        User user2 = new User();
+        user2.setUsername("user2");
+        Team team = new Team();
+        team.setMembers(new HashSet<>(List.of(user1, user2)));
+
+        Optional<User> result1 = team.getMember(user1.getUsername());
+        assertEquals(result1.get().getUsername(), user1.getUsername());
+
+        Optional<User> result2 = team.getMember(user2.getUsername());
+        assertEquals(result2.get().getUsername(), user2.getUsername());
+    }
+
+    @Test
     void addMember_User_addsMemberIfNotMember() throws DuplicateElementException {
         User user = new User();
         user.setUsername("username");
@@ -53,7 +67,7 @@ public class TeamTest {
     }
 
     @Test
-    void addMember_User_throwsDuplicateElementExceptionIfAlreadyMember() throws DuplicateElementException {
+    void addMember_User_throwsDuplicateElementExceptionIfAlreadyMember() {
         User user = new User();
         Team team = new Team("id", "name", Instant.now(), Set.of(user));
 

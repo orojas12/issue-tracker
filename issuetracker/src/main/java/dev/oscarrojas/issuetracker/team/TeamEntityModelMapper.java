@@ -1,12 +1,12 @@
 package dev.oscarrojas.issuetracker.team;
 
-import java.util.HashSet;
-
 import dev.oscarrojas.issuetracker.user.UserEntityModelMapper;
+
+import java.util.HashSet;
 
 public class TeamEntityModelMapper {
 
-    public static Team getEntity(TeamModel model) {
+    public static Team toEntity(TeamModel model) {
         Team team = new Team();
         team.setId(model.getId());
         team.setName(model.getName());
@@ -15,7 +15,7 @@ public class TeamEntityModelMapper {
         return team;
     }
 
-    public static TeamModel getModel(Team team) {
+    public static TeamModel toModel(Team team) {
         TeamModel model = new TeamModel();
         model.setId(team.getId());
         model.setName(team.getName());

@@ -11,12 +11,13 @@ logging:
 
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
+    url: "jdbc:sqlite::memory:"
+    driver-class-name: org.sqlite.JDBC
     username: admin
     password: password
 
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
     hibernate:
       ddl-auto: create-drop
+      globally-quoted-identifiers: true

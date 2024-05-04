@@ -1,13 +1,14 @@
 package dev.oscarrojas.issuetracker.team;
 
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import dev.oscarrojas.issuetracker.exceptions.DuplicateElementException;
 import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
 import dev.oscarrojas.issuetracker.user.User;
 import dev.oscarrojas.issuetracker.user.UserManager;
+import org.springframework.stereotype.Service;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TeamManager {
@@ -20,7 +21,7 @@ public class TeamManager {
         this.userManager = userManager;
     }
 
-    public void addUserToTeam(String username, String teamId) throws NotFoundException, DuplicateElementException {
+    public List<TeamMember> addUserToTeam(String username, String teamId) throws NotFoundException, DuplicateElementException {
         Optional<User> user = userManager.getUser(username);
 
         if (user.isEmpty()) {
@@ -35,7 +36,16 @@ public class TeamManager {
 
         Team team = teamOpt.get();
         team.addMember(user.get());
-        teamDao.update(teamId, team);
+        team = teamDao.update(teamId, team);
+        String finalTeamId = team.getId();
+
+        return team.getMembers().stream()
+                .map((member) -> new TeamMember(
+                        member.getUsername(),
+                        finalTeamId,
+                        member.getRoles()))
+                .sorted(Comparator.comparing(TeamMember::username))
+                .toList();
     }
 
     public void removeUserFromTeam(String username, String teamId) throws NotFoundException {
