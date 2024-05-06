@@ -6,9 +6,7 @@ import dev.oscarrojas.issuetracker.user.User;
 import dev.oscarrojas.issuetracker.user.UserManager;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TeamManager {
@@ -21,10 +19,26 @@ public class TeamManager {
         this.userManager = userManager;
     }
 
-    public List<TeamMember> addUserToTeam(String username, String teamId) throws NotFoundException, DuplicateElementException {
-        Optional<User> user = userManager.getUser(username);
+    public TeamDetails getTeam(String teamId) throws NotFoundException {
+        Optional<Team> teamOpt = teamDao.findById(teamId);
 
-        if (user.isEmpty()) {
+        if (teamOpt.isEmpty()) {
+            throw new NotFoundException(String.format("Team '%s' not found"));
+        }
+
+        Team team = teamOpt.get();
+
+        return new TeamDetails(
+                team.getId(),
+                team.getName(),
+                new ArrayList<>(team.getMembers())
+        );
+    }
+
+    public List<TeamMember> addUserToTeam(String username, String teamId) throws NotFoundException, DuplicateElementException {
+        Optional<User> userOpt = userManager.getUser(username);
+
+        if (userOpt.isEmpty()) {
             throw new NotFoundException(String.format("User '%s' not found", username));
         }
 
@@ -35,17 +49,14 @@ public class TeamManager {
         }
 
         Team team = teamOpt.get();
-        team.addMember(user.get());
+        User user = userOpt.get();
+        TeamMember teamMember = new TeamMember(
+                user.getUsername(),
+                team.getId()
+        );
+        team.addMember(teamMember);
         team = teamDao.update(teamId, team);
-        String finalTeamId = team.getId();
-
-        return team.getMembers().stream()
-                .map((member) -> new TeamMember(
-                        member.getUsername(),
-                        finalTeamId,
-                        member.getRoles()))
-                .sorted(Comparator.comparing(TeamMember::username))
-                .toList();
+        return new ArrayList<>(team.getMembers());
     }
 
     public void removeUserFromTeam(String username, String teamId) throws NotFoundException {

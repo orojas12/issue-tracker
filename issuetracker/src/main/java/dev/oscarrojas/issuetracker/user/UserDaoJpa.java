@@ -1,9 +1,9 @@
 package dev.oscarrojas.issuetracker.user;
 
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public class UserDaoJpa implements UserDao {
@@ -21,13 +21,18 @@ public class UserDaoJpa implements UserDao {
             UserModel entity = opt.get();
             User user = new User(
                 entity.getUsername(), 
-                entity.getRoles().stream().map((role) -> role.getId()).collect(Collectors.toSet()),
                 entity.getDateCreated()
             );
             return Optional.of(user);
         } else {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public List<User> findAll() {
+        List<UserModel> models = repository.findAll();
+        return (List<User>) UserEntityModelMapper.getEntities(models);
     }
 
 }

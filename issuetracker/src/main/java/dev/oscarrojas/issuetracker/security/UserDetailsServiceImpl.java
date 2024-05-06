@@ -1,16 +1,15 @@
 package dev.oscarrojas.issuetracker.security;
 
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+import dev.oscarrojas.issuetracker.user.UserModel;
+import dev.oscarrojas.issuetracker.user.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import dev.oscarrojas.issuetracker.user.UserModel;
-import dev.oscarrojas.issuetracker.user.UserRepository;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -27,11 +26,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (opt.isPresent()) {
             UserModel entity = opt.get();
             UserDetailsImpl userDetails = new UserDetailsImpl(
-                entity.getUsername(),
-                entity.getPassword(),
-                entity.getRoles().stream()
-                        .map((role) -> new SimpleGrantedAuthority(role.getId()))
-                        .collect(Collectors.toSet())
+                    entity.getUsername(),
+                    entity.getPassword(),
+                    Set.of(new SimpleGrantedAuthority("ROLE_USER"))
             );
             return userDetails;
         } else {

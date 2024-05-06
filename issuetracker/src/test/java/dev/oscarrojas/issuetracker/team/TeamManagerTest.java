@@ -27,10 +27,14 @@ public class TeamManagerTest {
 
     @Mock
     TestTeamDao teamDao;
+
+    private User withUsername(String username) {
+        return new User(username, Instant.now());
+    }
     
     @Test
     void addUserToTeam_UsernameAndTeamId_AddsUserToTeam() throws NotFoundException, DuplicateElementException {
-        User user = new User("username", new HashSet<>(), Instant.now());
+        User user = withUsername("user1");
         Team team = new Team("id", "name", Instant.now(), new HashSet<>());
 
         when(teamDao.findById(team.getId())).thenReturn(Optional.of(team));
@@ -47,7 +51,7 @@ public class TeamManagerTest {
 
     @Test
     void addUserToTeam_UsernameAndTeamId_throwsNotFoundExceptionIfUserNotFound() {
-        User user = new User("username", new HashSet<>(), Instant.now());
+        User user = withUsername("user1");
         Team team = new Team("id", "name", Instant.now(), new HashSet<>());
 
         when(userManager.getUser(user.getUsername())).thenReturn(Optional.empty());
@@ -62,7 +66,7 @@ public class TeamManagerTest {
 
     @Test
     void addUserToTeam_UsernameAndTeamId_throwsNotFoundExceptionIfTeamNotFound() {
-        User user = new User("username", new HashSet<>(), Instant.now());
+        User user = withUsername("user1");
         Team team = new Team("id", "name", Instant.now(), new HashSet<>());
 
         when(userManager.getUser(user.getUsername())).thenReturn(Optional.of(user));
@@ -78,21 +82,21 @@ public class TeamManagerTest {
 
     @Test
     void removeUserFromTeam_UsernameAndTeamId_removesUserFromTeam() throws NotFoundException {
-        User user = new User("username", new HashSet<>(), Instant.now());
-        Team team = new Team("id", "name", Instant.now(), new HashSet<>(Set.of(user)));
+        TeamMember teamMember = new TeamMember("user1", "team1");
+        Team team = new Team("team1", "name", Instant.now(), new HashSet<>(Set.of(teamMember)));
 
         when(teamDao.findById(team.getId())).thenReturn(Optional.of(team));
 
         TeamManager manager = new TeamManager(teamDao, userManager);
-        manager.removeUserFromTeam(user.getUsername(), team.getId());
+        manager.removeUserFromTeam(teamMember.username(), team.getId());
 
-        assertFalse(team.hasMember(user.getUsername()));
+        assertFalse(team.hasMember(teamMember.username()));
         verify(teamDao).update(team.getId(), team);
     }
 
     @Test
     void removeUserFromTeam_UsernameAndTeamId_throwsNotFoundExceptionIfUserNotFound() {
-        User user = new User("username", new HashSet<>(), Instant.now());
+        User user = withUsername("user1");
         Team team = new Team("id", "name", Instant.now(), new HashSet<>());
 
         when(teamDao.findById(team.getId())).thenReturn(Optional.of(team));
@@ -106,7 +110,7 @@ public class TeamManagerTest {
     
     @Test
     void removeUserFromTeam_UsernameAndTeamId_throwsNotFoundExceptionIfTeamNotFound() {
-        User user = new User("username", new HashSet<>(), Instant.now());
+        User user = withUsername("user1");
         Team team = new Team("id", "name", Instant.now(), new HashSet<>());
 
         when(teamDao.findById(team.getId())).thenReturn(Optional.empty());

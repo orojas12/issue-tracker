@@ -9,7 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/teams/{teamId}")
+@RequestMapping("/teams")
 public class TeamController {
     
     private final TeamManager teamManager;
@@ -18,9 +18,18 @@ public class TeamController {
         this.teamManager = teamManager;
     }
 
-    @PostMapping("/members")
+    @GetMapping("/{teamId}")
+    public TeamDetails getTeamDetails(@PathVariable(name = "teamId") String teamId) {
+        try {
+            return teamManager.getTeam(teamId);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
+    @PostMapping("/{teamId}/members")
     public List<TeamMember> addTeamMember(
-            @PathVariable String teamId, @RequestParam String username) {
+            @PathVariable(name = "teamId") String teamId, @RequestParam(name = "username") String username) {
         try {
             return teamManager.addUserToTeam(username, teamId);
         } catch (NotFoundException e) {

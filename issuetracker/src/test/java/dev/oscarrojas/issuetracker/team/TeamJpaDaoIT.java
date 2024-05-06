@@ -2,7 +2,6 @@ package dev.oscarrojas.issuetracker.team;
 
 import dev.oscarrojas.issuetracker.exceptions.DuplicateElementException;
 import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
-import dev.oscarrojas.issuetracker.user.RoleModel;
 import dev.oscarrojas.issuetracker.user.User;
 import dev.oscarrojas.issuetracker.user.UserModel;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -33,13 +32,14 @@ public class TeamJpaDaoIT {
     TeamJpaDao teamDao;
 
     private UserModel modelWithUsername(String username) {
-        return new UserModel(username, "password", new HashSet<>(), Instant.now());
+        return new UserModel(username, "password", Instant.now());
     }
 
     private User entityWithUsername(String username) {
-        return new User(username, new HashSet<>(), Instant.now());
+        return new User(username, Instant.now());
     }
 
+    // TODO: sqlite not generating sequences
     @Test
     void update_Team_updatesTeamModel() throws NotFoundException, DuplicateElementException {
         // insert test data
@@ -49,8 +49,12 @@ public class TeamJpaDaoIT {
                 "id",
                 "team1",
                 Instant.now(),
-                Set.of(user1, user2)
+                new HashSet<>()
         ));
+        var teamMember1 = new TeamMemberModel(user1, teamModel);
+        var teamMember2 = new TeamMemberModel(user2, teamModel);
+        teamModel.setMembers(new HashSet<>(Set.of(teamMember1, teamMember2)));
+        teamModel = entityManager.merge(teamModel);
 
         // set up entities
         var team = new Team(
@@ -58,20 +62,17 @@ public class TeamJpaDaoIT {
             teamModel.getName(),
             teamModel.getDateCreated(),
             teamModel.getMembers().stream()
-                    .map((model) -> new User(
-                        model.getUsername(), 
-                        model.getRoles().stream()
-                                .map(RoleModel::getId)
-                                .collect(Collectors.toSet()),
-                        Instant.now()))
-                    .collect(Collectors.toSet())
+                    .map((model) -> new TeamMember(
+                        model.getUser().getUsername(), model.getTeam().getId()
+                    ))
+                    .collect(Collectors.toCollection(HashSet::new))
         );
         var newUser = entityManager.persist(modelWithUsername("user3"));
-        var newUserEntity = entityWithUsername(newUser.getUsername());
+        var newTeamMember = new TeamMember(newUser.getUsername(), team.getId());
 
         // mutate team and persist
         team.setName("team2");
-        team.addMember(newUserEntity);
+        team.addMember(newTeamMember);
         team.removeMember("user1");
         teamDao.update(team.getId(), team);
 
@@ -81,11 +82,14 @@ public class TeamJpaDaoIT {
         // assert mutations persisted
         assertEquals(team.getName(), teamModel.getName());
         assertEquals(2, teamModel.getMembers().size());
-        for (UserModel model : teamModel.getMembers()) {
-            boolean isUser2 = model.getUsername().equals("user2");
-            boolean isUser3 = model.getUsername().equals("user3");
-            assertTrue(isUser2 || isUser3);
+        boolean hasUser1 = false;
+        for (TeamMemberModel model : teamModel.getMembers()) {
+            if (model.getUser().getUsername().equals("user1")) {
+                hasUser1 = true;
+                break;
+            }
         }
+        assertFalse(hasUser1);
 
     }
 

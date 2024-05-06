@@ -1,25 +1,17 @@
 package dev.oscarrojas.issuetracker.user;
 
 import java.time.Instant;
-import java.util.Set;
 
 public class User {
 
     private String username;
-    private Set<String> roles;
     private Instant dateCreated;
 
     public User() {}
 
-    public User(String username, Set<String> roles,
-            Instant dateCreated) {
+    public User(String username, Instant dateCreated) {
         this.username = username;
-        this.roles = roles;
         this.dateCreated = dateCreated;
-    }
-
-    public void addRole(String role) {
-        roles.add(role);
     }
 
     public String getUsername() {
@@ -30,13 +22,6 @@ public class User {
         this.username = username;
     }
 
-    public Set<String> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<String> roles) {
-        this.roles = roles;
-    }
 
     public Instant getDateCreated() {
         return dateCreated;

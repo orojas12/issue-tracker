@@ -2,9 +2,9 @@ package dev.oscarrojas.issuetracker.team;
 
 import dev.oscarrojas.issuetracker.exceptions.DuplicateElementException;
 import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
-import dev.oscarrojas.issuetracker.user.User;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -13,11 +13,11 @@ public class Team {
     private String id;
     private String name;
     private Instant dateCreated;
-    private Set<User> members;
+    private HashSet<TeamMember> members;
 
     public Team() {}
 
-    public Team(String id, String name, Instant dateCreated, Set<User> members) {
+    public Team(String id, String name, Instant dateCreated, HashSet<TeamMember> members) {
         this.id = id;
         this.name = name;
         this.dateCreated = dateCreated;
@@ -25,41 +25,41 @@ public class Team {
     }
 
     public boolean hasMember(String username) {
-        for (User member : members) {
-            if (member.getUsername().equals(username)) {
+        for (TeamMember member : members) {
+            if (member.username().equals(username)) {
                 return true;
             }
         }
         return false;
     }
 
-    public void addMember(User user) throws DuplicateElementException {
-        if (!members.contains(user)) {
-            members.add(user);
+    public void addMember(TeamMember teamMember) throws DuplicateElementException {
+        if (!members.contains(teamMember)) {
+            members.add(teamMember);
         } else {
             throw new DuplicateElementException(
                 String.format(
                     "User '%s' is already a member of team '%s'",
-                    user.getUsername(),
+                    teamMember.username(),
                     name
                 )
             );
         }
     }
 
-    public Optional<User> getMember(String username) {
-        User user = null;
-        for (User member : members) {
-            if (member.getUsername().equals(username)) {
-                user = member;
+    public Optional<TeamMember> getMember(String username) {
+        TeamMember teamMember = null;
+        for (TeamMember member : members) {
+            if (member.username().equals(username)) {
+                teamMember = member;
                 break;
             }
         }
-        return Optional.ofNullable(user);
+        return Optional.ofNullable(teamMember);
     }
 
     public void removeMember(String username) throws NotFoundException {
-        boolean found = members.removeIf((user) -> user.getUsername().equals(username));
+        boolean found = members.removeIf((member) -> member.username().equals(username));
         if (!found) {
             throw new NotFoundException(
                 String.format(
@@ -95,11 +95,11 @@ public class Team {
         this.dateCreated = creationDate;
     }
 
-    public Set<User> getMembers() {
+    public Set<TeamMember> getMembers() {
         return members;
     }
 
-    public void setMembers(Set<User> members) {
+    public void setMembers(HashSet<TeamMember> members) {
         this.members = members;
     }
 

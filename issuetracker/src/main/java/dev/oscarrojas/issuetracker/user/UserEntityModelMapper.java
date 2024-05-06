@@ -1,7 +1,6 @@
 package dev.oscarrojas.issuetracker.user;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 public class UserEntityModelMapper {
 
@@ -9,9 +8,6 @@ public class UserEntityModelMapper {
         User user = new User();
         user.setUsername(model.getUsername());
         user.setDateCreated(model.getDateCreated());
-        user.setRoles(model.getRoles().stream()
-                .map((role) -> role.getId())
-                .collect(Collectors.toSet()));
         return user;
     }
 
@@ -23,9 +19,6 @@ public class UserEntityModelMapper {
         UserModel model = new UserModel();
         model.setUsername(user.getUsername());
         model.setDateCreated(user.getDateCreated());
-        model.setRoles(user.getRoles().stream()
-                .map((role) -> new RoleModel(role))
-                .collect(Collectors.toSet()));
         return model;
     }
 

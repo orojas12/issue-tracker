@@ -1,44 +1,33 @@
 package dev.oscarrojas.issuetracker.config;
 
-import java.util.Arrays;
-
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.annotation.Value;
+import dev.oscarrojas.issuetracker.auth.HttpStatusAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationEntryPointFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import dev.oscarrojas.issuetracker.auth.CsrfCookieFilter;
-import dev.oscarrojas.issuetracker.auth.CsrfTokenRequestHeaderHandler;
-import dev.oscarrojas.issuetracker.auth.HttpStatusAuthenticationSuccessHandler;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    /*
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,
-            @Value("${ishiko.base_url}") String baseUrl, ObjectMapper mapper)
+    public SecurityFilterChain securityFilterChain(HttpSecurity http)
             throws Exception {
         http.cors(Customizer.withDefaults())
-                .addFilter(new CsrfCookieFilter())
+                .addFilterBefore(new CsrfCookieFilter(), UsernamePasswordAuthenticationFilter.class)
                 .csrf((csrf) -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(new CsrfTokenRequestHeaderHandler()))
@@ -52,33 +41,38 @@ public class SecurityConfig {
                         .successHandler(authenticationSuccessHandler()));
         return http.build();
     }
+     */
+
+    @Order(1)
+    @Bean
+    SecurityFilterChain securityFilterChainDefault(HttpSecurity http) throws Exception {
+        http
+            .securityMatcher("/**")
+            .cors((cors) -> cors
+                .configurationSource(corsConfigurationSource())
+            )
+            .csrf((csrf) -> csrf.disable())
+            .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
+        return http.build();
+    }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource(
-            @Value("${ishiko.base_url}") String baseUrl) {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(baseUrl));
-        configuration.setAllowedMethods(Arrays.asList("POST", "PUT", "DELETE"));
-        configuration.setAllowedHeaders(Arrays.asList("X-XSRF-TOKEN"));
-        configuration.setMaxAge(600L);
-        UrlBasedCorsConfigurationSource source =
-                new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration cors = new CorsConfiguration();
+        cors.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5173"));
+        cors.setAllowedMethods(Arrays.asList("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", cors);
         return source;
     }
 
     @Bean
-    public UserDetailsManager userDetailsManager(DataSource dataSource) {
-        return new JdbcUserDetailsManager(dataSource);
-    }
-    
-    @Bean
-    public AuthenticationFailureHandler authenticationFailureHandler() {
+    AuthenticationFailureHandler authenticationFailureHandler() {
         return new AuthenticationEntryPointFailureHandler(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
     }
     
     @Bean
-    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+    AuthenticationSuccessHandler authenticationSuccessHandler() {
         return new HttpStatusAuthenticationSuccessHandler(HttpStatus.OK);
     }
 }

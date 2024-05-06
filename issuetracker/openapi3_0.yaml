@@ -38,27 +38,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Team'
-              examples:
-                qa-team:
-                  value:
-                    id: GGAI7
-                    name: QA Team
-                    date_created: 2024-05-04T00:09:26Z
-                    team_members:
-                      - username: oscar
-                        roles:
-                          - role_user
-                      - username: sarah
-                        roles:
-                          - role_user
-                          - role_team_lead
-                      - username: john
-                        roles:
-                          - role_user
-                      - username: eric
-                        roles:
-                          - role_user
-                          - role_assistant
+              example:
+                value:
+                  id: GGAI7
+                  name: QA Team
+                  date_created: 2024-05-04T00:09:26Z
+                  team_members:
+                    - username: oscar
+                      team_id: GGAI7
+                    - username: sarah
+                      team_id: GGAI7
+                    - username: john
+                      team_id: GGAI7
+                    - username: eric
+                      team_id: GGAI7
         404:
           description: Team id not found
     put:
@@ -82,10 +75,9 @@ paths:
               properties:
                 name:
                   type: string
-            examples:
-              qa-team:
-                value:
-                  name: Quality Assurance
+            example:
+              value:
+                name: Quality Assurance
       responses:
         200:
           description: Returns updated team details
@@ -98,16 +90,11 @@ paths:
                 name: Quality Assurance
                 team_members:
                   - username: oscar
-                    team_roles:
-                      - member
+                    team_id: GGAI7
                   - username: sarah
-                    team_roles:
-                      - member
-                      - lead
+                    team_id: GGAI7
                   - username: john
-                    team_roles:
-                      - member
-                      - assistant
+                    team_id: GGAI7
 
   /teams/{team_id}/members:
     post:
@@ -139,8 +126,6 @@ paths:
               example:
                 username: kate
                 team_id: GGAI7
-                team_roles:
-                  - member
     delete:
       tags:
         - teams
@@ -156,7 +141,7 @@ paths:
         - in: query
           name: username
           required: true
-          description: Username of the user to be added
+          description: Username of the user to be removed
           schema:
             type: string
           example: kate
@@ -208,11 +193,9 @@ components:
         username:
           type: string
           description: Username
-        team_roles:
-          type: array
-          description: Roles in this team
-          items:
-            type: string
+        team_id:
+          type: string
+          description: Team id
     Login:
       required:
         - username

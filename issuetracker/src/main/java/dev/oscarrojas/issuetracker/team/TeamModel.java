@@ -1,6 +1,5 @@
 package dev.oscarrojas.issuetracker.team;
 
-import dev.oscarrojas.issuetracker.user.UserModel;
 import jakarta.persistence.*;
 
 import java.time.Instant;
@@ -14,9 +13,8 @@ public class TeamModel {
     private String id;
     private String name;
     private Instant dateCreated;
-    @ManyToMany
-    @JoinTable(name = "team_member")
-    private Set<UserModel> members;
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<TeamMemberModel> members;
 
     public TeamModel() {}
 
@@ -24,7 +22,7 @@ public class TeamModel {
             String id, 
             String name, 
             Instant dateCreated, 
-            Set<UserModel> members) {
+            Set<TeamMemberModel> members) {
         this.id = id;
         this.name = name;
         this.dateCreated = dateCreated;
@@ -55,12 +53,15 @@ public class TeamModel {
         this.dateCreated = dateCreated;
     }
 
-    public Set<UserModel> getMembers() {
+    public Set<TeamMemberModel> getMembers() {
         return members;
     }
 
-    public void setMembers(Set<UserModel> members) {
-        this.members = members;
+    public void setMembers(Set<TeamMemberModel> members) {
+        this.members.clear();
+        if (members != null) {
+            this.members.addAll(members);
+        }
     }
 
 }

@@ -9,16 +9,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TeamEntityModelMapperTest {
 
     private UserModel modelWithUsername(String username) {
-        return new UserModel(username, "password", new HashSet<>(), Instant.now());
+        return new UserModel(username, "password", Instant.now());
     }
 
     private User entityWithUsername(String username) {
-        return new User(username, new HashSet<>(), Instant.now());
+        return new User(username, Instant.now());
     }
 
     @Test
@@ -39,25 +38,20 @@ public class TeamEntityModelMapperTest {
 
     @Test
     void toEntity_Model_mapsInnerModels() {
-        TeamModel model = new TeamModel();
-        model.setId("id");
-        model.setName("name");
-        model.setMembers(Set.of(modelWithUsername("user1"), modelWithUsername("user2")));
-        model.setDateCreated(Instant.now());
+        TeamModel teamModel = new TeamModel();
+        UserModel userModel = new UserModel("username", "password", Instant.now());
+        TeamMemberModel teamMemberModel = new TeamMemberModel(userModel, teamModel);
+        teamModel.setId("id");
+        teamModel.setName("name");
+        teamModel.setMembers(Set.of(teamMemberModel));
+        teamModel.setDateCreated(Instant.now());
 
-        Team entity = TeamEntityModelMapper.toEntity(model);
+        Team entity = TeamEntityModelMapper.toEntity(teamModel);
 
-        // assert user1 and user2 are in the set
-        boolean hasUser1 = false;
-        boolean hasUser2 = false;
-        for (User user : entity.getMembers()) {
-            if (user.getUsername().equals("user1")) {
-                hasUser1 = true;
-            } else if (user.getUsername().equals("user2")) {
-                hasUser2 = true;
-            }
+        // assert team member is in the set
+        for (TeamMember member : entity.getMembers()) {
+            assertEquals(teamMemberModel.getUser().getUsername(), member.username());
         }
-        assertTrue(hasUser1 && hasUser2);
     }
 
     @Test
@@ -79,9 +73,10 @@ public class TeamEntityModelMapperTest {
     @Test
     void toModel_Entity_mapsInnerEntities() {
         Team entity = new Team();
-        entity.setId("id");
+        TeamMember teamMember = new TeamMember("user1", "team1");
+        entity.setId("team1");
         entity.setName("name");
-        entity.setMembers(Set.of(entityWithUsername("user1"), entityWithUsername("user2")));
+        entity.setMembers(new HashSet<>(Set.of(teamMember)));
         entity.setDateCreated(Instant.now());
 
         TeamModel model = TeamEntityModelMapper.toModel(entity);
@@ -89,19 +84,12 @@ public class TeamEntityModelMapperTest {
         assertEquals(entity.getId(), model.getId());
         assertEquals(entity.getName(), model.getName());
         assertEquals(entity.getDateCreated(), model.getDateCreated());
-        assertEquals(2, model.getMembers().size());
+        assertEquals(1, model.getMembers().size());
 
-        // assert user1 and user2 are in the set
-        boolean hasUser1 = false;
-        boolean hasUser2 = false;
-        for (UserModel user : model.getMembers()) {
-            if (user.getUsername().equals("user1")) {
-                hasUser1 = true;
-            } else if (user.getUsername().equals("user2")) {
-                hasUser2 = true;
-            }
+        // assert team member is in the set
+        for (TeamMemberModel member : model.getMembers()) {
+            assertEquals(teamMember.username(), member.getUser().getUsername());
         }
-        assertTrue(hasUser1 && hasUser2);
     }
 
 }

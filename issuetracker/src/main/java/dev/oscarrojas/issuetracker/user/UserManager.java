@@ -1,8 +1,9 @@
 package dev.oscarrojas.issuetracker.user;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserManager {
@@ -21,5 +22,12 @@ public class UserManager {
         }
 
         return Optional.of(user.get());
+    }
+
+    public List<UserDto> getAllUsers() {
+        List<User> users = userDao.findAll();
+        return users.stream()
+                .map((user) -> new UserDto(user.getUsername()))
+                .toList();
     }
 }
