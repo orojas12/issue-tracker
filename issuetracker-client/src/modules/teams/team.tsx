@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { Team, TeamMember, User } from "./types";
 import { Ellipsis } from "lucide-react";
 import {
-    Box,
+    AlertDialog,
     Button,
     Dialog,
     DropdownMenu,
@@ -26,9 +26,18 @@ export function TeamPage() {
         if (!team) return;
         const res = await fetch(
             `http://localhost:8080/teams/${team.id}/members?username=${username}`,
-            {
-                method: "POST",
-            },
+            { method: "POST" },
+        );
+        if (res.ok) {
+            getTeam("team1");
+        }
+    };
+
+    const removeUserFromTeam = async (username: string) => {
+        if (!team) return;
+        const res = await fetch(
+            `http://localhost:8080/teams/${team.id}/members?username=${username}`,
+            { method: "DELETE" },
         );
         if (res.ok) {
             getTeam("team1");
@@ -62,6 +71,7 @@ export function TeamPage() {
                         <TeamMemberRow
                             key={member.username}
                             teamMember={member}
+                            onRemove={removeUserFromTeam}
                         />
                     ))}
                 </Table.Body>
@@ -70,31 +80,70 @@ export function TeamPage() {
     );
 }
 
-function TeamMemberRow({ teamMember }: { teamMember: TeamMember }) {
+function TeamMemberRow({
+    teamMember,
+    onRemove,
+}: {
+    teamMember: TeamMember;
+    onRemove: (username: string) => void;
+}) {
     return (
         <Table.Row id={teamMember.username} align="center">
             <Table.RowHeaderCell>
                 <Text>{teamMember.username}</Text>
             </Table.RowHeaderCell>
             <Table.Cell width="50px">
-                <TeamMemberOptions />
+                <TeamMemberOptions
+                    username={teamMember.username}
+                    onRemove={onRemove}
+                />
             </Table.Cell>
         </Table.Row>
     );
 }
 
-function TeamMemberOptions() {
+function TeamMemberOptions({
+    username,
+    onRemove,
+}: {
+    username: string;
+    onRemove: (username: string) => void;
+}) {
     return (
-        <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
-                <Button color="gray" variant="soft" size="1">
-                    <Ellipsis />
-                </Button>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content size="1">
-                <DropdownMenu.Item color="red">Remove</DropdownMenu.Item>
-            </DropdownMenu.Content>
-        </DropdownMenu.Root>
+        <AlertDialog.Root>
+            <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                    <Button color="gray" variant="soft" size="1">
+                        <Ellipsis />
+                    </Button>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content size="1">
+                    <AlertDialog.Trigger>
+                        <DropdownMenu.Item color="red">
+                            Remove
+                        </DropdownMenu.Item>
+                    </AlertDialog.Trigger>
+                </DropdownMenu.Content>
+            </DropdownMenu.Root>
+            <AlertDialog.Content maxWidth="450px">
+                <AlertDialog.Title>Remove user</AlertDialog.Title>
+                <AlertDialog.Description size="2">
+                    Are you sure you want to remove {username} from this team?
+                </AlertDialog.Description>
+                <Flex gap="3" mt="4" justify="end">
+                    <AlertDialog.Cancel>
+                        <Button variant="soft" color="gray">
+                            Cancel
+                        </Button>
+                    </AlertDialog.Cancel>
+                    <AlertDialog.Action>
+                        <Button onClick={() => onRemove(username)} color="red">
+                            Remove user
+                        </Button>
+                    </AlertDialog.Action>
+                </Flex>
+            </AlertDialog.Content>
+        </AlertDialog.Root>
     );
 }
 
