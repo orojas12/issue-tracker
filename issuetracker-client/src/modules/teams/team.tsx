@@ -12,9 +12,10 @@ import {
     Text,
 } from "@radix-ui/themes";
 import { Command } from "cmdk";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export function TeamDetails() {
+    const navigate = useNavigate();
     const { teamId } = useParams();
     const [team, setTeam] = useState<Team | null>(null);
 
@@ -25,6 +26,16 @@ export function TeamDetails() {
         setTeam(team);
     };
 
+    const deleteTeam = async (teamId: string) => {
+        if (!teamId) return;
+        const res = await fetch(`http://localhost:8080/teams/${teamId}`, {
+            method: "DELETE",
+        });
+        if (res.ok) {
+            navigate("/teams", { replace: true });
+        }
+    };
+
     const addUserToTeam = async (username: string) => {
         if (!team) return;
         const res = await fetch(
@@ -32,7 +43,8 @@ export function TeamDetails() {
             { method: "POST" },
         );
         if (res.ok) {
-            getTeam(team.id);
+            const data: Team = await res.json();
+            setTeam(data);
         }
     };
 
@@ -56,11 +68,16 @@ export function TeamDetails() {
 
     return (
         <Flex direction="column" gap="4">
-            <Heading>{team.name}</Heading>
-            <AddUserDialog
-                onSubmit={addUserToTeam}
-                teamMembers={team.teamMembers.map((member) => member.username)}
-            />
+            <Heading mb="4">{team.name}</Heading>
+            <Flex justify="between">
+                <AddUserDialog
+                    onSubmit={addUserToTeam}
+                    teamMembers={team.teamMembers.map(
+                        (member) => member.username,
+                    )}
+                />
+                <TeamOptions team={team} onDelete={deleteTeam} />
+            </Flex>
             <Table.Root>
                 <Table.Header>
                     <Table.Row>
@@ -130,7 +147,7 @@ function TeamMemberOptions({
                 </DropdownMenu.Content>
             </DropdownMenu.Root>
             <AlertDialog.Content maxWidth="450px">
-                <AlertDialog.Title>Remove user</AlertDialog.Title>
+                <AlertDialog.Title>Remove user?</AlertDialog.Title>
                 <AlertDialog.Description size="2">
                     Are you sure you want to remove {username} from this team?
                 </AlertDialog.Description>
@@ -143,6 +160,52 @@ function TeamMemberOptions({
                     <AlertDialog.Action>
                         <Button onClick={() => onRemove(username)} color="red">
                             Remove user
+                        </Button>
+                    </AlertDialog.Action>
+                </Flex>
+            </AlertDialog.Content>
+        </AlertDialog.Root>
+    );
+}
+
+function TeamOptions({
+    team,
+    onDelete,
+}: {
+    team: Team;
+    onDelete: (teamId: string) => void;
+}) {
+    return (
+        <AlertDialog.Root>
+            <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                    <Button color="gray" variant="soft" size="1">
+                        <Ellipsis />
+                    </Button>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content size="1">
+                    <AlertDialog.Trigger>
+                        <DropdownMenu.Item color="red">
+                            Delete
+                        </DropdownMenu.Item>
+                    </AlertDialog.Trigger>
+                </DropdownMenu.Content>
+            </DropdownMenu.Root>
+            <AlertDialog.Content maxWidth="450px">
+                <AlertDialog.Title>Delete team?</AlertDialog.Title>
+                <AlertDialog.Description size="2">
+                    Are you sure you want to delete {team.name}? This action
+                    cannot be reversed.
+                </AlertDialog.Description>
+                <Flex gap="3" mt="4" justify="end">
+                    <AlertDialog.Cancel>
+                        <Button variant="soft" color="gray">
+                            Cancel
+                        </Button>
+                    </AlertDialog.Cancel>
+                    <AlertDialog.Action>
+                        <Button onClick={() => onDelete(team.id)} color="red">
+                            Delete team
                         </Button>
                     </AlertDialog.Action>
                 </Flex>

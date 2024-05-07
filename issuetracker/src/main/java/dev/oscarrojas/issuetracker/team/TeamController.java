@@ -23,6 +23,15 @@ public class TeamController {
         return teamManager.getAllTeams();
     }
 
+    @PostMapping
+    public TeamDetails createTeam(@RequestBody CreateTeamRequest dto) {
+        try {
+            return teamManager.createTeam(dto);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
     @GetMapping("/{teamId}")
     public TeamDetails getTeamDetails(@PathVariable(name = "teamId") String teamId) {
         try {
@@ -32,8 +41,17 @@ public class TeamController {
         }
     }
 
+    @DeleteMapping("/{teamId}")
+    public void deleteTeam(@PathVariable("teamId") String teamId) {
+        try {
+            teamManager.deleteTeam(teamId);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
     @PostMapping("/{teamId}/members")
-    public List<TeamMember> addTeamMember(
+    public TeamDetails addTeamMember(
             @PathVariable(name = "teamId") String teamId,
             @RequestParam(name = "username") String username
     ) {

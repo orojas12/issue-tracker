@@ -13,6 +13,20 @@ export function TeamsList() {
         setTeams(data);
     };
 
+    // created team name returns null for some reason
+    const createTeam = async (data: { name: string }) => {
+        const res = await fetch(`http://localhost:8080/teams`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+        if (res.ok) {
+            getAllTeams();
+        }
+    };
+
     useEffect(() => {
         getAllTeams();
     }, []);
@@ -20,7 +34,7 @@ export function TeamsList() {
     return (
         <Flex direction="column" gap="4">
             <Heading>Team Management</Heading>
-            <CreateTeamDialog>
+            <CreateTeamDialog onCreate={createTeam}>
                 <Button>Create new team...</Button>
             </CreateTeamDialog>
             <Table.Root>

@@ -4,6 +4,7 @@ import dev.oscarrojas.issuetracker.exceptions.DuplicateElementException;
 import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -13,7 +14,7 @@ public class Team {
     private String id;
     private String name;
     private Instant dateCreated;
-    private HashSet<TeamMember> members;
+    private HashSet<TeamMember> members = new HashSet<>();
 
     public Team() {
     }
@@ -71,6 +72,13 @@ public class Team {
             );
         }
     }
+
+    public TeamDetails getDetails() {
+        return new TeamDetails(
+                id, name, new ArrayList<>(members)
+        );
+    }
+
 
     public String getId() {
         return id;

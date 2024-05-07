@@ -13,5 +13,5 @@ public interface TeamDao {
 
     Team save(Team team) throws NotFoundException;
 
-    void delete(String id) throws NotFoundException;
+    void deleteById(String id) throws NotFoundException;
 }

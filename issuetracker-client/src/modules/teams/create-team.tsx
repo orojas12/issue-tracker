@@ -1,7 +1,15 @@
 import { Button, Dialog, Flex, Text, TextField } from "@radix-ui/themes";
-import React from "react";
+import React, { useState } from "react";
 
-export function CreateTeamDialog({ children }: { children: React.ReactNode }) {
+export function CreateTeamDialog({
+    children,
+    onCreate,
+}: {
+    children: React.ReactNode;
+    onCreate: (data: { name: string }) => void;
+}) {
+    const [name, setName] = useState("");
+
     return (
         <Dialog.Root>
             <Dialog.Trigger>{children}</Dialog.Trigger>
@@ -13,7 +21,11 @@ export function CreateTeamDialog({ children }: { children: React.ReactNode }) {
                 <Flex direction="column" gap="4" mt="4">
                     <label>
                         <Text>Name</Text>
-                        <TextField.Root placeholder="Enter team name" />
+                        <TextField.Root
+                            placeholder="Enter team name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
                     </label>
                 </Flex>
                 <Flex gap="3" mt="4" justify="end">
@@ -23,7 +35,9 @@ export function CreateTeamDialog({ children }: { children: React.ReactNode }) {
                         </Button>
                     </Dialog.Close>
                     <Dialog.Close>
-                        <Button>Save</Button>
+                        <Button onClick={() => onCreate({ name: name })}>
+                            Save
+                        </Button>
                     </Dialog.Close>
                 </Flex>
             </Dialog.Content>

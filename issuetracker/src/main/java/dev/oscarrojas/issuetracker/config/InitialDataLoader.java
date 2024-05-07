@@ -5,6 +5,7 @@ import dev.oscarrojas.issuetracker.team.TeamModel;
 import dev.oscarrojas.issuetracker.team.TeamRepository;
 import dev.oscarrojas.issuetracker.user.UserModel;
 import dev.oscarrojas.issuetracker.user.UserRepository;
+import dev.oscarrojas.issuetracker.util.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -29,7 +30,7 @@ public class InitialDataLoader implements ApplicationRunner {
     }
 
     private TeamModel teamWithUsers(String name, Collection<UserModel> users) {
-        var team = new TeamModel(name, name, Instant.now(), new HashSet<>());
+        var team = new TeamModel(RandomStringGenerator.getRandomString(8), name, Instant.now(), new HashSet<>());
         for (UserModel user : users) {
             team.getMembers().add(new TeamMemberModel(user, team));
         }

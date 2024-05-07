@@ -18,14 +18,72 @@ tags:
   - name: teams
 
 paths:
-  /teams/{id}:
+  /teams:
+    get:
+      tags:
+        - teams
+      summary: Get list of all teams
+      responses:
+        200:
+          description: Returns list of all teams
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Team'
+                example:
+                  - id: GGAI7
+                    name: QA Team
+                    team_members:
+                      - username: oscar
+                        team_id: GGAI7
+                      - username: alex
+                        team_id: GGAI7
+                  - id: SHWP4
+                    name: Design Team
+                    team_members:
+                      - username: oscar
+                        team_id: GGAI7
+                      - username: alex
+                        team_id: GGAI7
+    post:
+      tags:
+        - teams
+      summary: Create a new team
+      requestBody:
+        description: New team object
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+            example:
+              name: Development Team
+      responses:
+        200:
+          description: Returns newly created team
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+              example:
+                id: GGAI7
+                name: QA Team
+                team_members:
+                  -
+  /teams/{team_id}:
     get:
       tags:
         - teams
       summary: Get details about a particular team
       parameters: 
         - in: path
-          name: id
+          name: team_id
           required: true
           description: Team id
           schema:
@@ -39,28 +97,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/Team'
               example:
-                value:
-                  id: GGAI7
-                  name: QA Team
-                  date_created: 2024-05-04T00:09:26Z
-                  team_members:
-                    - username: oscar
-                      team_id: GGAI7
-                    - username: sarah
-                      team_id: GGAI7
-                    - username: john
-                      team_id: GGAI7
-                    - username: eric
-                      team_id: GGAI7
+                id: GGAI7
+                name: QA Team
+                date_created: 2024-05-04T00:09:26Z
+                team_members:
+                  - username: oscar
+                    team_id: GGAI7
+                  - username: sarah
+                    team_id: GGAI7
+                  - username: john
+                    team_id: GGAI7
+                  - username: eric
+                    team_id: GGAI7
         404:
-          description: Team id not found
+          description: Team not found
     put:
       tags:
         - teams
       summary: Edit team details
       parameters:
         - in: path
-          name: id
+          name: team_id
           required: true
           description: Team id
           schema:
@@ -76,8 +133,7 @@ paths:
                 name:
                   type: string
             example:
-              value:
-                name: Quality Assurance
+              name: Quality Assurance
       responses:
         200:
           description: Returns updated team details
@@ -95,6 +151,24 @@ paths:
                     team_id: GGAI7
                   - username: john
                     team_id: GGAI7
+    delete:
+      tags:
+        - teams
+      summary: Delete a team
+      parameters:
+        - in: path
+          name: team_id
+          required: true
+          description: Team id
+          schema:
+            type: string
+          example: GGAI7
+      responses:
+        204:
+          description: Deleted team successfully
+        404:
+          description: Team not found
+
 
   /teams/{team_id}/members:
     post:
@@ -148,6 +222,8 @@ paths:
       responses:
         204:
           description: Removed team member successfully
+        404:
+          description: Team member not found
 
   /auth/login:
     post:

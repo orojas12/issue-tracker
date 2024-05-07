@@ -3,6 +3,7 @@ package dev.oscarrojas.issuetracker.team;
 import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
 import dev.oscarrojas.issuetracker.user.UserModel;
 import dev.oscarrojas.issuetracker.user.UserRepository;
+import dev.oscarrojas.issuetracker.util.RandomStringGenerator;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -34,13 +35,22 @@ public class TeamJpaDao implements TeamDao {
 
     @Override
     public Team save(Team team) throws NotFoundException {
-        Optional<TeamModel> opt = teamRepository.findById(team.getId());
-        TeamModel model = opt.orElseGet(TeamModel::new);
-
+        TeamModel model;
         if (team.getId() == null) {
+            model = new TeamModel();
             // generate unique id
+            String id = RandomStringGenerator.getRandomString(8);
+            model.setId(id);
         } else {
-            model.setId(team.getId());
+            Optional<TeamModel> opt = teamRepository.findById(team.getId());
+            model = opt.orElseThrow(() -> new RuntimeException(
+                            String.format(
+                                    "Could not find team id '%s'. If this is a new team" +
+                                    " please set team id to null.",
+                                    team.getId()
+                            )
+                    )
+            );
         }
 
         model.setName(team.getName());
@@ -69,9 +79,12 @@ public class TeamJpaDao implements TeamDao {
     }
 
     @Override
-    public void delete(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    public void deleteById(String id) throws NotFoundException {
+        if (teamRepository.existsById(id)) {
+            teamRepository.deleteById(id);
+        } else {
+            throw new NotFoundException(String.format("Team id '%s' not found", id));
+        }
     }
 
     private static Team mapToEntity(TeamModel model) {
@@ -81,7 +94,7 @@ public class TeamJpaDao implements TeamDao {
         entity.setDateCreated(model.getDateCreated());
         entity.setMembers(model.getMembers().stream()
                 .map(member ->
-                        new TeamMember(member.getUser().getUsername(), member.getTeam().getId())
+                        new TeamMember(member.getUser().getUsername())
                 )
                 .collect(Collectors.toCollection(HashSet::new))
         );

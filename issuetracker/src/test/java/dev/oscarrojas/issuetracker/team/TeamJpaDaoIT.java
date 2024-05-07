@@ -80,6 +80,28 @@ public class TeamJpaDaoIT {
     }
 
     @Test
+    void save_Team_createsNewTeamModel() throws NotFoundException {
+        // setup
+        var user1 = entityManager.persist(modelWithUsername("user1"));
+        var team = new Team(
+                null,
+                "name",
+                Instant.now(),
+                new HashSet<>(Set.of(new TeamMember(user1.getUsername())))
+        );
+
+        // action
+        team = teamDao.save(team);
+
+        // new team data should be saved to db
+        var result = entityManager.find(TeamModel.class, team.getId());
+        assertEquals(team.getName(), result.getName());
+        assertEquals(team.getDateCreated(), result.getDateCreated());
+        assertTrue(team.hasMember(user1.getUsername()));
+        assertEquals(1, result.getMembers().size());
+    }
+
+    @Test
     void save_Team_updatesTeamModel() throws NotFoundException, DuplicateElementException {
         // insert test data
         var user1 = entityManager.persist(modelWithUsername("user1"));
@@ -102,12 +124,12 @@ public class TeamJpaDaoIT {
             teamModel.getDateCreated(),
             teamModel.getMembers().stream()
                     .map((model) -> new TeamMember(
-                        model.getUser().getUsername(), model.getTeam().getId()
+                        model.getUser().getUsername()
                     ))
                     .collect(Collectors.toCollection(HashSet::new))
         );
         var newUser = entityManager.persist(modelWithUsername("user3"));
-        var newTeamMember = new TeamMember(newUser.getUsername(), team.getId());
+        var newTeamMember = new TeamMember(newUser.getUsername());
 
         // mutate team and persist
         team.setName("team2");
@@ -130,6 +152,23 @@ public class TeamJpaDaoIT {
         }
         assertFalse(hasUser1);
 
+    }
+
+    @Test
+    void deleteById_TeamId_deletesTeamFromDatabase() throws NotFoundException {
+        TeamModel model = entityManager.persistFlushFind(
+                new TeamModel("team1", "QA Team", Instant.now(), new HashSet<>())
+        );
+
+        teamDao.deleteById(model.getId());
+
+        TeamModel result = entityManager.find(TeamModel.class, model.getId());
+        assertNull(result);
+    }
+
+    @Test
+    void deleteById_TeamId_throwsNotFoundIfTeamNotFoundInDatabase() {
+        assertThrows(NotFoundException.class, () -> teamDao.deleteById("team1"));
     }
 
 }
