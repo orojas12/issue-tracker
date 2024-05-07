@@ -1,4 +1,4 @@
 package dev.oscarrojas.issuetracker.team;
 
-public record TeamMember(String username, String teamId) {
+public record TeamMember(String username) {
 }

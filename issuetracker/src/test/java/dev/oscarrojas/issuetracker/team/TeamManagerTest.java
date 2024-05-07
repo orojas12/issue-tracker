@@ -6,6 +6,7 @@ import dev.oscarrojas.issuetracker.user.User;
 import dev.oscarrojas.issuetracker.user.UserManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -16,8 +17,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TeamManagerTest {
@@ -31,22 +32,79 @@ public class TeamManagerTest {
     private User withUsername(String username) {
         return new User(username, Instant.now());
     }
+
+    @Test
+    void getAllTeams_returnsAllTeams() {
+        // setup
+        var team1 = new Team("team1", "Team 1", Instant.now(),
+                        new HashSet<>(Set.of(new TeamMember("user1"))));
+        var team2 = new Team("team2", "Team 2", Instant.now(),
+                        new HashSet<>(Set.of(new TeamMember("user2"))));
+        when(teamDao.findAll()).thenReturn(List.of(team1, team2));
+        var teamManager = new TeamManager(teamDao, userManager);
+
+        // action
+        List<TeamDetails> results = teamManager.getAllTeams();
+
+        // result1 == team1
+        var result1 = results.get(0);
+        assertEquals(team1.getId(), result1.id());
+        assertEquals(team1.getName(), result1.name());
+        assertEquals(1, result1.teamMembers().size());
+        assertEquals("user1", result1.teamMembers().getFirst().username());
+
+        // result2 == team2
+        var result2 = results.get(1);
+        assertEquals(team2.getId(), result2.id());
+        assertEquals(team2.getName(), result2.name());
+        assertEquals(1, result2.teamMembers().size());
+        assertEquals("user2", result2.teamMembers().getFirst().username());
+    }
+
+    @Test
+    void createTeam_CreateTeamRequest_createsAndReturnsTeam() throws NotFoundException {
+        var request = new CreateTeamRequest("team1");
+        ArgumentCaptor<Team> captor = ArgumentCaptor.forClass(Team.class);
+
+        // return team object that was passed to save() method
+        when(teamDao.save(argThat(arg -> {
+            return arg.getName().equals(request.name());
+        }))).thenAnswer(i -> {
+            // simulate auto generated id
+            var entity = (Team) i.getArguments()[0];
+            entity.setId("team1");
+            return entity;
+        });
+
+        TeamManager teamManager = new TeamManager(teamDao, userManager);
+        TeamDetails result = teamManager.createTeam(request);
+        assertNotNull(result.id());
+        assertEquals(request.name(), result.name());
+        assertNotNull(result.teamMembers());
+    }
+
+    @Test
+    void deleteTeam_TeamId_callsDeleteMethodOnTeamDao() {
+        String teamId = "team1";
+        doNothing().when(teamDao).deleteById(eq(teamId));
+        teamDao.deleteById(teamId);
+    }
     
     @Test
-    void addUserToTeam_UsernameAndTeamId_AddsUserToTeam() throws NotFoundException, DuplicateElementException {
+    void addUserToTeam_UsernameAndTeamId_AddsUserToTeamAndSaves() throws NotFoundException, DuplicateElementException {
+        // setup
         User user = withUsername("user1");
         Team team = new Team("id", "name", Instant.now(), new HashSet<>());
-
         when(teamDao.findById(team.getId())).thenReturn(Optional.of(team));
-        when(teamDao.update(team.getId(), team)).thenReturn(team);
+        when(teamDao.save(team)).thenReturn(team);
         when(userManager.getUser(user.getUsername())).thenReturn(Optional.of(user));
-
         TeamManager manager = new TeamManager(teamDao, userManager);
-        List<TeamMember> teamMembers = manager.addUserToTeam(user.getUsername(), team.getId());
+
+        // action
+        manager.addUserToTeam(user.getUsername(), team.getId());
 
         assertTrue(team.hasMember(user.getUsername()));
-        assertEquals(teamMembers.getFirst().username(), user.getUsername());
-        verify(teamDao).update(team.getId(), team);
+        verify(teamDao).save(argThat(arg -> arg.hasMember(user.getUsername())));
     }
 
     @Test
@@ -82,16 +140,18 @@ public class TeamManagerTest {
 
     @Test
     void removeUserFromTeam_UsernameAndTeamId_removesUserFromTeam() throws NotFoundException {
-        TeamMember teamMember = new TeamMember("user1", "team1");
+        TeamMember teamMember = new TeamMember("user1");
         Team team = new Team("team1", "name", Instant.now(), new HashSet<>(Set.of(teamMember)));
 
         when(teamDao.findById(team.getId())).thenReturn(Optional.of(team));
+        when(teamDao.save(argThat(arg -> arg.getId().equals(team.getId()))))
+                .thenAnswer(i -> i.getArguments()[0]);
 
         TeamManager manager = new TeamManager(teamDao, userManager);
         manager.removeUserFromTeam(teamMember.username(), team.getId());
 
         assertFalse(team.hasMember(teamMember.username()));
-        verify(teamDao).update(team.getId(), team);
+        verify(teamDao).save(team);
     }
 
     @Test
@@ -124,23 +184,24 @@ public class TeamManagerTest {
     
     static class TestTeamDao implements TeamDao {
 
+
         @Override
-        public Team create(Team team) {
+        public void deleteById(String id) {
             throw new RuntimeException("Unimplemented method");
         }
 
         @Override
-        public void delete(String id) {
+        public List<Team> findAll() {
+            throw new RuntimeException("Unimplemented method");
+        }
+
+        @Override
+        public Team save(Team team) throws NotFoundException {
             throw new RuntimeException("Unimplemented method");
         }
 
         @Override
         public Optional<Team> findById(String id) {
-            throw new RuntimeException("Unimplemented method");
-        }
-
-        @Override
-        public Team update(String id, Team team) {
             throw new RuntimeException("Unimplemented method");
         }
 

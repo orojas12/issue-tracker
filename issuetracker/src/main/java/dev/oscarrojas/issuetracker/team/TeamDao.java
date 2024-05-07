@@ -1,17 +1,17 @@
 package dev.oscarrojas.issuetracker.team;
 
-import java.util.Optional;
-
 import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface TeamDao {
 
     Optional<Team> findById(String id);
-    
-    Team update(String id, Team team) throws NotFoundException;
 
-    Team create(Team team);
+    List<Team> findAll();
 
-    void delete(String id) throws NotFoundException;
+    Team save(Team team) throws NotFoundException;
 
+    void deleteById(String id) throws NotFoundException;
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { Team, TeamMember, User } from "./types";
 import { Ellipsis } from "lucide-react";
 import {
-    Box,
+    AlertDialog,
     Button,
     Dialog,
     DropdownMenu,
@@ -12,42 +12,72 @@ import {
     Text,
 } from "@radix-ui/themes";
 import { Command } from "cmdk";
+import { useNavigate, useParams } from "react-router-dom";
 
-export function TeamPage() {
+export function TeamDetails() {
+    const navigate = useNavigate();
+    const { teamId } = useParams();
     const [team, setTeam] = useState<Team | null>(null);
 
     const getTeam = async (teamId: string) => {
+        if (!teamId) return;
         const res = await fetch(`http://localhost:8080/teams/${teamId}`);
         const team: Team = await res.json();
         setTeam(team);
+    };
+
+    const deleteTeam = async (teamId: string) => {
+        if (!teamId) return;
+        const res = await fetch(`http://localhost:8080/teams/${teamId}`, {
+            method: "DELETE",
+        });
+        if (res.ok) {
+            navigate("/teams", { replace: true });
+        }
     };
 
     const addUserToTeam = async (username: string) => {
         if (!team) return;
         const res = await fetch(
             `http://localhost:8080/teams/${team.id}/members?username=${username}`,
-            {
-                method: "POST",
-            },
+            { method: "POST" },
         );
         if (res.ok) {
-            getTeam("team1");
+            const data: Team = await res.json();
+            setTeam(data);
+        }
+    };
+
+    const removeUserFromTeam = async (username: string) => {
+        if (!team) return;
+        const res = await fetch(
+            `http://localhost:8080/teams/${team.id}/members?username=${username}`,
+            { method: "DELETE" },
+        );
+        if (res.ok) {
+            getTeam(team.id);
         }
     };
 
     useEffect(() => {
-        getTeam("team1");
-    }, []);
+        if (!teamId) return;
+        getTeam(teamId);
+    }, [teamId]);
 
     if (!team) return null;
 
     return (
         <Flex direction="column" gap="4">
-            <Heading>{team.name}</Heading>
-            <AddUserDialog
-                onSubmit={addUserToTeam}
-                teamMembers={team.teamMembers.map((member) => member.username)}
-            />
+            <Heading mb="4">{team.name}</Heading>
+            <Flex justify="between">
+                <AddUserDialog
+                    onSubmit={addUserToTeam}
+                    teamMembers={team.teamMembers.map(
+                        (member) => member.username,
+                    )}
+                />
+                <TeamOptions team={team} onDelete={deleteTeam} />
+            </Flex>
             <Table.Root>
                 <Table.Header>
                     <Table.Row>
@@ -62,6 +92,7 @@ export function TeamPage() {
                         <TeamMemberRow
                             key={member.username}
                             teamMember={member}
+                            onRemove={removeUserFromTeam}
                         />
                     ))}
                 </Table.Body>
@@ -70,31 +101,116 @@ export function TeamPage() {
     );
 }
 
-function TeamMemberRow({ teamMember }: { teamMember: TeamMember }) {
+function TeamMemberRow({
+    teamMember,
+    onRemove,
+}: {
+    teamMember: TeamMember;
+    onRemove: (username: string) => void;
+}) {
     return (
         <Table.Row id={teamMember.username} align="center">
             <Table.RowHeaderCell>
                 <Text>{teamMember.username}</Text>
             </Table.RowHeaderCell>
             <Table.Cell width="50px">
-                <TeamMemberOptions />
+                <TeamMemberOptions
+                    username={teamMember.username}
+                    onRemove={onRemove}
+                />
             </Table.Cell>
         </Table.Row>
     );
 }
 
-function TeamMemberOptions() {
+function TeamMemberOptions({
+    username,
+    onRemove,
+}: {
+    username: string;
+    onRemove: (username: string) => void;
+}) {
     return (
-        <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
-                <Button color="gray" variant="soft" size="1">
-                    <Ellipsis />
-                </Button>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content size="1">
-                <DropdownMenu.Item color="red">Remove</DropdownMenu.Item>
-            </DropdownMenu.Content>
-        </DropdownMenu.Root>
+        <AlertDialog.Root>
+            <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                    <Button color="gray" variant="soft" size="1">
+                        <Ellipsis />
+                    </Button>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content size="1">
+                    <AlertDialog.Trigger>
+                        <DropdownMenu.Item color="red">
+                            Remove
+                        </DropdownMenu.Item>
+                    </AlertDialog.Trigger>
+                </DropdownMenu.Content>
+            </DropdownMenu.Root>
+            <AlertDialog.Content maxWidth="450px">
+                <AlertDialog.Title>Remove user?</AlertDialog.Title>
+                <AlertDialog.Description size="2">
+                    Are you sure you want to remove {username} from this team?
+                </AlertDialog.Description>
+                <Flex gap="3" mt="4" justify="end">
+                    <AlertDialog.Cancel>
+                        <Button variant="soft" color="gray">
+                            Cancel
+                        </Button>
+                    </AlertDialog.Cancel>
+                    <AlertDialog.Action>
+                        <Button onClick={() => onRemove(username)} color="red">
+                            Remove user
+                        </Button>
+                    </AlertDialog.Action>
+                </Flex>
+            </AlertDialog.Content>
+        </AlertDialog.Root>
+    );
+}
+
+function TeamOptions({
+    team,
+    onDelete,
+}: {
+    team: Team;
+    onDelete: (teamId: string) => void;
+}) {
+    return (
+        <AlertDialog.Root>
+            <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                    <Button color="gray" variant="soft" size="1">
+                        <Ellipsis />
+                    </Button>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content size="1">
+                    <AlertDialog.Trigger>
+                        <DropdownMenu.Item color="red">
+                            Delete
+                        </DropdownMenu.Item>
+                    </AlertDialog.Trigger>
+                </DropdownMenu.Content>
+            </DropdownMenu.Root>
+            <AlertDialog.Content maxWidth="450px">
+                <AlertDialog.Title>Delete team?</AlertDialog.Title>
+                <AlertDialog.Description size="2">
+                    Are you sure you want to delete {team.name}? This action
+                    cannot be reversed.
+                </AlertDialog.Description>
+                <Flex gap="3" mt="4" justify="end">
+                    <AlertDialog.Cancel>
+                        <Button variant="soft" color="gray">
+                            Cancel
+                        </Button>
+                    </AlertDialog.Cancel>
+                    <AlertDialog.Action>
+                        <Button onClick={() => onDelete(team.id)} color="red">
+                            Delete team
+                        </Button>
+                    </AlertDialog.Action>
+                </Flex>
+            </AlertDialog.Content>
+        </AlertDialog.Root>
     );
 }
 
