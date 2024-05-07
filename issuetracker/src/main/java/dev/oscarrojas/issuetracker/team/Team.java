@@ -15,7 +15,8 @@ public class Team {
     private Instant dateCreated;
     private HashSet<TeamMember> members;
 
-    public Team() {}
+    public Team() {
+    }
 
     public Team(String id, String name, Instant dateCreated, HashSet<TeamMember> members) {
         this.id = id;

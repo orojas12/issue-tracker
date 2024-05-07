@@ -12,11 +12,14 @@ import {
     Text,
 } from "@radix-ui/themes";
 import { Command } from "cmdk";
+import { useParams } from "react-router-dom";
 
-export function TeamPage() {
+export function TeamDetails() {
+    const { teamId } = useParams();
     const [team, setTeam] = useState<Team | null>(null);
 
     const getTeam = async (teamId: string) => {
+        if (!teamId) return;
         const res = await fetch(`http://localhost:8080/teams/${teamId}`);
         const team: Team = await res.json();
         setTeam(team);
@@ -29,7 +32,7 @@ export function TeamPage() {
             { method: "POST" },
         );
         if (res.ok) {
-            getTeam("team1");
+            getTeam(team.id);
         }
     };
 
@@ -40,13 +43,14 @@ export function TeamPage() {
             { method: "DELETE" },
         );
         if (res.ok) {
-            getTeam("team1");
+            getTeam(team.id);
         }
     };
 
     useEffect(() => {
-        getTeam("team1");
-    }, []);
+        if (!teamId) return;
+        getTeam(teamId);
+    }, [teamId]);
 
     if (!team) return null;
 

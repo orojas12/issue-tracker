@@ -23,7 +23,7 @@ public class TeamManager {
         Optional<Team> teamOpt = teamDao.findById(teamId);
 
         if (teamOpt.isEmpty()) {
-            throw new NotFoundException(String.format("Team '%s' not found"));
+            throw new NotFoundException(String.format("Team '%s' not found", teamId));
         }
 
         Team team = teamOpt.get();
@@ -33,6 +33,17 @@ public class TeamManager {
                 team.getName(),
                 new ArrayList<>(team.getMembers())
         );
+    }
+
+    public List<TeamDetails> getAllTeams() {
+        return teamDao.findAll().stream()
+                .map((team) ->
+                        new TeamDetails(
+                                team.getId(),
+                                team.getName(),
+                                new ArrayList<>(team.getMembers()))
+                )
+                .toList();
     }
 
     public List<TeamMember> addUserToTeam(String username, String teamId) throws NotFoundException, DuplicateElementException {
@@ -55,7 +66,7 @@ public class TeamManager {
                 team.getId()
         );
         team.addMember(teamMember);
-        team = teamDao.update(teamId, team);
+        team = teamDao.save(team);
         return new ArrayList<>(team.getMembers());
     }
 
@@ -68,7 +79,7 @@ public class TeamManager {
 
         Team team = opt.get();
         team.removeMember(username);
-        teamDao.update(teamId, team);
+        teamDao.save(team);
     }
 
 }

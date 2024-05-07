@@ -18,6 +18,11 @@ public class TeamController {
         this.teamManager = teamManager;
     }
 
+    @GetMapping
+    public List<TeamDetails> getAllTeams() {
+        return teamManager.getAllTeams();
+    }
+
     @GetMapping("/{teamId}")
     public TeamDetails getTeamDetails(@PathVariable(name = "teamId") String teamId) {
         try {

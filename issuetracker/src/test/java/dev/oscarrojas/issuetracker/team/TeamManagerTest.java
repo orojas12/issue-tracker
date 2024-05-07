@@ -31,6 +31,35 @@ public class TeamManagerTest {
     private User withUsername(String username) {
         return new User(username, Instant.now());
     }
+
+    @Test
+    void getAllTeams() {
+        List<Team> teams = List.of(
+                new Team("team1", "Team 1", Instant.now(),
+                        new HashSet<>(Set.of(new TeamMember("user1", "team1")))),
+                new Team("team2", "Team 2", Instant.now(),
+                        new HashSet<>(Set.of(new TeamMember("user2", "team2"))))
+        );
+        when(teamDao.findAll()).thenReturn(teams);
+        var teamManager = new TeamManager(teamDao, userManager);
+        List<TeamDetails> results = teamManager.getAllTeams();
+        var team1 = teams.get(0);
+        var team2 = teams.get(1);
+
+        var result1 = results.get(0);
+        assertEquals(team1.getId(), result1.id());
+        assertEquals(team1.getName(), result1.name());
+        assertEquals(1, result1.teamMembers().size());
+        assertEquals("user1", result1.teamMembers().getFirst().username());
+        assertEquals("team1", result1.teamMembers().getFirst().teamId());
+
+        var result2 = results.get(1);
+        assertEquals(team2.getId(), result2.id());
+        assertEquals(team2.getName(), result2.name());
+        assertEquals(1, result2.teamMembers().size());
+        assertEquals("user2", result2.teamMembers().getFirst().username());
+        assertEquals("team2", result2.teamMembers().getFirst().teamId());
+    }
     
     @Test
     void addUserToTeam_UsernameAndTeamId_AddsUserToTeam() throws NotFoundException, DuplicateElementException {
@@ -38,7 +67,7 @@ public class TeamManagerTest {
         Team team = new Team("id", "name", Instant.now(), new HashSet<>());
 
         when(teamDao.findById(team.getId())).thenReturn(Optional.of(team));
-        when(teamDao.update(team.getId(), team)).thenReturn(team);
+        when(teamDao.save(team)).thenReturn(team);
         when(userManager.getUser(user.getUsername())).thenReturn(Optional.of(user));
 
         TeamManager manager = new TeamManager(teamDao, userManager);
@@ -46,7 +75,7 @@ public class TeamManagerTest {
 
         assertTrue(team.hasMember(user.getUsername()));
         assertEquals(teamMembers.getFirst().username(), user.getUsername());
-        verify(teamDao).update(team.getId(), team);
+        verify(teamDao).save(team);
     }
 
     @Test
@@ -91,7 +120,7 @@ public class TeamManagerTest {
         manager.removeUserFromTeam(teamMember.username(), team.getId());
 
         assertFalse(team.hasMember(teamMember.username()));
-        verify(teamDao).update(team.getId(), team);
+        verify(teamDao).save(team);
     }
 
     @Test
@@ -124,10 +153,6 @@ public class TeamManagerTest {
     
     static class TestTeamDao implements TeamDao {
 
-        @Override
-        public Team create(Team team) {
-            throw new RuntimeException("Unimplemented method");
-        }
 
         @Override
         public void delete(String id) {
@@ -135,12 +160,17 @@ public class TeamManagerTest {
         }
 
         @Override
-        public Optional<Team> findById(String id) {
+        public List<Team> findAll() {
             throw new RuntimeException("Unimplemented method");
         }
 
         @Override
-        public Team update(String id, Team team) {
+        public Team save(Team team) throws NotFoundException {
+            throw new RuntimeException("Unimplemented method");
+        }
+
+        @Override
+        public Optional<Team> findById(String id) {
             throw new RuntimeException("Unimplemented method");
         }
 

@@ -3,6 +3,7 @@ package dev.oscarrojas.issuetracker.team;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -14,7 +15,7 @@ public class TeamModel {
     private String name;
     private Instant dateCreated;
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<TeamMemberModel> members;
+    private Set<TeamMemberModel> members = new HashSet<>();
 
     public TeamModel() {}
 

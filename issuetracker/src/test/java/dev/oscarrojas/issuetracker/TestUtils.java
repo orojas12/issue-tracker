@@ -11,7 +11,7 @@ public class TestUtils {
         return new User(username, Instant.now());
     }
 
-    static UserModel userModelWithUsername(String username) {
+    public static UserModel userModelWithUsername(String username) {
         return new UserModel(username, "password", Instant.now());
     }
 

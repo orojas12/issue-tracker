@@ -3,7 +3,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { TeamPage } from "./modules/teams/team.tsx";
+import { TeamDetails } from "./modules/teams/team.tsx";
+import { TeamsList } from "./modules/teams/teams-list.tsx";
 
 const router = createBrowserRouter([
     {
@@ -11,8 +12,12 @@ const router = createBrowserRouter([
         element: <App />,
         children: [
             {
-                path: "team",
-                element: <TeamPage />,
+                path: "teams",
+                element: <TeamsList />,
+            },
+            {
+                path: "/teams/:teamId",
+                element: <TeamDetails />,
             },
         ],
     },
