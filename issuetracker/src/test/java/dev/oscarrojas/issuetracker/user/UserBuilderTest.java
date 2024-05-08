@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class UserBuilderTest {
 
@@ -56,14 +55,6 @@ public class UserBuilderTest {
         assertEquals(
                 LocalDate.now(),
                 user.getDateCreated().atZone(ZoneId.systemDefault()).toLocalDate());
-    }
-
-    @Test
-    void build_setsRandomIdIfNotSet() {
-        var builder = new UserBuilder();
-        User user = builder.build();
-
-        assertNotNull(user.getId());
     }
 
 }

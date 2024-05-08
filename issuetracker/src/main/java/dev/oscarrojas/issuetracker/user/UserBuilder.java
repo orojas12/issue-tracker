@@ -1,7 +1,5 @@
 package dev.oscarrojas.issuetracker.user;
 
-import dev.oscarrojas.issuetracker.util.RandomStringGenerator;
-
 import java.time.Instant;
 
 public class UserBuilder {
@@ -40,18 +38,13 @@ public class UserBuilder {
     public User build() {
         User user = new User();
 
-        if (id != null) {
-            user.setId(id);
-        } else {
-            user.setId(RandomStringGenerator.getRandomString(10));
-        }
-
         if (dateCreated != null) {
             user.setDateCreated(dateCreated);
         } else {
             user.setDateCreated(Instant.now());
         }
 
+        user.setId(id);
         user.setUsername(username);
         user.setFirstName(firstName);
         user.setLastName(lastName);
