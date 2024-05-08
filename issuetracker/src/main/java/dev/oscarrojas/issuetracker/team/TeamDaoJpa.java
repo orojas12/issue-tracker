@@ -10,12 +10,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
-public class TeamJpaDao implements TeamDao {
+public class TeamDaoJpa implements TeamDao {
 
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
 
-    public TeamJpaDao(TeamRepository teamRepository, UserRepository userRepository) {
+    public TeamDaoJpa(TeamRepository teamRepository, UserRepository userRepository) {
         this.teamRepository = teamRepository;
         this.userRepository = userRepository;
     }
@@ -23,14 +23,14 @@ public class TeamJpaDao implements TeamDao {
     @Override
     public Optional<Team> findById(String id) {
         Optional<TeamModel> modelOpt = teamRepository.findById(id);
-        return modelOpt.map(TeamJpaDao::mapToEntity);
+        return modelOpt.map(TeamDaoJpa::mapToEntity);
     }
 
 
     @Override
     public List<Team> findAll() {
         List<TeamModel> models = teamRepository.findAll();
-        return models.stream().map(TeamJpaDao::mapToEntity).toList();
+        return models.stream().map(TeamDaoJpa::mapToEntity).toList();
     }
 
     @Override
