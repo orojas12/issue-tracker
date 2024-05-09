@@ -26,7 +26,13 @@ public class InitialDataLoader implements ApplicationRunner {
     UserRepository userRepository;
 
     private UserModel userWithUsername(String username) {
-        return new UserModel(username, "password", Instant.now());
+        return new UserModel(
+                RandomStringGenerator.getRandomString(10),
+                username,
+                "John",
+                "Wick",
+                Instant.now()
+        );
     }
 
     private TeamModel teamWithUsers(String name, Collection<UserModel> users) {

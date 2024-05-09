@@ -1,5 +1,7 @@
 package dev.oscarrojas.issuetracker.user;
 
+import dev.oscarrojas.issuetracker.exceptions.DuplicateElementException;
+import dev.oscarrojas.issuetracker.util.RandomStringGenerator;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -8,31 +10,72 @@ import java.util.Optional;
 @Component
 public class UserDaoJpa implements UserDao {
 
-    private UserRepository repository;
+    private UserRepository userRepository;
 
-    public UserDaoJpa(UserRepository repository) {
-        this.repository = repository;
+    public UserDaoJpa(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public Optional<User> findByUsername(String username) {
-        Optional<UserModel> opt = repository.findByUsername(username);
-        if (opt.isPresent()) {
-            UserModel entity = opt.get();
-            User user = new User(
-                entity.getUsername(), 
-                entity.getDateCreated()
-            );
-            return Optional.of(user);
-        } else {
-            return Optional.empty();
-        }
+        Optional<UserModel> opt = userRepository.findByUsername(username);
+        return opt.map(UserDaoJpa::toEntity);
     }
 
     @Override
     public List<User> findAll() {
-        List<UserModel> models = repository.findAll();
-        return (List<User>) UserEntityModelMapper.getEntities(models);
+        List<UserModel> models = userRepository.findAll();
+        return models.stream().map(UserDaoJpa::toEntity).toList();
     }
 
+    @Override
+    public User save(User user) throws DuplicateElementException {
+        if (user.getId() == null) {
+            return createUser(user);
+        } else {
+            return updateUser(user);
+        }
+    }
+
+    private User createUser(User user) throws DuplicateElementException {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new DuplicateElementException(
+                    "Username '%s' already exists.".formatted(user.getUsername()));
+        }
+
+        UserModel model = userRepository.save(new UserModel(
+                RandomStringGenerator.getRandomString(10),
+                user.getUsername(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getDateCreated()
+        ));
+
+        return toEntity(model);
+    }
+
+    private User updateUser(User user) {
+        Optional<UserModel> modelOpt = userRepository.findById(user.getId());
+
+        if (modelOpt.isEmpty()) {
+            throw new RuntimeException("Could not find user '%s' to update. " +
+                    "If trying to create new user, user id must be null.".formatted(user.getId()));
+        }
+
+        UserModel model = modelOpt.get();
+        model.setFirstName(user.getFirstName());
+        model.setLastName(user.getLastName());
+        model = userRepository.save(model);
+        return toEntity(model);
+    }
+
+    private static User toEntity(UserModel model) {
+        return new User(
+                model.getId(),
+                model.getUsername(),
+                model.getFirstName(),
+                model.getLastName(),
+                model.getDateCreated()
+        );
+    }
 }

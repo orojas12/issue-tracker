@@ -5,6 +5,7 @@ import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { TeamDetails } from "./modules/teams/team.tsx";
 import { TeamsList } from "./modules/teams/teams-list.tsx";
+import { UserManagement } from "./modules/users/user-management.tsx";
 
 const router = createBrowserRouter([
     {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
             {
                 path: "/teams/:teamId",
                 element: <TeamDetails />,
+            },
+            {
+                path: "/users",
+                element: <UserManagement />,
             },
         ],
     },

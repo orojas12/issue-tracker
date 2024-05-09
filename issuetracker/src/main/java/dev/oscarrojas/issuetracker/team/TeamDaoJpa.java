@@ -1,12 +1,13 @@
 package dev.oscarrojas.issuetracker.team;
 
 import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
-import dev.oscarrojas.issuetracker.user.UserModel;
 import dev.oscarrojas.issuetracker.user.UserRepository;
 import dev.oscarrojas.issuetracker.util.RandomStringGenerator;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -35,15 +36,15 @@ public class TeamDaoJpa implements TeamDao {
 
     @Override
     public Team save(Team team) throws NotFoundException {
-        TeamModel model;
+        TeamModel teamModel;
         if (team.getId() == null) {
-            model = new TeamModel();
+            teamModel = new TeamModel();
             // generate unique id
             String id = RandomStringGenerator.getRandomString(8);
-            model.setId(id);
+            teamModel.setId(id);
         } else {
             Optional<TeamModel> opt = teamRepository.findById(team.getId());
-            model = opt.orElseThrow(() -> new RuntimeException(
+            teamModel = opt.orElseThrow(() -> new RuntimeException(
                             String.format(
                                     "Could not find team id '%s'. If this is a new team" +
                                     " please set team id to null.",
@@ -53,27 +54,31 @@ public class TeamDaoJpa implements TeamDao {
             );
         }
 
-        model.setName(team.getName());
-        model.setDateCreated(team.getDateCreated());
+        teamModel.setName(team.getName());
+        teamModel.setDateCreated(team.getDateCreated());
 
-        List<String> usernames = new ArrayList<>(team.getMembers().size());
+        List<String> usernames = team.getMembers().stream()
+                .map((member) -> member.username())
+                .toList();
 
-        Set<TeamMemberModel> teamMembers = team.getMembers().stream().map((member) -> {
-            usernames.add(member.username());
-            UserModel user = userRepository.getReferenceById(member.username());
-            return new TeamMemberModel(user, model);
-        }).collect(Collectors.toSet());
+        List<TeamMemberModel> teamMemberModels = userRepository.findAllByUsernameIn(usernames)
+                .stream()
+                .map((userModel -> new TeamMemberModel(
+                            userModel,
+                            teamModel
+                    )
+                ))
+                .toList();
 
-        // verify all users exist before saving them to model
-        if (userRepository.countByUsername(usernames) < usernames.size()) {
+        if (teamMemberModels.size() != usernames.size()) {
             throw new NotFoundException(
-                    String.format("One or more users added to team '%s' do not exist", team.getId())
+                    String.format("One or more users in team '%s' do not exist", team.getId())
             );
         }
 
-        model.setMembers(teamMembers);
+        teamModel.setMembers(teamMemberModels);
 
-        TeamModel result = teamRepository.save(model);
+        TeamModel result = teamRepository.save(teamModel);
 
         return mapToEntity(result);
     }

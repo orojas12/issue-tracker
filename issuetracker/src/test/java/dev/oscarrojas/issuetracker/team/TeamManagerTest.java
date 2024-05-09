@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static dev.oscarrojas.issuetracker.TestUtils.userWithUsername;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
@@ -28,10 +29,6 @@ public class TeamManagerTest {
 
     @Mock
     TestTeamDao teamDao;
-
-    private User withUsername(String username) {
-        return new User(username, Instant.now());
-    }
 
     @Test
     void getAllTeams_returnsAllTeams() {
@@ -93,7 +90,7 @@ public class TeamManagerTest {
     @Test
     void addUserToTeam_UsernameAndTeamId_AddsUserToTeamAndSaves() throws NotFoundException, DuplicateElementException {
         // setup
-        User user = withUsername("user1");
+        User user = userWithUsername("user1");
         Team team = new Team("id", "name", Instant.now(), new HashSet<>());
         when(teamDao.findById(team.getId())).thenReturn(Optional.of(team));
         when(teamDao.save(team)).thenReturn(team);
@@ -109,7 +106,7 @@ public class TeamManagerTest {
 
     @Test
     void addUserToTeam_UsernameAndTeamId_throwsNotFoundExceptionIfUserNotFound() {
-        User user = withUsername("user1");
+        User user = userWithUsername("user1");
         Team team = new Team("id", "name", Instant.now(), new HashSet<>());
 
         when(userDao.findByUsername(user.getUsername())).thenReturn(Optional.empty());
@@ -124,7 +121,7 @@ public class TeamManagerTest {
 
     @Test
     void addUserToTeam_UsernameAndTeamId_throwsNotFoundExceptionIfTeamNotFound() {
-        User user = withUsername("user1");
+        User user = userWithUsername("user1");
         Team team = new Team("id", "name", Instant.now(), new HashSet<>());
 
         when(userDao.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
@@ -156,7 +153,7 @@ public class TeamManagerTest {
 
     @Test
     void removeUserFromTeam_UsernameAndTeamId_throwsNotFoundExceptionIfUserNotFound() {
-        User user = withUsername("user1");
+        User user = userWithUsername("user1");
         Team team = new Team("id", "name", Instant.now(), new HashSet<>());
 
         when(teamDao.findById(team.getId())).thenReturn(Optional.of(team));
@@ -170,7 +167,7 @@ public class TeamManagerTest {
     
     @Test
     void removeUserFromTeam_UsernameAndTeamId_throwsNotFoundExceptionIfTeamNotFound() {
-        User user = withUsername("user1");
+        User user = userWithUsername("user1");
         Team team = new Team("id", "name", Instant.now(), new HashSet<>());
 
         when(teamDao.findById(team.getId())).thenReturn(Optional.empty());
@@ -216,6 +213,11 @@ public class TeamManagerTest {
 
         @Override
         public List<User> findAll() {
+            throw new RuntimeException("Unimplemented method");
+        }
+
+        @Override
+        public User save(User user) {
             throw new RuntimeException("Unimplemented method");
         }
     }

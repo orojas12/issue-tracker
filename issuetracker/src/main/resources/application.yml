@@ -7,13 +7,14 @@ logging:
       springframework:
         web: debug
         security: debug
+        data: debug
 
 spring:
   datasource:
-    url: "jdbc:sqlite:file:/home/oscar/projects/issue-tracker/issuetracker/db/dev.db"
+    url: 'jdbc:sqlite:file:/home/oscar/projects/issue-tracker/issuetracker/db/dev.db'
     driver-class-name: org.sqlite.JDBC
-    username: admin
-    password: password
+    username: ''
+    password: ''
 
   jpa:
     database-platform: org.hibernate.community.dialect.SQLiteDialect

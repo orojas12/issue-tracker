@@ -1,4 +1,6 @@
 package dev.oscarrojas.issuetracker.user;
 
-public record UserDto(String username) {
+import java.time.Instant;
+
+public record UserDto(String id, String username, String firstName, String lastName, Instant dateCreated) {
 }

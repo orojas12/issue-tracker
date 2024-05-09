@@ -12,8 +12,15 @@ public class User {
 
     public User() {}
 
-    public User(String username, Instant dateCreated) {
+    public User(String id,
+                String username,
+                String firstName,
+                String lastName,
+                Instant dateCreated) {
+        this.id = id;
         this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.dateCreated = dateCreated;
     }
 

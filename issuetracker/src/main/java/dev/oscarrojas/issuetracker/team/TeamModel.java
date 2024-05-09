@@ -3,6 +3,7 @@ package dev.oscarrojas.issuetracker.team;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -58,11 +59,15 @@ public class TeamModel {
         return members;
     }
 
-    public void setMembers(Set<TeamMemberModel> members) {
+    public void setMembers(Collection<TeamMemberModel> members) {
         this.members.clear();
         if (members != null) {
             this.members.addAll(members);
         }
+    }
+
+    public void addMember(TeamMemberModel member) {
+        members.add(member);
     }
 
 }
