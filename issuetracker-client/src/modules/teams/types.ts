@@ -16,3 +16,9 @@ export type User = {
     lastName: string;
     dateCreated: Date;
 };
+
+export type CreateUserRequest = {
+    username: string;
+    firstName: string;
+    lastName: string;
+};

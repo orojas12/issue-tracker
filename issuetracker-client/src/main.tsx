@@ -6,6 +6,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { TeamDetails } from "./modules/teams/team.tsx";
 import { TeamsList } from "./modules/teams/teams-list.tsx";
 import { UserManagement } from "./modules/users/user-management.tsx";
+import { UserDetails } from "./modules/users/user-details.tsx";
 
 const router = createBrowserRouter([
     {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
             {
                 path: "/users",
                 element: <UserManagement />,
+            },
+            {
+                path: "/users/:username",
+                element: <UserDetails />,
             },
         ],
     },

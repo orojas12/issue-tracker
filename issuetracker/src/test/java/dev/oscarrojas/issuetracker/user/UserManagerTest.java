@@ -101,7 +101,6 @@ public class UserManagerTest {
         assertNotNull(dto.id());
     }
 
-
     static class TestUserDao implements UserDao {
 
         @Override

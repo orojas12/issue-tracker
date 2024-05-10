@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { User } from "../teams/types";
+import { CreateUserRequest, User } from "../teams/types";
 import {
     AlertDialog,
     Button,
@@ -25,7 +25,7 @@ export function UserManagement() {
         }
     };
 
-    const createUser = async (user: { username: string }) => {
+    const createUser = async (user: CreateUserRequest) => {
         const res = await fetch(`http://localhost:8080/users`, {
             method: "POST",
             headers: {
@@ -80,7 +80,9 @@ export function UserManagement() {
                     {filteredUsers.map((user) => (
                         <Table.Row key={user.id}>
                             <Table.RowHeaderCell>
-                                <Link to="">{user.username}</Link>
+                                <Link to={`${user.username}`}>
+                                    {user.username}
+                                </Link>
                             </Table.RowHeaderCell>
                             <Table.Cell>
                                 <UserOptions

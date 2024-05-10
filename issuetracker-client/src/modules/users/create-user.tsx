@@ -1,14 +1,17 @@
 import { Button, Dialog, Flex, TextField, Text } from "@radix-ui/themes";
 import { useState } from "react";
+import { CreateUserRequest } from "../teams/types";
 
 export function CreateUserDialog({
     children,
     onCreate,
 }: {
     children: React.ReactNode;
-    onCreate: (user: { username: string }) => void;
+    onCreate: (user: CreateUserRequest) => void;
 }) {
     const [username, setUsername] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
 
     return (
         <Dialog.Root>
@@ -22,9 +25,25 @@ export function CreateUserDialog({
                     <label>
                         <Text>Username</Text>
                         <TextField.Root
-                            placeholder="Enter team name"
+                            placeholder="Enter username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
+                        />
+                    </label>
+                    <label>
+                        <Text>First Name</Text>
+                        <TextField.Root
+                            placeholder="Enter first name"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                        />
+                    </label>
+                    <label>
+                        <Text>Last Name</Text>
+                        <TextField.Root
+                            placeholder="Enter last name"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
                         />
                     </label>
                 </Flex>
@@ -36,7 +55,9 @@ export function CreateUserDialog({
                     </Dialog.Close>
                     <Dialog.Close>
                         <Button
-                            onClick={() => onCreate({ username: username })}
+                            onClick={() =>
+                                onCreate({ username, firstName, lastName })
+                            }
                         >
                             Save
                         </Button>
