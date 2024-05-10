@@ -1,6 +1,7 @@
 package dev.oscarrojas.issuetracker.user;
 
 import dev.oscarrojas.issuetracker.exceptions.DuplicateElementException;
+import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,5 +59,9 @@ public class UserManager {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getDateCreated());
+    }
+
+    public void deleteUser(String userId) throws NotFoundException {
+        userDao.deleteById(userId);
     }
 }

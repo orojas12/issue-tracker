@@ -1,8 +1,17 @@
 import { useEffect, useState } from "react";
 import { User } from "../teams/types";
-import { Button, Flex, Heading, Table, TextField } from "@radix-ui/themes";
+import {
+    AlertDialog,
+    Button,
+    DropdownMenu,
+    Flex,
+    Heading,
+    Table,
+    TextField,
+} from "@radix-ui/themes";
 import { Link } from "react-router-dom";
 import { CreateUserDialog } from "./create-user";
+import { Ellipsis } from "lucide-react";
 
 export function UserManagement() {
     const [users, setUsers] = useState<User[]>([]);
@@ -27,6 +36,15 @@ export function UserManagement() {
         if (res.ok) {
             const result: User = await res.json();
             setUsers((users) => [...users, result]);
+        }
+    };
+
+    const deleteUser = async (userId: string) => {
+        const res = await fetch(`http://localhost:8080/users/${userId}`, {
+            method: "DELETE",
+        });
+        if (res.ok) {
+            setUsers((users) => users.filter((user) => user.id !== userId));
         }
     };
 
@@ -64,10 +82,62 @@ export function UserManagement() {
                             <Table.RowHeaderCell>
                                 <Link to="">{user.username}</Link>
                             </Table.RowHeaderCell>
+                            <Table.Cell>
+                                <UserOptions
+                                    user={user}
+                                    onDelete={deleteUser}
+                                />
+                            </Table.Cell>
                         </Table.Row>
                     ))}
                 </Table.Body>
             </Table.Root>
         </Flex>
+    );
+}
+
+function UserOptions({
+    user,
+    onDelete,
+}: {
+    user: User;
+    onDelete: (userId: string) => void;
+}) {
+    return (
+        <AlertDialog.Root>
+            <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                    <Button color="gray" variant="soft" size="1">
+                        <Ellipsis />
+                    </Button>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content size="1">
+                    <AlertDialog.Trigger>
+                        <DropdownMenu.Item color="red">
+                            Delete
+                        </DropdownMenu.Item>
+                    </AlertDialog.Trigger>
+                </DropdownMenu.Content>
+            </DropdownMenu.Root>
+            <AlertDialog.Content maxWidth="450px">
+                <AlertDialog.Title>Delete user?</AlertDialog.Title>
+                <AlertDialog.Description size="2">
+                    Are you sure you want to delete {user.username}? This action
+                    cannot be reversed.
+                </AlertDialog.Description>
+                <Flex gap="3" mt="4" justify="end">
+                    <AlertDialog.Cancel>
+                        <Button variant="soft" color="gray">
+                            Cancel
+                        </Button>
+                    </AlertDialog.Cancel>
+                    <AlertDialog.Action>
+                        <Button onClick={() => onDelete(user.id)} color="red">
+                            Delete user
+                        </Button>
+                    </AlertDialog.Action>
+                </Flex>
+            </AlertDialog.Content>
+        </AlertDialog.Root>
     );
 }

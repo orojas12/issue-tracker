@@ -1,6 +1,7 @@
 package dev.oscarrojas.issuetracker.user;
 
 import dev.oscarrojas.issuetracker.exceptions.DuplicateElementException;
+import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
 import dev.oscarrojas.issuetracker.util.RandomStringGenerator;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +35,15 @@ public class UserDaoJpa implements UserDao {
             return createUser(user);
         } else {
             return updateUser(user);
+        }
+    }
+
+    @Override
+    public void deleteById(String userId) throws NotFoundException {
+        if (userRepository.existsById(userId)) {
+            userRepository.deleteById(userId);
+        } else {
+            throw new NotFoundException("User id '%s' not found.".formatted(userId));
         }
     }
 

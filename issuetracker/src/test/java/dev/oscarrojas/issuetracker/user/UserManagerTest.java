@@ -101,6 +101,7 @@ public class UserManagerTest {
         assertNotNull(dto.id());
     }
 
+
     static class TestUserDao implements UserDao {
 
         @Override
@@ -115,6 +116,11 @@ public class UserManagerTest {
 
         @Override
         public User save(User user) {
+            throw new RuntimeException("Unimplemented method");
+        }
+
+        @Override
+        public void deleteById(String userId) {
             throw new RuntimeException("Unimplemented method");
         }
     }

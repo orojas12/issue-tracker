@@ -39,4 +39,14 @@ public class UserController {
         return user.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                 "User '%s' not found".formatted(username)));
     }
+
+    @DeleteMapping("/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable("userId") String userId) {
+        try {
+            userManager.deleteUser(userId);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
 }

@@ -220,5 +220,10 @@ public class TeamManagerTest {
         public User save(User user) {
             throw new RuntimeException("Unimplemented method");
         }
+
+        @Override
+        public void deleteById(String userId) {
+            throw new RuntimeException("Unimplemented method");
+        }
     }
 }

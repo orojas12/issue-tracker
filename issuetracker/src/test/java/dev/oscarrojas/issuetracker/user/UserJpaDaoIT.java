@@ -134,4 +134,26 @@ public class UserJpaDaoIT {
 
         assertThrows(RuntimeException.class, () -> userDao.save(user));
     }
+
+    @Test
+    void deleteById_throwsNotFoundIfUserDoesNotExist() {
+        User user = userWithUsername("john1");
+
+        assertThrows(NotFoundException.class, () -> userDao.deleteById(user.getId()));
+    }
+
+    @Test
+    void deleteById_userNotInDatabaseAfterDeletion() throws NotFoundException {
+        UserModel userModel = em.persistFlushFind(userModelWithUsername("john1"));
+        User user = new User(userModel.getId(),
+                userModel.getUsername(),
+                userModel.getFirstName(),
+                userModel.getLastName(),
+                userModel.getDateCreated());
+
+        userDao.deleteById(user.getId());
+
+        userModel = em.find(UserModel.class, userModel.getId());
+        assertNull(userModel);
+    }
 }
