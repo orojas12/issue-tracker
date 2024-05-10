@@ -2,12 +2,13 @@ package dev.oscarrojas.issuetracker.user;
 
 import dev.oscarrojas.issuetracker.team.TeamMemberModel;
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.Instant;
 import java.util.Collection;
 
 @Entity
-@Table(name = "user")
+@Table(name = "account")
 public class UserModel {
 
     @Id
@@ -16,9 +17,10 @@ public class UserModel {
     private String username;
     private String firstName;
     private String lastName;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Instant dateCreated;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Collection<TeamMemberModel> teamMembers;
 
     public UserModel() {}

@@ -11,7 +11,7 @@ public class TeamMemberModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "account_id")
     private UserModel user;
     @ManyToOne
     @JoinColumn(name = "team_id")

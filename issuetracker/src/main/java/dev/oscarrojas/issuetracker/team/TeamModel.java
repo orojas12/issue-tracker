@@ -1,6 +1,7 @@
 package dev.oscarrojas.issuetracker.team;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.Instant;
 import java.util.Collection;
@@ -14,6 +15,7 @@ public class TeamModel {
     @Id
     private String id;
     private String name;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Instant dateCreated;
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TeamMemberModel> members = new HashSet<>();

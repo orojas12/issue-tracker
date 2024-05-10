@@ -7,17 +7,21 @@ logging:
       springframework:
         web: debug
         security: debug
-        data: debug
-
-spring:
-  datasource:
-    url: 'jdbc:sqlite:file:${SQLITE_FILE_PATH}'
-    driver-class-name: org.sqlite.JDBC
-    username: ''
-    password: ''
+      hibernate:
+        SQL: debug
+        orm:
+          jdbc:
+            bind: trace
+        type:
+          descriptor:
+            sql:
+              BasicBinder: trace
+    net:
+      ttddyy:
+        dsproxy:
+          listener: debug
 
   jpa:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
     hibernate:
-      ddl-auto: create-drop
-      globally-quoted-identifiers: true
+      ddl-auto: validate

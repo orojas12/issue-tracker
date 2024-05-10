@@ -78,6 +78,13 @@
             <version>6.5.0.Final</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/net.ttddyy/datasource-proxy -->
+        <dependency>
+            <groupId>net.ttddyy</groupId>
+            <artifactId>datasource-proxy</artifactId>
+            <version>1.10</version>
+        </dependency>
+
     </dependencies>
 
     <build>
