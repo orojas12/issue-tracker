@@ -11,7 +11,7 @@ logging:
 
 spring:
   datasource:
-    url: 'jdbc:sqlite:file:/home/oscar/projects/issue-tracker/issuetracker/db/dev.db'
+    url: 'jdbc:sqlite:file:${SQLITE_FILE_PATH}'
     driver-class-name: org.sqlite.JDBC
     username: ''
     password: ''

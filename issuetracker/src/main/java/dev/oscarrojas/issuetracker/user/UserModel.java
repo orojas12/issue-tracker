@@ -1,8 +1,10 @@
 package dev.oscarrojas.issuetracker.user;
 
+import dev.oscarrojas.issuetracker.team.TeamMemberModel;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.Collection;
 
 @Entity
 @Table(name = "user")
@@ -15,6 +17,9 @@ public class UserModel {
     private String firstName;
     private String lastName;
     private Instant dateCreated;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private Collection<TeamMemberModel> teamMembers;
 
     public UserModel() {}
 
