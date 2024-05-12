@@ -1,0 +1,30 @@
+.header {
+    background-color: var(--gray-4);
+}
+
+.member-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.member-list li {
+    display: flex;
+    align-items: center;
+}
+
+.member-list li:hover {
+    background-color: var(--gray-3);
+}
+
+.member-list a {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    padding: var(--space-2);
+    text-decoration: none;
+}
+
+.member-list button {
+    margin-right: var(--space-1);
+}

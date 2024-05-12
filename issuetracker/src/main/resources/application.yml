@@ -7,16 +7,24 @@ logging:
       springframework:
         web: debug
         security: debug
-
-spring:
-  datasource:
-    url: "jdbc:sqlite:file:/home/oscar/projects/issue-tracker/issuetracker/db/dev.db"
-    driver-class-name: org.sqlite.JDBC
-    username: admin
-    password: password
+      hibernate:
+        SQL: debug
+        orm:
+          jdbc:
+            bind: trace
+        type:
+          descriptor:
+            sql:
+              BasicBinder: trace
+    net:
+      ttddyy:
+        dsproxy:
+          listener: debug
 
   jpa:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
     hibernate:
-      ddl-auto: create-drop
-      globally-quoted-identifiers: true
+      ddl-auto: validate
+
+issuetracker:
+  insert-fake-data: false

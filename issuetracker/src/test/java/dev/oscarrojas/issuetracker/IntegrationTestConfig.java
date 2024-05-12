@@ -13,6 +13,7 @@ public class IntegrationTestConfig {
     @Bean
     DataSource testDataSource() {
         DataSourceBuilder<HikariDataSource> builder = DataSourceBuilder.create().type(HikariDataSource.class);
+
         builder.driverClassName("org.sqlite.JDBC")
                 .url("jdbc:sqlite::memory:")
                 .username("")

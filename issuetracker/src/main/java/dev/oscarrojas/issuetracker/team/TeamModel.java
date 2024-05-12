@@ -1,8 +1,10 @@
 package dev.oscarrojas.issuetracker.team;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.Instant;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +15,7 @@ public class TeamModel {
     @Id
     private String id;
     private String name;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Instant dateCreated;
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TeamMemberModel> members = new HashSet<>();
@@ -58,11 +61,15 @@ public class TeamModel {
         return members;
     }
 
-    public void setMembers(Set<TeamMemberModel> members) {
+    public void setMembers(Collection<TeamMemberModel> members) {
         this.members.clear();
         if (members != null) {
             this.members.addAll(members);
         }
+    }
+
+    public void addMember(TeamMemberModel member) {
+        members.add(member);
     }
 
 }

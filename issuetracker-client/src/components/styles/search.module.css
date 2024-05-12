@@ -1,0 +1,11 @@
+.text-field {
+    padding-inline: var(--space-1);
+}
+
+.text-field input {
+    padding: var(--space-1);
+}
+
+.text-field button {
+    padding: var(--space-1);
+}

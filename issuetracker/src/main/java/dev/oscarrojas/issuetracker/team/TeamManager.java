@@ -3,21 +3,23 @@ package dev.oscarrojas.issuetracker.team;
 import dev.oscarrojas.issuetracker.exceptions.DuplicateElementException;
 import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
 import dev.oscarrojas.issuetracker.user.User;
-import dev.oscarrojas.issuetracker.user.UserManager;
+import dev.oscarrojas.issuetracker.user.UserDao;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TeamManager {
     
     private final TeamDao teamDao;
-    private final UserManager userManager;
+    private final UserDao userDao;
 
-    public TeamManager(TeamDao teamDao, UserManager userManager) {
+    public TeamManager(TeamDao teamDao, UserDao userDao) {
         this.teamDao = teamDao;
-        this.userManager = userManager;
+        this.userDao = userDao;
     }
 
     public TeamDetails getTeam(String teamId) throws NotFoundException {
@@ -60,7 +62,7 @@ public class TeamManager {
     }
 
     public TeamDetails addUserToTeam(String username, String teamId) throws NotFoundException, DuplicateElementException {
-        Optional<User> userOpt = userManager.getUser(username);
+        Optional<User> userOpt = userDao.findByUsername(username);
         if (userOpt.isEmpty()) {
             throw new NotFoundException(String.format("User '%s' not found", username));
         }

@@ -245,8 +245,70 @@ paths:
         '500':
           description: Authentication error
 
+  /users:
+    get:
+      tags:
+        - users
+      summary: Get list of all users
+      responses:
+        200:
+          description: Returns list of all users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+              examples:
+                userListExample:
+                  $ref: '#/components/examples/UserListExample'
+    post:
+      tags:
+        - users
+      summary: Create a new user
+      requestBody:
+        required: true
+        description: New user data
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Username
+            example:
+              username: 'john1'
+      responses:
+        200:
+          description: Returns new user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                userExample:
+                  $ref: '#/components/examples/UserExample'
 components:
   schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: User id
+        username:
+          type: string
+          description: Username
+        first_name:
+          type: string
+          description: First name
+        last_name:
+          type: string
+          description: Last name
+        date_created:
+          type: string
+          description: Date user was created in ISO 8601 format
     Team:
       type: object
       properties:
@@ -287,3 +349,18 @@ components:
       type: apiKey
       in: cookie
       name: JSESSIONID
+  examples:
+    UserExample:
+      value:
+        id: abR3U8Tyx4
+        username: john1
+        first_name: John
+        last_name: Wick
+        date_created: '2014-10-24'
+    UserListExample:
+      value:
+        - id: abR3U8Tyx4
+          username: john1
+          first_name: John
+          last_name: Wick
+          date_created: '2014-10-24'

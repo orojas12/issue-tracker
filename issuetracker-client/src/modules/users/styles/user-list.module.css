@@ -1,0 +1,16 @@
+.list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.list-item:hover,
+.list-item:focus-within {
+    background-color: var(--gray-3);
+}
+
+.list-item a {
+    display: block;
+    text-decoration: none;
+    padding: var(--space-3);
+}

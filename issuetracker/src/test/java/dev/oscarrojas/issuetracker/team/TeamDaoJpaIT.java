@@ -4,8 +4,6 @@ import dev.oscarrojas.issuetracker.IntegrationTestConfig;
 import dev.oscarrojas.issuetracker.IssueTracker;
 import dev.oscarrojas.issuetracker.exceptions.DuplicateElementException;
 import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
-import dev.oscarrojas.issuetracker.user.User;
-import dev.oscarrojas.issuetracker.user.UserModel;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -27,22 +25,14 @@ import static org.junit.jupiter.api.Assertions.*;
 @ContextConfiguration(classes = {IssueTracker.class, IntegrationTestConfig.class})
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-@Import(TeamJpaDao.class)
-public class TeamJpaDaoIT {
+@Import(TeamDaoJpa.class)
+public class TeamDaoJpaIT {
     
     @Autowired
     TestEntityManager entityManager;
 
     @Autowired
-    TeamJpaDao teamDao;
-
-    private UserModel modelWithUsername(String username) {
-        return new UserModel(username, "password", Instant.now());
-    }
-
-    private User entityWithUsername(String username) {
-        return new User(username, Instant.now());
-    }
+    TeamDaoJpa teamDao;
 
     @Test
     void findAll_returnsAllTeam() {
@@ -50,10 +40,8 @@ public class TeamJpaDaoIT {
                 new HashSet<>());
         var model2 = new TeamModel("team2", "Team 2", Instant.now(),
                 new HashSet<>());
-        var user1 = userModelWithUsername("user1");
-        var user2 = userModelWithUsername("user2");
-        user1 = entityManager.persistFlushFind(user1);
-        user2 = entityManager.persistFlushFind(user2);
+        var user1 = entityManager.persistFlushFind(userModelWithUsername("user1"));
+        var user2 = entityManager.persistFlushFind(userModelWithUsername("user2"));
         model1.getMembers().add(new TeamMemberModel(user1, model1));
         model2.getMembers().add(new TeamMemberModel(user2, model2));
 
@@ -82,7 +70,7 @@ public class TeamJpaDaoIT {
     @Test
     void save_Team_createsNewTeamModel() throws NotFoundException {
         // setup
-        var user1 = entityManager.persist(modelWithUsername("user1"));
+        var user1 = entityManager.persist(userModelWithUsername("user1"));
         var team = new Team(
                 null,
                 "name",
@@ -104,8 +92,8 @@ public class TeamJpaDaoIT {
     @Test
     void save_Team_updatesTeamModel() throws NotFoundException, DuplicateElementException {
         // insert test data
-        var user1 = entityManager.persist(modelWithUsername("user1"));
-        var user2 = entityManager.persist(modelWithUsername("user2"));
+        var user1 = entityManager.persist(userModelWithUsername("user1"));
+        var user2 = entityManager.persist(userModelWithUsername("user2"));
         var teamModel = entityManager.persist(new TeamModel(
                 "id",
                 "team1",
@@ -128,7 +116,7 @@ public class TeamJpaDaoIT {
                     ))
                     .collect(Collectors.toCollection(HashSet::new))
         );
-        var newUser = entityManager.persist(modelWithUsername("user3"));
+        var newUser = entityManager.persist(userModelWithUsername("user3"));
         var newTeamMember = new TeamMember(newUser.getUsername());
 
         // mutate team and persist

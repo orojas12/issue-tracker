@@ -1,23 +1,39 @@
 package dev.oscarrojas.issuetracker.user;
 
+import dev.oscarrojas.issuetracker.team.TeamMemberModel;
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.Instant;
+import java.util.Collection;
 
 @Entity
-@Table(name = "user")
+@Table(name = "account")
 public class UserModel {
 
     @Id
+    private String id;
+    @Column(unique = true, nullable = false)
     private String username;
-    private String password;
+    private String firstName;
+    private String lastName;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Instant dateCreated;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Collection<TeamMemberModel> teamMembers;
 
     public UserModel() {}
 
-    public UserModel(String username, String password, Instant dateCreated) {
+    public UserModel(String id,
+                     String username,
+                     String firstName,
+                     String lastName,
+                     Instant dateCreated) {
+        this.id = id;
         this.username = username;
-        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.dateCreated = dateCreated;
     }
 
@@ -29,14 +45,6 @@ public class UserModel {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Instant getDateCreated() {
         return dateCreated;
     }
@@ -45,4 +53,27 @@ public class UserModel {
         this.dateCreated = dateCreated;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 }
