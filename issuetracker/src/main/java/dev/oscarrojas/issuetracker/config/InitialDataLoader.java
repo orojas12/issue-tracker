@@ -7,6 +7,7 @@ import dev.oscarrojas.issuetracker.user.UserModel;
 import dev.oscarrojas.issuetracker.user.UserRepository;
 import dev.oscarrojas.issuetracker.util.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -25,12 +26,15 @@ public class InitialDataLoader implements ApplicationRunner {
     @Autowired
     UserRepository userRepository;
 
-    private UserModel userWithUsername(String username) {
+    @Value("${issuetracker.insert-fake-data}")
+    boolean shouldInsertData;
+
+    private UserModel user(String username, String firstName, String lastName) {
         return new UserModel(
                 RandomStringGenerator.getRandomString(10),
                 username,
-                "John",
-                "Wick",
+                firstName,
+                lastName,
                 Instant.now()
         );
     }
@@ -45,16 +49,17 @@ public class InitialDataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
+        if (!shouldInsertData) return;
         List<UserModel> users = List.of(
-                userWithUsername("oscar"),
-                userWithUsername("eric"),
-                userWithUsername("sarah"),
-                userWithUsername("charles"),
-                userWithUsername("john"),
-                userWithUsername("susan"),
-                userWithUsername("tommy"),
-                userWithUsername("alicia"),
-                userWithUsername("alex")
+                user("orojas12", "Oscar", "Rojas"),
+                user("ericg463", "Eric", "Gutierrez"),
+                user("sarahparker06", "Sarah", "Parker"),
+                user("charlestheman", "Charles", "Owens"),
+                user("johnnyboy01", "Johnny", "Fasber"),
+                user("lovelysusan1", "Susan", "Bearmont"),
+                user("tommy123", "Tom", "Gates"),
+                user("aleeshaa7", "Alicia", "Green"),
+                user("benalex02", "Alexis", "Martinez")
         );
         users = userRepository.saveAll(users);
         TeamModel team1 = teamWithUsers("QA Team", List.of(users.get(0), users.get(1), users.get(2)));

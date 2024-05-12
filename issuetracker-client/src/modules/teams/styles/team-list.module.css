@@ -1,0 +1,28 @@
+.list {
+    padding: 0;
+    margin: 0;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 180px;
+    width: 160px;
+}
+
+.link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-3);
+}
+
+.card-image {
+    display: block;
+    object-fit: cover;
+    height: 100px;
+    width: 160px;
+    background-color: var(--gray-5);
+}

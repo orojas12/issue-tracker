@@ -1,12 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App.tsx";
 import "./index.css";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { TeamDetails } from "./modules/teams/team.tsx";
-import { TeamsList } from "./modules/teams/teams-list.tsx";
-import { UserManagement } from "./modules/users/user-management.tsx";
+import { TeamDetails } from "./modules/teams/team-details.tsx";
+import { TeamsList } from "./modules/teams/team-list.tsx";
 import { UserDetails } from "./modules/users/user-details.tsx";
+import { UserManagement } from "./modules/users/user-list.tsx";
 
 const router = createBrowserRouter([
     {

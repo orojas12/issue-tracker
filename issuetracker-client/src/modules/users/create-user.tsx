@@ -1,4 +1,4 @@
-import { Button, Dialog, Flex, TextField, Text } from "@radix-ui/themes";
+import { Button, Dialog, Flex, Text, TextField } from "@radix-ui/themes";
 import { useState } from "react";
 import { CreateUserRequest } from "../teams/types";
 

@@ -25,3 +25,6 @@ logging:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
     hibernate:
       ddl-auto: validate
+
+issuetracker:
+  insert-fake-data: false
