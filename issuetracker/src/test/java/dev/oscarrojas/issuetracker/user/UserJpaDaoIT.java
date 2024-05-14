@@ -70,7 +70,7 @@ public class UserJpaDaoIT {
     }
 
     @Test
-    void save_returnsSavedUser() throws DuplicateElementException, NotFoundException {
+    void save_returnsSavedUser() throws DuplicateElementException {
         User user = new UserBuilder().username("user1").firstName("John").lastName("Smith").build();
 
         User result = userDao.save(user);
@@ -84,7 +84,7 @@ public class UserJpaDaoIT {
     }
 
     @Test
-    void save_persistsNewUserToDatabase() throws DuplicateElementException, NotFoundException {
+    void save_persistsNewUserToDatabase() throws DuplicateElementException {
         User user = userWithUsername("john1");
         // a user with null id means it does not exist and should be created in db
         user.setId(null);
@@ -110,7 +110,7 @@ public class UserJpaDaoIT {
     }
 
     @Test
-    void save_updatesExistingUserInDatabase() throws DuplicateElementException, NotFoundException {
+    void save_updatesExistingUserInDatabase() throws DuplicateElementException {
         UserModel userModel = em.persistFlushFind(userModelWithUsername("john1"));
         User user = new User(userModel.getId(),
                 userModel.getUsername(),
@@ -131,7 +131,7 @@ public class UserJpaDaoIT {
     }
 
     @Test
-    void save_throwsRuntimeExceptionIfUpdatingUserThatDoesNotExist() throws DuplicateElementException, NotFoundException {
+    void save_throwsRuntimeExceptionIfUpdatingUserThatDoesNotExist() {
         User user = userWithUsername("john1");
 
         assertThrows(RuntimeException.class, () -> userDao.save(user));
