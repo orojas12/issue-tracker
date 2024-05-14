@@ -90,7 +90,7 @@ public class Issue {
 
         private final Issue issue = new Issue();
 
-        public Builder id(long id) {
+        public Builder id(Long id) {
             issue.setId(id);
             return this;
         }

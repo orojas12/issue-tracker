@@ -32,7 +32,7 @@ public class TestUtils {
 
     public static Issue issue(Long id) {
         return Issue.getBuilder().id(id).title("title").description("desc")
-                .dueDate(Instant.now()).build();
+                .createdAt(Instant.now()).build();
     }
 
     public static IssueModel issueModel(Long id) {

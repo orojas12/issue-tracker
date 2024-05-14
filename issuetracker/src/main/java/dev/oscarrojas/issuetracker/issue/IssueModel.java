@@ -15,10 +15,12 @@ public class IssueModel {
     @Column(nullable = false)
     private String title;
     private String description;
+    @Column(nullable = false)
     @Convert(converter = SQLiteDateTimeConverter.class)
     private Instant createdAt;
     @Convert(converter = SQLiteDateTimeConverter.class)
     private Instant dueDate;
+    @Column(nullable = false)
     private boolean closed;
 
     public IssueModel() {
