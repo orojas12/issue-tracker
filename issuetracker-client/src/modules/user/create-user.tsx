@@ -1,6 +1,6 @@
 import { Button, Dialog, Flex, Text, TextField } from "@radix-ui/themes";
 import { useState } from "react";
-import { CreateUserRequest } from "../teams/types";
+import { CreateUserRequest } from "@/modules/team/types";
 
 export function CreateUserDialog({
     children,

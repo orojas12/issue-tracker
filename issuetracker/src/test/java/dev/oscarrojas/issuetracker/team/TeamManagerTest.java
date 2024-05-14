@@ -18,7 +18,6 @@ import java.util.Set;
 
 import static dev.oscarrojas.issuetracker.TestUtils.userWithUsername;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,9 +33,9 @@ public class TeamManagerTest {
     void getAllTeams_returnsAllTeams() {
         // setup
         var team1 = new Team("team1", "Team 1", Instant.now(),
-                        new HashSet<>(Set.of(new TeamMember("user1"))));
+                new HashSet<>(Set.of(new TeamMember("user1"))));
         var team2 = new Team("team2", "Team 2", Instant.now(),
-                        new HashSet<>(Set.of(new TeamMember("user2"))));
+                new HashSet<>(Set.of(new TeamMember("user2"))));
         when(teamDao.findAll()).thenReturn(List.of(team1, team2));
         var teamManager = new TeamManager(teamDao, userDao);
 
@@ -86,7 +85,7 @@ public class TeamManagerTest {
         doNothing().when(teamDao).deleteById(eq(teamId));
         teamDao.deleteById(teamId);
     }
-    
+
     @Test
     void addUserToTeam_UsernameAndTeamId_AddsUserToTeamAndSaves() throws NotFoundException, DuplicateElementException {
         // setup
@@ -114,8 +113,8 @@ public class TeamManagerTest {
         TeamManager manager = new TeamManager(teamDao, userDao);
 
         assertThrows(
-            NotFoundException.class, 
-            () -> manager.addUserToTeam(user.getUsername(), team.getId())
+                NotFoundException.class,
+                () -> manager.addUserToTeam(user.getUsername(), team.getId())
         );
     }
 
@@ -130,8 +129,8 @@ public class TeamManagerTest {
         TeamManager manager = new TeamManager(teamDao, userDao);
 
         assertThrows(
-            NotFoundException.class, 
-            () -> manager.addUserToTeam(user.getUsername(), team.getId())
+                NotFoundException.class,
+                () -> manager.addUserToTeam(user.getUsername(), team.getId())
         );
     }
 
@@ -160,11 +159,11 @@ public class TeamManagerTest {
 
         TeamManager manager = new TeamManager(teamDao, userDao);
         assertThrows(
-            NotFoundException.class,
-            () -> manager.removeUserFromTeam(user.getUsername(), team.getId())
+                NotFoundException.class,
+                () -> manager.removeUserFromTeam(user.getUsername(), team.getId())
         );
     }
-    
+
     @Test
     void removeUserFromTeam_UsernameAndTeamId_throwsNotFoundExceptionIfTeamNotFound() {
         User user = userWithUsername("user1");
@@ -174,11 +173,11 @@ public class TeamManagerTest {
 
         TeamManager manager = new TeamManager(teamDao, userDao);
         assertThrows(
-            NotFoundException.class,
-            () -> manager.removeUserFromTeam(user.getUsername(), team.getId())
+                NotFoundException.class,
+                () -> manager.removeUserFromTeam(user.getUsername(), team.getId())
         );
     }
-    
+
     static class TestTeamDao implements TeamDao {
 
 

@@ -1,0 +1,9 @@
+.link {
+    text-decoration: none;
+    color: inherit;
+    font-weight: var(--font-weight-medium);
+}
+
+.link:hover {
+    color: var(--accent-11);
+}

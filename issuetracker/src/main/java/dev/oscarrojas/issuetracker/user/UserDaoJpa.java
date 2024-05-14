@@ -68,8 +68,8 @@ public class UserDaoJpa implements UserDao {
         Optional<UserModel> modelOpt = userRepository.findById(user.getId());
 
         if (modelOpt.isEmpty()) {
-            throw new RuntimeException("Could not find user '%s' to update. " +
-                    "If trying to create new user, user id must be null.".formatted(user.getId()));
+            throw new RuntimeException("Could not find user '%s' to update. ".formatted(user.getId()) +
+                    "If trying to create new user, user id must be null.");
         }
 
         UserModel model = modelOpt.get();

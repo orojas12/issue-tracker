@@ -1,12 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.tsx";
 import "./index.css";
-import { TeamDetails } from "./modules/teams/team-details.tsx";
-import { TeamsList } from "./modules/teams/team-list.tsx";
-import { UserDetails } from "./modules/users/user-details.tsx";
-import { UserManagement } from "./modules/users/user-list.tsx";
+import { TeamDetails } from "@/modules/team/team-details.tsx";
+import { TeamsList } from "@/modules/team/team-list.tsx";
+import { UserDetails } from "@/modules/user/user-details.tsx";
+import { UserManagement } from "@/modules/user/user-list.tsx";
+import { IssueList } from "@/modules/issue/issue-list.tsx";
+import { IssueDetails } from "@/modules/issue/issue-details.tsx";
 
 const router = createBrowserRouter([
     {
@@ -15,26 +17,34 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "teams",
-                element: <TeamsList />,
+                element: <TeamsList />
             },
             {
                 path: "/teams/:teamId",
-                element: <TeamDetails />,
+                element: <TeamDetails />
             },
             {
                 path: "/users",
-                element: <UserManagement />,
+                element: <UserManagement />
             },
             {
                 path: "/users/:username",
-                element: <UserDetails />,
+                element: <UserDetails />
             },
-        ],
-    },
+            {
+                path: "/issues",
+                element: <IssueList />
+            },
+            {
+                path: "/issues/:issueId",
+                element: <IssueDetails />
+            }
+        ]
+    }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
         <RouterProvider router={router} />
-    </React.StrictMode>,
+    </React.StrictMode>
 );

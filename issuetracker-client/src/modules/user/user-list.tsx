@@ -1,6 +1,6 @@
 import { Button, Container, Flex, Heading, Separator } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
-import { CreateUserRequest, User } from "../teams/types";
+import { CreateUserRequest, User } from "@/modules/team/types";
 import { CreateUserDialog } from "./create-user";
 
 import { SearchField } from "@/components/search-field";

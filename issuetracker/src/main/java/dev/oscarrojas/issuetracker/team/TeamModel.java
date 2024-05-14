@@ -1,7 +1,7 @@
 package dev.oscarrojas.issuetracker.team;
 
+import dev.oscarrojas.issuetracker.util.SQLiteDateTimeConverter;
 import jakarta.persistence.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.Instant;
 import java.util.Collection;
@@ -11,21 +11,22 @@ import java.util.Set;
 @Entity
 @Table(name = "team")
 public class TeamModel {
-    
+
     @Id
     private String id;
     private String name;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @Convert(converter = SQLiteDateTimeConverter.class)
     private Instant dateCreated;
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TeamMemberModel> members = new HashSet<>();
 
-    public TeamModel() {}
+    public TeamModel() {
+    }
 
     public TeamModel(
-            String id, 
-            String name, 
-            Instant dateCreated, 
+            String id,
+            String name,
+            Instant dateCreated,
             Set<TeamMemberModel> members) {
         this.id = id;
         this.name = name;

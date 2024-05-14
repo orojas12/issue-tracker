@@ -1,8 +1,8 @@
 package dev.oscarrojas.issuetracker.user;
 
 import dev.oscarrojas.issuetracker.team.TeamMemberModel;
+import dev.oscarrojas.issuetracker.util.SQLiteDateTimeConverter;
 import jakarta.persistence.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.Instant;
 import java.util.Collection;
@@ -17,13 +17,14 @@ public class UserModel {
     private String username;
     private String firstName;
     private String lastName;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @Convert(converter = SQLiteDateTimeConverter.class)
     private Instant dateCreated;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Collection<TeamMemberModel> teamMembers;
 
-    public UserModel() {}
+    public UserModel() {
+    }
 
     public UserModel(String id,
                      String username,
