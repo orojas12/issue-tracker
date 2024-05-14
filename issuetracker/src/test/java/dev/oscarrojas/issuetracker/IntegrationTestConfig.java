@@ -1,23 +1,25 @@
 package dev.oscarrojas.issuetracker;
 
-import com.zaxxer.hikari.HikariDataSource;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.sqlite.SQLiteConfig;
+import org.sqlite.SQLiteDataSource;
 
 import javax.sql.DataSource;
 
 @Configuration
 public class IntegrationTestConfig {
 
+    // SQLite config
     @Bean
-    DataSource testDataSource() {
-        DataSourceBuilder<HikariDataSource> builder = DataSourceBuilder.create().type(HikariDataSource.class);
-
-        builder.driverClassName("org.sqlite.JDBC")
-                .url("jdbc:sqlite::memory:")
-                .username("")
-                .password("");
-        return builder.build();
+    public DataSource dataSource() {
+        SQLiteDataSource ds = new SQLiteDataSource();
+        ds.setUrl("jdbc:sqlite::memory:");
+        SQLiteConfig config = ds.getConfig();
+        config.enforceForeignKeys(true);
+        config.setDateClass(SQLiteConfig.DateClass.TEXT.getValue());
+        ds.setConfig(config);
+        return ds;
     }
+
 }

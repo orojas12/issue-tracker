@@ -18,8 +18,8 @@ public class DataConfig {
         ds.setUrl("jdbc:sqlite:file:" + filepath);
         SQLiteConfig config = ds.getConfig();
         config.enforceForeignKeys(true);
-        config.setDateClass(SQLiteConfig.DateClass.TEXT.getValue());
         ds.setConfig(config);
         return ds;
     }
+
 }

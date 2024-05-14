@@ -1,17 +1,8 @@
-import {
-    AlertDialog,
-    Button,
-    Container,
-    DataList,
-    DropdownMenu,
-    Flex,
-    Heading,
-    Separator,
-} from "@radix-ui/themes";
+import { AlertDialog, Button, Container, DataList, DropdownMenu, Flex, Heading, Separator } from "@radix-ui/themes";
 import { Ellipsis } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { User } from "../teams/types";
+import { User } from "@/modules/team/types";
 
 export function UserDetails() {
     const navigate = useNavigate();
@@ -28,7 +19,7 @@ export function UserDetails() {
 
     const deleteUser = async (userId: string) => {
         const res = await fetch(`http://localhost:8080/users/${userId}`, {
-            method: "DELETE",
+            method: "DELETE"
         });
         if (res.ok) {
             navigate("/users", { replace: true });
@@ -79,9 +70,9 @@ export function UserDetails() {
 }
 
 export function UserOptions({
-    user,
-    onDelete,
-}: {
+                                user,
+                                onDelete
+                            }: {
     user: User;
     onDelete: (userId: string) => void;
 }) {

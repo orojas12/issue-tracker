@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.time.Instant;
 import java.util.HashSet;
@@ -26,8 +27,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @Import(TeamDaoJpa.class)
+@Sql("/sqlite/schema.sql")
 public class TeamDaoJpaIT {
-    
+
     @Autowired
     TestEntityManager entityManager;
 
@@ -107,14 +109,14 @@ public class TeamDaoJpaIT {
 
         // set up entities
         var team = new Team(
-            teamModel.getId(),
-            teamModel.getName(),
-            teamModel.getDateCreated(),
-            teamModel.getMembers().stream()
-                    .map((model) -> new TeamMember(
-                        model.getUser().getUsername()
-                    ))
-                    .collect(Collectors.toCollection(HashSet::new))
+                teamModel.getId(),
+                teamModel.getName(),
+                teamModel.getDateCreated(),
+                teamModel.getMembers().stream()
+                        .map((model) -> new TeamMember(
+                                model.getUser().getUsername()
+                        ))
+                        .collect(Collectors.toCollection(HashSet::new))
         );
         var newUser = entityManager.persist(userModelWithUsername("user3"));
         var newTeamMember = new TeamMember(newUser.getUsername());
