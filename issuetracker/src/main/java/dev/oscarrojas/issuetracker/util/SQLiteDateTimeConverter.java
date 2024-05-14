@@ -7,11 +7,11 @@ import java.time.Instant;
 public class SQLiteDateTimeConverter implements AttributeConverter<Instant, String> {
     @Override
     public String convertToDatabaseColumn(Instant datetime) {
-        return datetime.toString();
+        return datetime != null ? datetime.toString() : null;
     }
 
     @Override
     public Instant convertToEntityAttribute(String datetime) {
-        return Instant.parse(datetime);
+        return datetime != null ? Instant.parse(datetime) : null;
     }
 }
