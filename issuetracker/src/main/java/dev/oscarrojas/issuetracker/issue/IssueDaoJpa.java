@@ -55,6 +55,7 @@ public class IssueDaoJpa implements IssueDao {
         return toEntity(model);
     }
 
+    @Override
     public void deleteById(long id) throws NotFoundException {
         if (issueRepository.existsById(id)) {
             issueRepository.deleteById(id);
