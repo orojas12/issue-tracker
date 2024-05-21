@@ -1,0 +1,16 @@
+.input-title {
+    flex-grow: 1;
+    margin-right: var(--space-3);
+}
+
+.input-desc {
+    min-height: 200px;
+}
+
+.datalist {
+    gap: var(--space-4);
+}
+
+.datalist dt {
+    min-width: unset;
+}

@@ -1,0 +1,3 @@
+.button--transparent:not(:hover) {
+    background-color: transparent;
+}

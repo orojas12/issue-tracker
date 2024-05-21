@@ -18,7 +18,7 @@ export function CreateIssueForm({ onSubmit, onCancel }: CreateIssueFormProps) {
     const datePicker = useRef<HTMLInputElement | null>(null);
 
     const resetDatePicker = () => {
-        datePicker.current.value = "";
+        if (datePicker.current) datePicker.current.value = "";
     };
 
     const localDateToday: string = formatLocalDate(new Date());
