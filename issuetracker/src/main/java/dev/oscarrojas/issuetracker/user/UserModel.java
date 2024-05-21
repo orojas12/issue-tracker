@@ -1,7 +1,7 @@
 package dev.oscarrojas.issuetracker.user;
 
+import dev.oscarrojas.issuetracker.data.SQLiteInstantConverter;
 import dev.oscarrojas.issuetracker.team.TeamMemberModel;
-import dev.oscarrojas.issuetracker.util.SQLiteDateTimeConverter;
 import jakarta.persistence.*;
 
 import java.time.Instant;
@@ -17,7 +17,7 @@ public class UserModel {
     private String username;
     private String firstName;
     private String lastName;
-    @Convert(converter = SQLiteDateTimeConverter.class)
+    @Convert(converter = SQLiteInstantConverter.class)
     private Instant dateCreated;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

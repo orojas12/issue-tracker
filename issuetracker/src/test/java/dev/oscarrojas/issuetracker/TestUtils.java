@@ -8,6 +8,8 @@ import dev.oscarrojas.issuetracker.user.UserModel;
 import dev.oscarrojas.issuetracker.util.RandomStringGenerator;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class TestUtils {
 
@@ -36,7 +38,7 @@ public class TestUtils {
     }
 
     public static IssueModel issueModel(Long id) {
-        return new IssueModel(null, "title", "desc", Instant.now(), Instant.now(), false);
+        return new IssueModel(null, "title", "desc", Instant.now(), LocalDateTime.now(), ZoneId.systemDefault(), false);
     }
 
 }

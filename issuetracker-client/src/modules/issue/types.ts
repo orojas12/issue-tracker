@@ -6,3 +6,10 @@ export type Issue = {
     dueDate?: Date;
     closed: boolean;
 }
+
+export type CreateIssue = {
+    title: string;
+    description: string;
+    dueDate?: string;
+    dueDateTimeZone?: string;
+}

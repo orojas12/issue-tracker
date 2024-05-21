@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,16 @@ public class IssueController {
     }
 
     @PostMapping
-    public IssueDto createIssue(@RequestBody CreateIssueDto dto) {
+    public IssueDto createIssue(@RequestBody CreateIssueRequest body) {
+        ZonedDateTime datetime = null;
+        if (body.dueDate() != null && body.dueDateTimeZone() != null) {
+            datetime = ZonedDateTime.of(body.dueDate(), body.dueDateTimeZone());
+        }
+        var dto = new CreateIssueDto(
+                body.title(),
+                body.description(),
+                datetime
+        );
         return issueService.createIssue(dto);
     }
 

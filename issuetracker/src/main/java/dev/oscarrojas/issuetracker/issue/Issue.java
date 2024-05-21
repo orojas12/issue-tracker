@@ -1,19 +1,24 @@
 package dev.oscarrojas.issuetracker.issue;
 
+import jakarta.annotation.Nullable;
+
 import java.time.Instant;
+import java.time.ZonedDateTime;
 
 public class Issue {
+    @Nullable
     private Long id;
     private String title;
     private String description;
     private Instant createdAt;
-    private Instant dueDate;
+    @Nullable
+    private ZonedDateTime dueDate;
     private boolean closed;
 
     public Issue() {
     }
 
-    public Issue(Long id, String title, String description, Instant createdAt, Instant dueDate, boolean closed) {
+    public Issue(Long id, String title, String description, Instant createdAt, ZonedDateTime dueDate, boolean closed) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -74,11 +79,11 @@ public class Issue {
         this.createdAt = createdAt;
     }
 
-    public Instant getDueDate() {
+    public ZonedDateTime getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Instant dueDate) {
+    public void setDueDate(ZonedDateTime dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -110,7 +115,7 @@ public class Issue {
             return this;
         }
 
-        public Builder dueDate(Instant dueDate) {
+        public Builder dueDate(ZonedDateTime dueDate) {
             issue.setDueDate(dueDate);
             return this;
         }

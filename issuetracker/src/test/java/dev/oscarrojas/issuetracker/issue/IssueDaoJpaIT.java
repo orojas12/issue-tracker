@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,8 +39,8 @@ public class IssueDaoJpaIT {
 
     @Test
     void findAll_findsAllIssues() {
-        IssueModel issue1 = testEm.persistFlushFind(issueModel(null));
-        IssueModel issue2 = testEm.persistFlushFind(issueModel(null));
+        IssueModel model1 = testEm.persistFlushFind(issueModel(null));
+        IssueModel model2 = testEm.persistFlushFind(issueModel(null));
 
         List<Issue> issues = issueDao.findAll();
 
@@ -49,20 +50,29 @@ public class IssueDaoJpaIT {
         boolean hasIssue2 = false;
 
         for (Issue issue : issues) {
-            if (issue.getId().equals(issue1.getId())) {
+            assertNotNull(issue.getId());
+            if (issue.getId().equals(model1.getId())) {
                 hasIssue1 = true;
-                assertEquals(issue1.getTitle(), issue.getTitle());
-                assertEquals(issue1.getDescription(), issue.getDescription());
-                assertEquals(issue1.getCreatedAt(), issue.getCreatedAt());
-                assertEquals(issue1.getDueDate(), issue.getDueDate());
-                assertEquals(issue1.isClosed(), issue.isClosed());
-            } else if (issue.getId().equals(issue2.getId())) {
+                assertEquals(model1.getTitle(), issue.getTitle());
+                assertEquals(model1.getDescription(), issue.getDescription());
+                assertEquals(model1.getCreatedAt(), issue.getCreatedAt());
+                if (model1.getDueDate() != null && model1.getDueDateTimeZone() != null) {
+                    assertEquals(ZonedDateTime.of(model1.getDueDate(), model1.getDueDateTimeZone()), issue.getDueDate());
+                } else {
+                    assertNull(issue.getDueDate());
+                }
+                assertEquals(model1.isClosed(), issue.isClosed());
+            } else if (issue.getId().equals(model2.getId())) {
                 hasIssue2 = true;
-                assertEquals(issue2.getTitle(), issue.getTitle());
-                assertEquals(issue2.getDescription(), issue.getDescription());
-                assertEquals(issue2.getCreatedAt(), issue.getCreatedAt());
-                assertEquals(issue2.getDueDate(), issue.getDueDate());
-                assertEquals(issue2.isClosed(), issue.isClosed());
+                assertEquals(model2.getTitle(), issue.getTitle());
+                assertEquals(model2.getDescription(), issue.getDescription());
+                assertEquals(model2.getCreatedAt(), issue.getCreatedAt());
+                if (model2.getDueDate() != null && model2.getDueDateTimeZone() != null) {
+                    assertEquals(ZonedDateTime.of(model2.getDueDate(), model2.getDueDateTimeZone()), issue.getDueDate());
+                } else {
+                    assertNull(issue.getDueDate());
+                }
+                assertEquals(model2.isClosed(), issue.isClosed());
             }
         }
 
@@ -71,17 +81,21 @@ public class IssueDaoJpaIT {
 
     @Test
     void findById_returnsIssue() {
-        IssueModel issue1 = testEm.persistFlushFind(issueModel(null));
+        IssueModel model = testEm.persistFlushFind(issueModel(null));
 
-        Optional<Issue> opt = issueDao.findById(issue1.getId());
+        Optional<Issue> opt = issueDao.findById(model.getId());
 
         assertTrue(opt.isPresent());
         Issue result = opt.get();
-        assertEquals(issue1.getTitle(), result.getTitle());
-        assertEquals(issue1.getDescription(), result.getDescription());
-        assertEquals(issue1.getCreatedAt(), result.getCreatedAt());
-        assertEquals(issue1.getDueDate(), result.getDueDate());
-        assertEquals(issue1.isClosed(), result.isClosed());
+        assertEquals(model.getTitle(), result.getTitle());
+        assertEquals(model.getDescription(), result.getDescription());
+        assertEquals(model.getCreatedAt(), result.getCreatedAt());
+        if (model.getDueDate() != null && model.getDueDateTimeZone() != null) {
+            assertEquals(ZonedDateTime.of(model.getDueDate(), model.getDueDateTimeZone()), result.getDueDate());
+        } else {
+            assertNull(result.getDueDate());
+        }
+        assertEquals(model.isClosed(), result.isClosed());
     }
 
     @Test
@@ -122,7 +136,14 @@ public class IssueDaoJpaIT {
         assertEquals(issue.getTitle(), model.getTitle());
         assertEquals(issue.getDescription(), model.getDescription());
         assertEquals(issue.getCreatedAt(), model.getCreatedAt());
-        assertEquals(issue.getDueDate(), model.getDueDate());
+        if (issue.getDueDate() != null) {
+            assertNotNull(model.getDueDate());
+            assertNotNull(model.getDueDateTimeZone());
+            assertEquals(issue.getDueDate(), ZonedDateTime.of(model.getDueDate(), model.getDueDateTimeZone()));
+        } else {
+            assertNull(model.getDueDate());
+            assertNull(model.getDueDateTimeZone());
+        }
         assertEquals(issue.isClosed(), model.isClosed());
     }
 
@@ -133,7 +154,9 @@ public class IssueDaoJpaIT {
                 model.getTitle(),
                 model.getDescription(),
                 model.getCreatedAt(),
-                model.getDueDate(),
+                model.getDueDate() != null && model.getDueDateTimeZone() != null ?
+                        ZonedDateTime.of(model.getDueDate(), model.getDueDateTimeZone()) :
+                        null,
                 model.isClosed());
 
         issue.setTitle("new title");
@@ -151,7 +174,11 @@ public class IssueDaoJpaIT {
         assertEquals(issue.getTitle(), model.getTitle());
         assertEquals(issue.getDescription(), model.getDescription());
         assertEquals(issue.getCreatedAt(), model.getCreatedAt());
-        assertEquals(issue.getDueDate(), model.getDueDate());
+        if (model.getDueDate() != null && model.getDueDateTimeZone() != null) {
+            assertEquals(issue.getDueDate(), ZonedDateTime.of(model.getDueDate(), model.getDueDateTimeZone()));
+        } else {
+            assertNull(issue.getDueDate());
+        }
         assertEquals(issue.isClosed(), model.isClosed());
     }
 

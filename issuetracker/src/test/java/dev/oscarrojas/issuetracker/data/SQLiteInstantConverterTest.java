@@ -1,4 +1,4 @@
-package dev.oscarrojas.issuetracker.util;
+package dev.oscarrojas.issuetracker.data;
 
 import org.junit.jupiter.api.Test;
 
@@ -10,18 +10,18 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SQLiteDateTimeConverterTest {
+public class SQLiteInstantConverterTest {
 
     @Test
     void convertToDatabaseColumn_returnsNullIfDateTimeIsNull() {
-        var converter = new SQLiteDateTimeConverter();
+        var converter = new SQLiteInstantConverter();
         String result = converter.convertToDatabaseColumn(null);
         assertNull(result);
     }
 
     @Test
     void convertToDatabaseColumn_returnsISO8601DateTimeUTCFormattedString() {
-        var converter = new SQLiteDateTimeConverter();
+        var converter = new SQLiteInstantConverter();
         Instant instant = Instant.now();
         String timestamp = converter.convertToDatabaseColumn(instant);
         AtomicReference<OffsetDateTime> datetime = new AtomicReference<>();
@@ -32,7 +32,7 @@ public class SQLiteDateTimeConverterTest {
 
     @Test
     void convertToDatabaseColumn_returnsInstantConvertedToDateTimeString() {
-        var converter = new SQLiteDateTimeConverter();
+        var converter = new SQLiteInstantConverter();
         Instant instant1 = Instant.now();
         Instant instant2 = Instant.now().plusSeconds(1);
 
@@ -46,7 +46,7 @@ public class SQLiteDateTimeConverterTest {
     @Test
     void convertToEntityAttribute_throwsExceptionIfInvalidISOString() {
         String timestamp = "2024-04-21T09:30:05"; // should include offset to be valid
-        var converter = new SQLiteDateTimeConverter();
+        var converter = new SQLiteInstantConverter();
         assertThrows(DateTimeParseException.class, () -> converter.convertToEntityAttribute(timestamp));
     }
 
@@ -54,14 +54,14 @@ public class SQLiteDateTimeConverterTest {
     void convertToEntityAttribute_DateTimeStringConvertedToInstant() {
         String timestamp = "2024-04-21T09:30:05Z";
         Instant instant = Instant.parse(timestamp);
-        var converter = new SQLiteDateTimeConverter();
+        var converter = new SQLiteInstantConverter();
         Instant result = converter.convertToEntityAttribute(timestamp);
         assertEquals(instant, result);
     }
 
     @Test
     void convertToEntityAttribute_returnsNullIfDateTimeStringIsNull() {
-        var converter = new SQLiteDateTimeConverter();
+        var converter = new SQLiteInstantConverter();
         Instant result = converter.convertToEntityAttribute(null);
         assertNull(result);
     }

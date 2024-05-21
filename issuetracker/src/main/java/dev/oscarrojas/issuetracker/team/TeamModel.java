@@ -1,6 +1,6 @@
 package dev.oscarrojas.issuetracker.team;
 
-import dev.oscarrojas.issuetracker.util.SQLiteDateTimeConverter;
+import dev.oscarrojas.issuetracker.data.SQLiteInstantConverter;
 import jakarta.persistence.*;
 
 import java.time.Instant;
@@ -15,7 +15,7 @@ public class TeamModel {
     @Id
     private String id;
     private String name;
-    @Convert(converter = SQLiteDateTimeConverter.class)
+    @Convert(converter = SQLiteInstantConverter.class)
     private Instant dateCreated;
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TeamMemberModel> members = new HashSet<>();

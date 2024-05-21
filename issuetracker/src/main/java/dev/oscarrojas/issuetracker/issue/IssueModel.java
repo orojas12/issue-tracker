@@ -1,9 +1,13 @@
 package dev.oscarrojas.issuetracker.issue;
 
-import dev.oscarrojas.issuetracker.util.SQLiteDateTimeConverter;
+import dev.oscarrojas.issuetracker.data.SQLiteInstantConverter;
+import dev.oscarrojas.issuetracker.data.SQLiteLocalDateTimeConverter;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Entity
 @Table(name = "issue")
@@ -16,22 +20,24 @@ public class IssueModel {
     private String title;
     private String description;
     @Column(nullable = false)
-    @Convert(converter = SQLiteDateTimeConverter.class)
+    @Convert(converter = SQLiteInstantConverter.class)
     private Instant createdAt;
-    @Convert(converter = SQLiteDateTimeConverter.class)
-    private Instant dueDate;
+    @Convert(converter = SQLiteLocalDateTimeConverter.class)
+    private LocalDateTime dueDate;
+    private ZoneId dueDateTimeZone;
     @Column(nullable = false)
     private boolean closed;
 
     public IssueModel() {
     }
 
-    public IssueModel(Long id, String title, String description, Instant createdAt, Instant dueDate, boolean closed) {
+    public IssueModel(Long id, String title, String description, Instant createdAt, LocalDateTime dueDate, ZoneId dueDateTimeZone, boolean closed) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.createdAt = createdAt;
         this.dueDate = dueDate;
+        this.dueDateTimeZone = dueDateTimeZone;
         this.closed = closed;
     }
 
@@ -67,11 +73,12 @@ public class IssueModel {
         this.createdAt = createdAt;
     }
 
-    public Instant getDueDate() {
+    @Nullable
+    public LocalDateTime getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Instant dueDate) {
+    public void setDueDate(LocalDateTime dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -81,5 +88,14 @@ public class IssueModel {
 
     public void setClosed(boolean closed) {
         this.closed = closed;
+    }
+
+    @Nullable
+    public ZoneId getDueDateTimeZone() {
+        return dueDateTimeZone;
+    }
+
+    public void setDueDateTimeZone(ZoneId dueDateTimeZone) {
+        this.dueDateTimeZone = dueDateTimeZone;
     }
 }

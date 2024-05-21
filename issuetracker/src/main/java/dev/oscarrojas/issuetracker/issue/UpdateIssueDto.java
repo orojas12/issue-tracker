@@ -1,11 +1,11 @@
 package dev.oscarrojas.issuetracker.issue;
 
-import java.time.Instant;
+import java.time.ZonedDateTime;
 
 public record UpdateIssueDto(
         String title,
         String description,
-        Instant dueDate,
+        ZonedDateTime dueDate,
         boolean closed
 ) {
 }

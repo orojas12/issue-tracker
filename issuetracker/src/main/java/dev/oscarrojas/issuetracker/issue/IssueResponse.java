@@ -1,14 +1,16 @@
 package dev.oscarrojas.issuetracker.issue;
 
 import java.time.Instant;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
-public record IssueDto(
-        Long id,
+public record IssueResponse(
+        long id,
         String title,
         String description,
         Instant createdAt,
-        ZonedDateTime dueDate,
+        LocalDateTime dueDate,
+        ZoneId dueDateTimeZone,
         boolean closed
 ) {
 }

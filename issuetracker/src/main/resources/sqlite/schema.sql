@@ -33,5 +33,11 @@ CREATE TABLE issue
     description text,
     created_at  text NOT NULL,
     due_date    text,
-    closed      integer
+    due_date_time_zone text,
+    closed      integer,
+    CONSTRAINT CHK_due_date_has_time_zone CHECK (
+        (due_date NOT NULL AND due_date_time_zone NOT NULL)
+        OR
+        (due_date IS NULL AND due_date_time_zone IS NULL)
+    )
 );

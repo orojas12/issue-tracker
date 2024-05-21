@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,16 +68,19 @@ public class IssueServiceTest {
 
     @Test
     void createIssue_returnsCreatedIssue() {
-        CreateIssueDto dto = new CreateIssueDto("title", "desc", Instant.now());
+        CreateIssueDto dto = new CreateIssueDto("title", "desc", ZonedDateTime.now());
         IssueDto expected = new IssueDto(null,
                 dto.title(),
                 dto.description(),
                 Instant.now(),
                 dto.dueDate(),
                 false);
-        when(issueDao.save(argThat((arg) -> arg.getTitle().equals(dto.title()) &&
-                arg.getDescription().equals(dto.description()) &&
-                arg.getDueDate().equals(dto.dueDate())
+        when(issueDao.save(argThat((arg) -> {
+                    assertEquals(dto.title(), arg.getTitle());
+                    assertEquals(dto.description(), arg.getDescription());
+                    assertEquals(dto.dueDate(), arg.getDueDate());
+                    return true;
+                }
         ))).thenAnswer(i -> i.getArgument(0));
 
         IssueService service = new IssueService(issueDao);
@@ -94,7 +98,7 @@ public class IssueServiceTest {
                 "new desc",
                 null,
                 true);
-        Issue issue = new Issue(1L, "title", "desc", Instant.now(), Instant.now(), false);
+        Issue issue = new Issue(1L, "title", "desc", Instant.now(), ZonedDateTime.now(), false);
         when(issueDao.findById(issue.getId())).thenReturn(Optional.of(issue));
         when(issueDao.save(issue)).thenAnswer(i -> i.getArgument(0));
         IssueService service = new IssueService(issueDao);

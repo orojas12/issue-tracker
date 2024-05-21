@@ -1,10 +1,10 @@
-package dev.oscarrojas.issuetracker.util;
+package dev.oscarrojas.issuetracker.data;
 
 import jakarta.persistence.AttributeConverter;
 
 import java.time.Instant;
 
-public class SQLiteDateTimeConverter implements AttributeConverter<Instant, String> {
+public class SQLiteInstantConverter implements AttributeConverter<Instant, String> {
     @Override
     public String convertToDatabaseColumn(Instant datetime) {
         return datetime != null ? datetime.toString() : null;

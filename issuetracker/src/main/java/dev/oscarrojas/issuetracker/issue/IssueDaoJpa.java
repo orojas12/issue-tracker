@@ -3,6 +3,7 @@ package dev.oscarrojas.issuetracker.issue;
 import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
 import org.springframework.stereotype.Repository;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +30,7 @@ public class IssueDaoJpa implements IssueDao {
 
     @Override
     public Issue save(Issue issue) {
-        IssueModel model = null;
+        IssueModel model;
         if (issue.getId() != null) {
             Optional<IssueModel> opt = issueRepository.findById(issue.getId());
             model = opt.orElseThrow(() -> new RuntimeException(
@@ -41,14 +42,21 @@ public class IssueDaoJpa implements IssueDao {
             ));
             model.setTitle(issue.getTitle());
             model.setDescription(issue.getDescription());
-            model.setDueDate(issue.getDueDate());
+            if (issue.getDueDate() != null) {
+                model.setDueDate(issue.getDueDate().toLocalDateTime());
+                model.setDueDateTimeZone(issue.getDueDate().getZone());
+            } else {
+                model.setDueDate(null);
+                model.setDueDateTimeZone(null);
+            }
             model.setClosed(issue.isClosed());
         } else {
             model = new IssueModel(null,
                     issue.getTitle(),
                     issue.getDescription(),
                     issue.getCreatedAt(),
-                    issue.getDueDate(),
+                    issue.getDueDate() != null ? issue.getDueDate().toLocalDateTime() : null,
+                    issue.getDueDate() != null ? issue.getDueDate().getZone() : null,
                     false);
         }
         model = issueRepository.save(model);
@@ -65,11 +73,17 @@ public class IssueDaoJpa implements IssueDao {
     }
 
     private static Issue toEntity(IssueModel model) {
-        return new Issue(model.getId(),
-                model.getTitle(),
-                model.getDescription(),
-                model.getCreatedAt(),
-                model.getDueDate(),
-                model.isClosed());
+        var issue = new Issue();
+        issue.setId(model.getId());
+        issue.setTitle(model.getTitle());
+        issue.setDescription(model.getDescription());
+        issue.setCreatedAt(model.getCreatedAt());
+        issue.setClosed(model.isClosed());
+        if (model.getDueDate() != null && model.getDueDateTimeZone() != null) {
+            issue.setDueDate(ZonedDateTime.of(model.getDueDate(), model.getDueDateTimeZone()));
+        } else {
+            issue.setDueDate(null);
+        }
+        return issue;
     }
 }
