@@ -1,17 +1,26 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-export function useFetch<T>(url: string, options?: RequestInit) {
+const defaultOptions: RequestInit = {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+    },
+};
+
+export function useMutate<T>(url: string, initOptions?: RequestInit) {
     const [data, setData] = useState<T | null>(null);
-    const [isLoading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    const refresh = async (refreshOptions?: RequestInit) => {
+    const mutate = async (data: any, mutateOptions?: RequestInit) => {
+        const options = mutateOptions || initOptions || defaultOptions;
+        options.body = JSON.stringify(data);
         setLoading(true);
         setError("");
         try {
-            const res = await fetch(url, refreshOptions || options);
+            const res = await fetch(url, options);
             if (res.ok) {
-                const data = (await res.json()) as T;
+                const data: T = await res.json();
                 setData(data);
             } else {
                 const error = await res.json();
@@ -27,14 +36,10 @@ export function useFetch<T>(url: string, options?: RequestInit) {
         }
     };
 
-    useEffect(() => {
-        refresh();
-    }, [url]);
-
     return {
         data,
         isLoading,
         error,
-        refresh,
+        mutate,
     };
 }

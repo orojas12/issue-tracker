@@ -24,7 +24,7 @@
 
 .date-picker {
     padding: var(--space-2);
-    border: solid 1px;
+    border: 1px solid;
     border-color: var(--gray-7);
     border-radius: var(--radius-2);
     font-weight: var(--font-weight-regular);

@@ -1,3 +1,24 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+}
+
+.list-wrapper {
+    overflow: hidden;
+    padding: 0;
+}
+
+.list,
+.list-header {
+    background-color: var(--color-panel);
+}
 
 .list {
     list-style: none;
@@ -6,9 +27,7 @@
 }
 
 .list-header {
-    background-color: var(--gray-2);
-    border-inline: 1px solid var(--gray-5);
-    border-top: 1px solid var(--gray-5);
+    border-bottom: 1px solid var(--gray-5);
 }
 
 .list-item {
@@ -16,14 +35,13 @@
     flex-direction: column;
     padding-block: var(--space-2);
     padding-inline: var(--space-4);
-    border-inline: 1px solid var(--gray-5);
-    border-top: 1px solid var(--gray-5);
-}
-
-.list-item:last-child {
     border-bottom: 1px solid var(--gray-5);
 }
 
+.list-item:last-child {
+    border-bottom: none;
+}
+
 .list-item:hover {
-    background-color: var(--gray-2);
+    background-color: var(--gray-3);
 }

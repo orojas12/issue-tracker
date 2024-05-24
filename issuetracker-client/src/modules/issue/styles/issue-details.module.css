@@ -5,6 +5,7 @@
 
 .input-desc {
     min-height: 200px;
+    /* box-shadow: var(--shadow-1); */
 }
 
 .datalist {
@@ -13,4 +14,8 @@
 
 .datalist dt {
     min-width: unset;
+}
+
+.description-card {
+    flex-grow: 1
 }

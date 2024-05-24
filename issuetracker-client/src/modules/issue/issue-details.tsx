@@ -1,7 +1,8 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { Issue } from "./types.ts";
 import {
+    AlertDialog,
     Badge,
     Box,
     Card,
@@ -18,13 +19,24 @@ import { Button } from "@/components/button.tsx";
 import styles from "./styles/issue-details.module.css";
 import { useIssue } from "./use-issue.ts";
 
+const dateTimeFormatter = Intl.DateTimeFormat(undefined, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+});
+
 export function IssueDetails() {
     const { issueId } = useParams();
-    const { issue, isLoading, error, update } = useIssue(issueId as string);
+    const navigate = useNavigate();
+    const { issue, isLoading, error, updateIssue, deleteIssue } = useIssue(
+        issueId as string,
+    );
 
     const onTitleChange = (title: string) => {
         if (!issue) return;
-        update({
+        updateIssue({
             title,
             description: issue.description,
             dueDate: issue.dueDate,
@@ -34,12 +46,18 @@ export function IssueDetails() {
 
     const onDescChange = (description: string) => {
         if (!issue) return;
-        update({
+        updateIssue({
             title: issue.title,
             description,
             dueDate: issue.dueDate,
             closed: issue.closed,
         });
+    };
+
+    const onDelete = async () => {
+        if (!issue) return;
+        await deleteIssue();
+        navigate("/issues", { replace: true });
     };
 
     const status = issue?.closed ? "Closed" : "Open";
@@ -54,7 +72,12 @@ export function IssueDetails() {
                 <IssueTitle issue={issue} onChange={onTitleChange} />
                 <Separator size="4" />
                 <Flex gap="6">
-                    <IssueDescription issue={issue} onChange={onDescChange} />
+                    <Card size="3" className={styles["description-card"]}>
+                        <IssueDescription
+                            issue={issue}
+                            onChange={onDescChange}
+                        />
+                    </Card>
                     <Flex
                         direction="column"
                         gap="4"
@@ -74,14 +97,18 @@ export function IssueDetails() {
                                 <DataList.Item>
                                     <DataList.Label>Created At</DataList.Label>
                                     <DataList.Value>
-                                        {issue.createdAt.toLocaleString()}
+                                        {dateTimeFormatter.format(
+                                            issue.createdAt,
+                                        )}
                                     </DataList.Value>
                                 </DataList.Item>
                                 <DataList.Item>
                                     <DataList.Label>Due Date</DataList.Label>
                                     <DataList.Value>
                                         {issue.dueDate
-                                            ? issue.dueDate.toLocaleDateString()
+                                            ? dateTimeFormatter.format(
+                                                  issue.dueDate,
+                                              )
                                             : "-"}
                                     </DataList.Value>
                                 </DataList.Item>
@@ -92,9 +119,41 @@ export function IssueDetails() {
                                 <Button variant="ghost" color="gray">
                                     Close issue
                                 </Button>
-                                <Button variant="ghost" color="red">
-                                    Delete issue
-                                </Button>
+                                <AlertDialog.Root>
+                                    <AlertDialog.Trigger>
+                                        <Button variant="ghost" color="red">
+                                            Delete issue
+                                        </Button>
+                                    </AlertDialog.Trigger>
+                                    <AlertDialog.Content>
+                                        <AlertDialog.Title>
+                                            Delete this issue?
+                                        </AlertDialog.Title>
+                                        <AlertDialog.Description>
+                                            This issue and any related data will
+                                            be deleted forever.
+                                        </AlertDialog.Description>
+                                        <Flex gap="3" mt="4" justify="end">
+                                            <AlertDialog.Cancel>
+                                                <Button
+                                                    variant="soft"
+                                                    color="gray"
+                                                >
+                                                    Cancel
+                                                </Button>
+                                            </AlertDialog.Cancel>
+                                            <AlertDialog.Action>
+                                                <Button
+                                                    variant="solid"
+                                                    color="red"
+                                                    onClick={onDelete}
+                                                >
+                                                    Delete issue
+                                                </Button>
+                                            </AlertDialog.Action>
+                                        </Flex>
+                                    </AlertDialog.Content>
+                                </AlertDialog.Root>
                             </Flex>
                         </Card>
                     </Flex>
@@ -184,7 +243,7 @@ function IssueDescription({
     };
 
     return (
-        <Box flexGrow="1">
+        <Box>
             <Flex justify="between" mb="2">
                 <Heading size="3" my="auto">
                     Description

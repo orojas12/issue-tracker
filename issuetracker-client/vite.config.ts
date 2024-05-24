@@ -10,6 +10,7 @@ export default defineConfig({
             "@/components": path.resolve(__dirname, "./src/components"),
             "@/modules": path.resolve(__dirname, "./src/modules"),
             "@/hooks": path.resolve(__dirname, "./src/hooks"),
+            "@/theme": path.resolve(__dirname, "./src/theme.tsx"),
         },
     },
 });

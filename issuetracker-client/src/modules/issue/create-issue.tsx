@@ -1,7 +1,10 @@
 import { Button, Flex, TextArea, TextField } from "@radix-ui/themes";
 
 import styles from "./styles/create-issue.module.css";
-import { FormEvent, useRef } from "react";
+import { FormEvent, MutableRefObject, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { CreateIssue } from "./types";
+import { useCreateIssue } from "./use-create-issue";
 
 function formatLocalDate(date: Date) {
     const offsetMillis = date.getTimezoneOffset() * 60000;
@@ -10,12 +13,44 @@ function formatLocalDate(date: Date) {
 }
 
 type CreateIssueFormProps = {
-    onSubmit: (e: FormEvent) => void;
+    onSubmit: () => void;
     onCancel: () => void;
 };
 
 export function CreateIssueForm({ onSubmit, onCancel }: CreateIssueFormProps) {
     const datePicker = useRef<HTMLInputElement | null>(null);
+    const form = useRef<HTMLFormElement | null>(null);
+    const navigate = useNavigate();
+
+    const { newIssue, isLoading, error, createIssue } = useCreateIssue();
+
+    const onCreateIssueSubmit = (e: FormEvent<HTMLFormElement>) => {
+        if (!form.current) return;
+        e.preventDefault();
+        const localTimeZone = new Intl.DateTimeFormat().resolvedOptions()
+            .timeZone;
+        const formData = new FormData(form.current);
+        const dueDate = formData.get("dueDate") as string;
+        const data: CreateIssue = {
+            title: formData.get("title"),
+            description: formData.get("description"),
+            dueDate: dueDate,
+            dueDateTimeZone: dueDate && localTimeZone,
+        };
+        createIssue(data);
+    };
+
+    useEffect(() => {
+        if (!isLoading && newIssue) {
+            navigate(newIssue.id.toString());
+        }
+    }, [isLoading, newIssue]);
+
+    useEffect(() => {
+        if (error) {
+            alert(error);
+        }
+    }, [error]);
 
     const resetDatePicker = () => {
         if (datePicker.current) datePicker.current.value = "";
@@ -24,7 +59,7 @@ export function CreateIssueForm({ onSubmit, onCancel }: CreateIssueFormProps) {
     const localDateToday: string = formatLocalDate(new Date());
 
     return (
-        <form className={styles.form} onSubmit={onSubmit}>
+        <form ref={form} className={styles.form} onSubmit={onCreateIssueSubmit}>
             <label>
                 Title
                 <TextField.Root
@@ -65,7 +100,7 @@ export function CreateIssueForm({ onSubmit, onCancel }: CreateIssueFormProps) {
                     className={styles.input}
                 />
             </label>
-            <Flex justify="end" gap="4">
+            <Flex justify="end" gap="2">
                 <Button
                     type="reset"
                     variant="outline"
@@ -79,4 +114,3 @@ export function CreateIssueForm({ onSubmit, onCancel }: CreateIssueFormProps) {
         </form>
     );
 }
-

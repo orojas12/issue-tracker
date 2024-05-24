@@ -1,0 +1,15 @@
+/* Set global styles */
+.app {
+    min-height: 100vh;
+    font-family: var(--family-default);
+    font-size: var(--font-base);
+    line-height: var(--line-base);
+    background-color: var(--background-base);
+    color: var(--foreground);
+}
+
+.navbar {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-4);
+}

@@ -1,23 +1,25 @@
-import "@radix-ui/themes/styles.css";
-import styles from "./App.module.css";
-import "./theme.css";
+import "./styles/variables.css";
+import "./styles/reset.css";
+import "./styles/themes.css";
+import "./styles/base.css";
 
-import { Flex, Section, Text, Theme } from "@radix-ui/themes";
+import { Theme } from "@/theme";
 import { Outlet } from "react-router-dom";
 import { Link } from "@/components/link";
+import { ThemeToggle } from "./components/theme-toggle";
 
 function App() {
     return (
-        <Theme appearance="light">
-            <Section p="3" className={styles.navbar}>
-                <Flex gap="6" justify="start">
-                    <Text>Issue Tracker</Text>
+        <Theme>
+            <div className="app">
+                <nav className="navbar">
                     <Link to="/users">Users</Link>
                     <Link to="/teams">Teams</Link>
                     <Link to="/issues">Issues</Link>
-                </Flex>
-            </Section>
-            <Outlet />
+                    <ThemeToggle />
+                </nav>
+                <Outlet />
+            </div>
         </Theme>
     );
 }

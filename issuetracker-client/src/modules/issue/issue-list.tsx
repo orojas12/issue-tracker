@@ -1,7 +1,8 @@
+import { Container } from "@/components/container";
 import {
     Box,
     Button,
-    Container,
+    Card,
     Dialog,
     Flex,
     Heading,
@@ -9,13 +10,14 @@ import {
     Text,
 } from "@radix-ui/themes";
 import { SearchField } from "@/components/search-field";
-import { FormEvent, useEffect, useState } from "react";
-import type { Issue } from "./types";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import type { CreateIssue, Issue } from "./types";
 
 import styles from "./styles/issue-list.module.css";
 import { IssueBadge } from "@/modules/issue/issue-badge";
 import { Link } from "@/components/link";
 import { CreateIssueForm } from "@/modules/issue/create-issue.tsx";
+import { useIssueList } from "./use-issue-list";
 
 const dateFormatter = Intl.DateTimeFormat(undefined, {
     year: "numeric",
@@ -23,67 +25,38 @@ const dateFormatter = Intl.DateTimeFormat(undefined, {
     day: "2-digit",
 });
 
-const timeFormatter = Intl.DateTimeFormat(undefined, {
-    minute: "2-digit",
-    second: "2-digit",
-});
-
 export function IssueList() {
-    const [issues, setIssues] = useState<Issue[]>([]);
+    const { issues, isLoading, error } = useIssueList();
     const [search, setSearch] = useState("");
-
-    const getIssues = async () => {
-        const res = await fetch(`http://localhost:8080/issues`);
-        if (res.ok) {
-            const data: Issue[] = await res.json();
-            setIssues(
-                data.map((issue) => ({
-                    ...issue,
-                    createdAt: new Date(issue.createdAt),
-                    dueDate: issue.dueDate
-                        ? new Date(issue.dueDate)
-                        : undefined,
-                })),
-            );
-        }
-    };
-
-    const onCreateIssue = (newIssue: Issue) => {
-        setIssues([
-            ...issues,
-            {
-                ...newIssue,
-                createdAt: new Date(newIssue.createdAt),
-                dueDate: newIssue.dueDate
-                    ? new Date(newIssue.dueDate)
-                    : undefined,
-            },
-        ]);
-    };
-
-    useEffect(() => {
-        getIssues();
-    }, []);
+    const [dialogOpen, setDialogOpen] = useState(false);
 
     const filteredIssues = issues.filter((issue) =>
         issue.title.includes(search),
     );
 
+    const closeFormDialog = () => {
+        setDialogOpen(false);
+    };
+
     return (
-        <Container size="3" p="6">
-            <Flex direction="column" gap="5" align="stretch">
-                <Heading>Issues</Heading>
-                <Flex justify="between" gap="4">
+        <Container size="lg">
+            <div className={styles.wrapper}>
+                <h1>Issues</h1>
+                <div className="controls">
                     <SearchField
                         value={search}
                         placeholder="Search issues..."
                         onChange={(e) => setSearch(e.target.value)}
                         onClear={() => setSearch("")}
                     />
-                    <NewIssueDialog onCreateIssue={onCreateIssue} />
-                </Flex>
-                <Separator size="4" />
-                <Box>
+                    <NewIssueDialog open={dialogOpen} setOpen={setDialogOpen}>
+                        <CreateIssueForm
+                            onSubmit={closeFormDialog}
+                            onCancel={() => setDialogOpen(false)}
+                        />
+                    </NewIssueDialog>
+                </div>
+                <Card className={styles["list-wrapper"]}>
                     <Box className={styles["list-header"]} p="4">
                         blah
                     </Box>
@@ -92,44 +65,18 @@ export function IssueList() {
                             <IssueItem key={issue.id} issue={issue} />
                         ))}
                     </ul>
-                </Box>
-            </Flex>
+                </Card>
+            </div>
         </Container>
     );
 }
 
 interface NewIssueDialogProps {
-    onCreateIssue: (newIssue: Issue) => void;
+    open: boolean;
+    setOpen: (open: boolean) => void;
+    children: React.ReactNode;
 }
-function NewIssueDialog({ onCreateIssue }: NewIssueDialogProps) {
-    const [open, setOpen] = useState(false);
-
-    const onSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-        const localTimeZone = new Intl.DateTimeFormat().resolvedOptions()
-            .timeZone;
-        const formData = new FormData(e.target);
-        const dueDate = formData.get("dueDate") as string;
-        const data = {
-            title: formData.get("title"),
-            description: formData.get("description"),
-            dueDate: dueDate,
-            dueDateTimeZone: dueDate && localTimeZone,
-        };
-        const res = await fetch(`http://localhost:8080/issues`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        });
-        if (res.ok) {
-            const newIssue: Issue = await res.json();
-            onCreateIssue(newIssue);
-            setOpen(false);
-        }
-    };
-
+function NewIssueDialog({ open, setOpen, children }: NewIssueDialogProps) {
     return (
         <Dialog.Root open={open} onOpenChange={setOpen}>
             <Dialog.Trigger>
@@ -137,10 +84,7 @@ function NewIssueDialog({ onCreateIssue }: NewIssueDialogProps) {
             </Dialog.Trigger>
             <Dialog.Content>
                 <Dialog.Title mb="6">Create new issue</Dialog.Title>
-                <CreateIssueForm
-                    onSubmit={onSubmit}
-                    onCancel={() => setOpen(false)}
-                />
+                {children}
             </Dialog.Content>
         </Dialog.Root>
     );
@@ -149,7 +93,9 @@ function NewIssueDialog({ onCreateIssue }: NewIssueDialogProps) {
 function IssueItem({ issue }: { issue: Issue }) {
     return (
         <li className={styles["list-item"]}>
-            <Link to={issue.id.toString()}>{issue.title}</Link>
+            <Link to={issue.id.toString()}>
+                {issue.title.trim() || "[no title]"}
+            </Link>
             <Box flexGrow="1">
                 <Text mr="1" size="1">
                     #{issue.id}{" "}

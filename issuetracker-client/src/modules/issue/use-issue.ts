@@ -1,34 +1,24 @@
-import type { Issue } from "./types";
+import type { Issue, IssueData, UpdateIssue } from "./types";
 import { useFetch } from "@/hooks/use-fetch";
-
-export type UpdateIssue = {
-    title: string;
-    description: string;
-    dueDate: Date | null;
-    closed: boolean;
-};
-
-type IssueData = {
-    id: number;
-    title: string;
-    description: string;
-    createdAt: string;
-    dueDate: string | null;
-    closed: boolean;
-};
 
 export function useIssue(id: string) {
     const { data, isLoading, error, refresh } = useFetch<IssueData>(
         `http://localhost:8080/issues/${id}`,
     );
 
-    const update = async (issue: UpdateIssue) => {
+    const updateIssue = async (issue: UpdateIssue) => {
         refresh({
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(issue),
+        });
+    };
+
+    const deleteIssue = async () => {
+        refresh({
+            method: "DELETE",
         });
     };
 
@@ -40,5 +30,5 @@ export function useIssue(id: string) {
           }
         : null;
 
-    return { issue, isLoading, error, update };
+    return { issue, isLoading, error, updateIssue, deleteIssue };
 }

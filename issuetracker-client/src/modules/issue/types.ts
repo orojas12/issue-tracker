@@ -13,3 +13,19 @@ export type CreateIssue = {
     dueDate?: string;
     dueDateTimeZone?: string;
 };
+
+export type UpdateIssue = {
+    title: string;
+    description: string;
+    dueDate: Date | null;
+    closed: boolean;
+};
+
+export type IssueData = {
+    id: number;
+    title: string;
+    description: string;
+    createdAt: string;
+    dueDate: string | null;
+    closed: boolean;
+};
