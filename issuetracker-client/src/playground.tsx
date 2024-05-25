@@ -1,6 +1,16 @@
 import { Button } from "./components/button";
 import { Card } from "./components/card";
 import { Container } from "./components/container";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogControls,
+    DialogDescription,
+    DialogTitle,
+    DialogTrigger,
+} from "./components/dialog";
+import { TextField } from "./components/text-field";
 
 export function Playground() {
     return (
@@ -15,7 +25,14 @@ export function Playground() {
                 padding: "var(--space-8)",
             }}
         >
-            <Card style={{}}>
+            <Card
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    gap: "32px",
+                }}
+            >
                 <p style={{ marginBottom: "32px" }}>
                     Lorem ipsum dolor sit amet, officia excepteur ex fugiat
                     reprehenderit enim labore culpa sint ad nisi Lorem pariatur
@@ -31,29 +48,123 @@ export function Playground() {
                     laboris sint cupidatat ullamco ut ea consectetur et est
                     culpa et culpa duis.
                 </p>
-                {["solid", "soft", "outline"].map((variant: any) => (
-                    <div
-                        style={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            gap: "16px",
-                            marginBottom: "16px",
-                        }}
+                <div>
+                    {["solid", "soft", "outline"].map((variant: any) => (
+                        <div
+                            style={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: "16px",
+                                marginBottom: "16px",
+                            }}
+                        >
+                            <Button variant={variant} color="neutral">
+                                Submit
+                            </Button>
+                            <Button variant={variant} color="primary">
+                                Submit
+                            </Button>
+                            <Button variant={variant} color="secondary">
+                                Submit
+                            </Button>
+                            <Button variant={variant} color="destructive">
+                                Submit
+                            </Button>
+                        </div>
+                    ))}
+                </div>
+                <div>
+                    {["solid", "soft", "outline"].map((variant: any) => (
+                        <div
+                            style={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: "16px",
+                                marginBottom: "16px",
+                            }}
+                        >
+                            <Button size="sm" variant={variant} color="neutral">
+                                Submit
+                            </Button>
+                            <Button size="sm" variant={variant} color="primary">
+                                Submit
+                            </Button>
+                            <Button
+                                size="sm"
+                                variant={variant}
+                                color="secondary"
+                            >
+                                Submit
+                            </Button>
+                            <Button
+                                size="sm"
+                                variant={variant}
+                                color="destructive"
+                            >
+                                Submit
+                            </Button>
+                        </div>
+                    ))}
+                </div>
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "8px",
+                        alignItems: "flex-start",
+                    }}
+                >
+                    <TextField variant="normal" />
+                    <TextField variant="soft" />
+                    <TextField variant="inset" />
+                    <TextField variant="shadow" />
+                </div>
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "8px",
+                        alignItems: "flex-start",
+                    }}
+                >
+                    <TextField size="sm" variant="normal" />
+                    <TextField size="sm" variant="soft" />
+                    <TextField size="sm" variant="inset" />
+                    <TextField size="sm" variant="shadow" />
+                </div>
+                <Dialog>
+                    <DialogTrigger>
+                        <Button color="primary">Open Dialog</Button>
+                    </DialogTrigger>
+                    <DialogContent
+                        title="New dialog"
+                        description="
+                            Lorem ipsum dolor sit amet, qui minim labore
+                            adipisicing minim sint cillum sint consectetur
+                            cupidatat.
+                        "
                     >
-                        <Button variant={variant} color="neutral">
-                            Submit
-                        </Button>
-                        <Button variant={variant} color="primary">
-                            Submit
-                        </Button>
-                        <Button variant={variant} color="secondary">
-                            Submit
-                        </Button>
-                        <Button variant={variant} color="destructive">
-                            Submit
-                        </Button>
-                    </div>
-                ))}
+                        Lorem ipsum dolor sit amet, officia excepteur ex fugiat
+                        reprehenderit enim labore culpa sint ad nisi Lorem
+                        pariatur mollit ex esse exercitation amet. Nisi anim
+                        cupidatat excepteur officia. Reprehenderit nostrud
+                        nostrud ipsum Lorem est aliquip amet voluptate voluptate
+                        dolor minim nulla est proident. Nostrud officia pariatur
+                        ut officia. Sit irure elit esse ea nulla sunt ex
+                        occaecat reprehenderit commodo officia dolor Lorem duis
+                        laboris cupidatat officia voluptate. Culpa proident
+                        adipisicing id nulla nisi laboris ex in Lorem sunt duis
+                        officia eiusmod. Aliqua reprehenderit commodo ex non
+                        excepteur duis sunt velit enim. Voluptate laboris sint
+                        cupidatat ullamco ut ea consectetur et est culpa et
+                        culpa duis.
+                        <DialogControls>
+                            <DialogClose>
+                                <Button variant="outline">Close</Button>
+                            </DialogClose>
+                        </DialogControls>
+                    </DialogContent>
+                </Dialog>
             </Card>
         </Container>
     );

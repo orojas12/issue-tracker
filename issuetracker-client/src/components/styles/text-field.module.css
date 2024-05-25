@@ -1,0 +1,32 @@
+.text-field {
+    background-color: inherit;
+    border: var(--border-1);
+    outline: 2px solid transparent;
+    border-radius: var(--radius-input);
+    padding: var(--space-3) var(--space-4);
+    color: inherit;
+}
+
+.text-field:focus {
+    outline: 2px solid var(--accent-ring);
+}
+
+.sm {
+    padding: var(--space-2) var(--space-3);
+}
+
+.soft {
+    background-color: var(--accent-soft);
+    border: none;
+}
+
+.inset {
+    border: none;
+    background-color: var(--background-base);
+    box-shadow: var(--inset-shadow-top), var(--inset-shadow-bottom);
+}
+
+.shadow {
+    border: none;
+    box-shadow: var(--shadow-1);
+}

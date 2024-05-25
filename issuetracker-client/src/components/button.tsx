@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import styles from "./styles/button.module.css";
 
 type ButtonProps = {
@@ -6,14 +7,19 @@ type ButtonProps = {
     size?: "sm" | "md";
 } & React.HTMLAttributes<HTMLButtonElement>;
 
-export function Button(props: ButtonProps) {
-    const { variant, color, size, ...btnProps } = props;
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+    (props, ref) => {
+        const { variant, color, size, ...btnProps } = props;
 
-    return (
-        <button
-            data-accent={color || "neutral"}
-            className={`${styles.btn} ${styles[size || "md"]} ${styles[variant || "solid"]}`}
-            {...btnProps}
-        />
-    );
-}
+        return (
+            <button
+                ref={ref}
+                data-accent={color || "neutral"}
+                className={`${styles.btn} ${styles[size || "md"]} ${styles[variant || "solid"]}`}
+                {...btnProps}
+            />
+        );
+    },
+);
+
+Button.displayName = "Button";

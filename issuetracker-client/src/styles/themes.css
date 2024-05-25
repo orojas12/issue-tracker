@@ -1,5 +1,5 @@
 /* Themes */
-.app {
+#app {
     --background-lighter: var(--sage-1);
     --background-light: var(--sage-2);
     --background-base: var(--sage-3);
@@ -8,89 +8,73 @@
     --border-1: 1px solid var(--sage-7);
     --border-2: 2px solid var(--sage-7);
     --radius: var(--radius-md);
+    --radius-button: var(--radius-md);
+    --radius-input: var(--radius-md);
+    --accent-active-filter: brightness(90%);
+    --accent-white: var(--sage-1);
+    --inset-shadow-top: inset 0 1px 2px hsla(0, 0%, 0%, .3);
+    --inset-shadow-bottom: inset 0 -1px hsla(0, 0%, 100%, .1)
 }
 
-.dark .app {
+.dark #app {
     /* in dark mode radix makes backgrounds darker 
        with elevation, so this reverts it */
     --background-lighter: var(--sage-3);
     --background-light: var(--sage-2);
     --background-base: var(--sage-1);
+    --accent-active-filter: brightness(112%);
+    --accent-white: var(--sage-12);
 }
 
 [data-accent=neutral] {
-    --accent-solid: var(--sage-12);
-    --accent-solid-hover: var(--sage-11);
-    --accent-solid-active: var(--sage-10);
+    --accent-solid: var(--sage-9);
+    --accent-solid-hover: var(--sage-10);
     --accent-solid-text: var(--sage-2);
     --accent-soft: var(--sage-4);
     --accent-soft-hover: var(--sage-5);
-    --accent-soft-active: var(--sage-6);
     --accent-soft-text: var(--sage-11);
-    --accent-outline: var(--sage-9);
-    --accent-outline-hover: var(--sage-10);
-    --accent-outline-active: var(--sage-4);
-    --accent-outline-text: var(--sage-10);
-    --accent-outline-text-hover: var(--sage-11);
+    --accent-outline: var(--sage-11);
+    --accent-outline-hover: var(--sage-3);
+    --accent-outline-text: var(--sage-11);
+    --accent-ring: var(--sage-7);
 }
 
+
 [data-accent=primary] {
-    --accent-solid: var(--teal-10);
-    --accent-solid-hover: var(--teal-9);
-    --accent-solid-active: var(--teal-8);
-    --accent-solid-text: var(--teal-2);
-    --accent-soft: var(--teal-a3);
-    --accent-soft-hover: var(--teal-a4);
-    --accent-soft-active: var(--teal-a5);
+    --accent-solid: var(--teal-9);
+    --accent-solid-hover: var(--teal-10);
+    --accent-solid-text: var(--sage-2);
+    --accent-soft: var(--teal-4);
+    --accent-soft-hover: var(--teal-5);
     --accent-soft-text: var(--teal-11);
-    --accent-outline: var(--teal-9);
-    --accent-outline-hover: var(--teal-10);
-    --accent-outline-active: var(--teal-4);
+    --accent-outline: var(--teal-10);
+    --accent-outline-hover: var(--teal-3);
     --accent-outline-text: var(--teal-10);
-    --accent-outline-text-hover: var(--teal-11);
+    --accent-ring: var(--teal-7);
 }
 
 
 [data-accent=secondary] {
-    --accent-solid: var(--iris-10);
-    --accent-solid-hover: var(--iris-9);
-    --accent-solid-active: var(--iris-8);
-    --accent-solid-text: var(--iris-2);
-    --accent-soft: var(--iris-a3);
-    --accent-soft-hover: var(--iris-a4);
-    --accent-soft-active: var(--iris-a5);
+    --accent-solid: var(--iris-9);
+    --accent-solid-hover: var(--iris-10);
+    --accent-solid-text: var(--sage-2);
+    --accent-soft: var(--iris-4);
+    --accent-soft-hover: var(--iris-5);
     --accent-soft-text: var(--iris-11);
-    --accent-outline: var(--iris-9);
-    --accent-outline-hover: var(--iris-10);
-    --accent-outline-active: var(--iris-4);
-    --accent-outline-text: var(--iris-10);
-    --accent-outline-text-hover: var(--iris-11);
-}
-
-.dark [data-accent=secondary] {
-    --accent-soft: var(--iris-3);
-    --accent-soft-hover: var(--iris-4);
-    --accent-soft-active: var(--iris-5);
+    --accent-outline: var(--iris-11);
+    --accent-outline-hover: var(--iris-3);
+    --accent-outline-text: var(--iris-11);
+    --accent-ring: var(--iris-7);
 }
 
 [data-accent=destructive] {
-    --accent-solid: var(--ruby-11);
+    --accent-solid: var(--ruby-9);
     --accent-solid-hover: var(--ruby-10);
-    --accent-solid-active: var(--ruby-9);
-    --accent-solid-text: var(--ruby-2);
-    --accent-soft: var(--ruby-a3);
-    --accent-soft-hover: var(--ruby-a4);
-    --accent-soft-active: var(--ruby-a5);
+    --accent-solid-text: var(--sage-2);
+    --accent-soft: var(--ruby-4);
+    --accent-soft-hover: var(--ruby-5);
     --accent-soft-text: var(--ruby-11);
-    --accent-outline: var(--ruby-9);
-    --accent-outline-hover: var(--ruby-10);
-    --accent-outline-active: var(--ruby-4);
+    --accent-outline: var(--ruby-10);
+    --accent-outline-hover: var(--ruby-3);
     --accent-outline-text: var(--ruby-10);
-    --accent-outline-text-hover: var(--ruby-11);
-}
-
-.dark [data-accent=destructive] {
-    --accent-soft: var(--ruby-3);
-    --accent-soft-hover: var(--ruby-4);
-    --accent-soft-active: var(--ruby-5);
 }

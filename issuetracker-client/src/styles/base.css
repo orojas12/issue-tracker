@@ -1,5 +1,6 @@
 /* Set global styles */
-.app {
+#app {
+    position: relative;
     min-height: 100vh;
     font-family: var(--family-default);
     font-size: var(--font-base);

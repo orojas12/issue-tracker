@@ -1,0 +1,39 @@
+.content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--family-default);
+    font-size: var(--font-base);
+    background-color: var(--background-lighter);
+    border-radius: var(--radius);
+    padding: var(--space-6);
+    max-width: var(--space-14);
+    max-height: var(--space-16);
+    overflow-y: auto;
+}
+
+.header {
+    margin-bottom: var(--space-5);
+}
+
+.title {
+    margin-bottom: var(--space-1);
+}
+
+.description {
+    color: var(--foreground-muted);
+}
+
+.controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-4);
+    margin-top: var(--space-5);
+}
+
+.overlay {
+    background-color: hsla(0, 0%, 0%, .3);
+    position: fixed;
+    inset: 0;
+}

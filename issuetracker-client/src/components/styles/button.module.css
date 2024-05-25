@@ -2,11 +2,15 @@
     display: inline-block;
     padding-block: var(--space-3);
     padding-inline: var(--space-5);
-    border-radius: var(--radius);
+    border-radius: var(--radius-button);
     border: 1px solid transparent;
     font-weight: var(--weight-medium);
     cursor: pointer;
     user-select: none;
+}
+
+.btn:active {
+    filter: var(--accent-active-filter);
 }
 
 .sm {
@@ -16,15 +20,11 @@
 
 .solid {
     background-color: var(--accent-solid);
-    color: var(--accent-solid-text);
+    color: var(--accent-white);
 }
 
 .solid:hover {
     background-color: var(--accent-solid-hover);
-}
-
-.solid:active {
-    background-color: var(--accent-solid-active);
 }
 
 .soft {
@@ -36,22 +36,13 @@
     background-color: var(--accent-soft-hover);
 }
 
-.soft:active {
-    background-color: var(--accent-soft-active);
-}
-
 .outline {
     background-color: transparent;
     border: 1px solid var(--accent-outline);
-    box-shadow: 0px 0px 2px var(--accent-outline-hover);
+    box-shadow: 0px 0px 2px var(--accent-outline);
     color: var(--accent-outline-text);
 }
 
 .outline:hover {
-    border-color: var(--accent-outline-hover);
-    color: var(--accent-outline-text-hover);
-}
-
-.outline:active {
-    background-color: var(--accent-outline-active);
+    background-color: var(--accent-outline-hover);
 }
