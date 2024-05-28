@@ -1,11 +1,4 @@
-.text-field {
-    padding-inline: var(--space-1);
-}
-
-.text-field input {
-    padding: var(--space-1);
-}
-
-.text-field button {
-    padding: var(--space-1);
+.textField {
+    background-color: var(--background-light);
+    max-width: var(--space-14);
 }

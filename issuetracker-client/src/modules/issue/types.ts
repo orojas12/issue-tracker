@@ -9,9 +9,9 @@ export type Issue = {
 
 export type CreateIssue = {
     title: string;
-    description: string;
-    dueDate?: string;
-    dueDateTimeZone?: string;
+    description: string | null;
+    dueDate: string | null;
+    dueDateTimeZone: string | null;
 };
 
 export type UpdateIssue = {

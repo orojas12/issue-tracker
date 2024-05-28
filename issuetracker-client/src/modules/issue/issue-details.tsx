@@ -2,20 +2,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { Issue } from "./types.ts";
 import {
-    AlertDialog,
-    Badge,
-    Box,
-    Card,
+    Button,
     Container,
-    DataList,
-    Flex,
-    Heading,
-    Separator,
-    Text,
-    TextArea,
+    Dialog,
+    DialogTrigger,
+    DialogClose,
+    DialogContent,
+    DialogControls,
     TextField,
-} from "@radix-ui/themes";
-import { Button } from "@/components/button.tsx";
+    TextArea,
+} from "@/components";
 import styles from "./styles/issue-details.module.css";
 import { useIssue } from "./use-issue.ts";
 
@@ -54,6 +50,14 @@ export function IssueDetails() {
         });
     };
 
+    const toggleClose = () => {
+        if (!issue) return;
+        updateIssue({
+            ...issue,
+            closed: !issue.closed,
+        });
+    };
+
     const onDelete = async () => {
         if (!issue) return;
         await deleteIssue();
@@ -64,101 +68,49 @@ export function IssueDetails() {
     const statusColor = issue?.closed ? "blue" : "green";
 
     return !issue ? null : (
-        <Container size="3" p="6">
-            <Flex direction="column" gap="5">
-                <Heading color="gray" size="3">
-                    Issue #{issue.id}
-                </Heading>
-                <IssueTitle issue={issue} onChange={onTitleChange} />
-                <Separator size="4" />
-                <Flex gap="6">
-                    <Card size="3" className={styles["description-card"]}>
-                        <IssueDescription
-                            issue={issue}
-                            onChange={onDescChange}
-                        />
-                    </Card>
-                    <Flex
-                        direction="column"
-                        gap="4"
-                        flexShrink="0"
-                        flexBasis="300px"
+        <Container size="lg" className={styles.container}>
+            <h1 className={styles.issueNumber}>Issue #{issue.id}</h1>
+            <IssueTitle issue={issue} onChange={onTitleChange} />
+            <div className={styles.wrapper}>
+                <IssueDescription issue={issue} onChange={onDescChange} />
+                <IssuePropertyList issue={issue} />
+                <div className={styles.actions}>
+                    <Button
+                        size="sm"
+                        variant="transparent"
+                        onClick={toggleClose}
                     >
-                        <Card size="3">
-                            <DataList.Root className={styles.datalist}>
-                                <DataList.Item>
-                                    <DataList.Label>Status</DataList.Label>
-                                    <DataList.Value>
-                                        <Badge color={statusColor}>
-                                            {status}
-                                        </Badge>
-                                    </DataList.Value>
-                                </DataList.Item>
-                                <DataList.Item>
-                                    <DataList.Label>Created At</DataList.Label>
-                                    <DataList.Value>
-                                        {dateTimeFormatter.format(
-                                            issue.createdAt,
-                                        )}
-                                    </DataList.Value>
-                                </DataList.Item>
-                                <DataList.Item>
-                                    <DataList.Label>Due Date</DataList.Label>
-                                    <DataList.Value>
-                                        {issue.dueDate
-                                            ? dateTimeFormatter.format(
-                                                  issue.dueDate,
-                                              )
-                                            : "-"}
-                                    </DataList.Value>
-                                </DataList.Item>
-                            </DataList.Root>
-                        </Card>
-                        <Card size="3">
-                            <Flex direction="column" align="start" gap="4">
-                                <Button variant="ghost" color="gray">
-                                    Close issue
+                        {issue.closed ? "Reopen issue" : "Close issue"}
+                    </Button>
+                    <Dialog>
+                        <DialogTrigger>
+                            <Button size="sm" variant="transparent">
+                                Delete issue
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent
+                            title="Delete this issue?"
+                            description="This issue and any related data will be deleted forever."
+                            className={styles.deleteDialogContent}
+                        >
+                            <DialogControls>
+                                <DialogClose>
+                                    <Button size="sm" variant="soft">
+                                        Cancel
+                                    </Button>
+                                </DialogClose>
+                                <Button
+                                    size="sm"
+                                    color="destructive"
+                                    onClick={onDelete}
+                                >
+                                    Delete issue
                                 </Button>
-                                <AlertDialog.Root>
-                                    <AlertDialog.Trigger>
-                                        <Button variant="ghost" color="red">
-                                            Delete issue
-                                        </Button>
-                                    </AlertDialog.Trigger>
-                                    <AlertDialog.Content>
-                                        <AlertDialog.Title>
-                                            Delete this issue?
-                                        </AlertDialog.Title>
-                                        <AlertDialog.Description>
-                                            This issue and any related data will
-                                            be deleted forever.
-                                        </AlertDialog.Description>
-                                        <Flex gap="3" mt="4" justify="end">
-                                            <AlertDialog.Cancel>
-                                                <Button
-                                                    variant="soft"
-                                                    color="gray"
-                                                >
-                                                    Cancel
-                                                </Button>
-                                            </AlertDialog.Cancel>
-                                            <AlertDialog.Action>
-                                                <Button
-                                                    variant="solid"
-                                                    color="red"
-                                                    onClick={onDelete}
-                                                >
-                                                    Delete issue
-                                                </Button>
-                                            </AlertDialog.Action>
-                                        </Flex>
-                                    </AlertDialog.Content>
-                                </AlertDialog.Root>
-                            </Flex>
-                        </Card>
-                    </Flex>
-                </Flex>
-            </Flex>
+                            </DialogControls>
+                        </DialogContent>
+                    </Dialog>
+                </div>
+            </div>
         </Container>
     );
 }
@@ -184,42 +136,44 @@ function IssueTitle({
     };
 
     return (
-        <Flex justify="between">
+        <div className={styles.title}>
             {editable ? (
-                <TextField.Root
-                    className={styles["input-title"]}
+                <TextField
+                    className={styles.titleInput}
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                 />
             ) : (
-                <Heading wrap="wrap" weight="medium" size="5">
-                    {issue.title}
-                </Heading>
+                <h1 className={styles.titleText}>{issue.title}</h1>
             )}
 
-            {editable ? (
-                <Flex gap="2">
-                    <Button variant="soft" onClick={onSave}>
-                        Save
-                    </Button>
+            <div className={styles.titleControls}>
+                {editable ? (
+                    <>
+                        <Button size="sm" color="primary" onClick={onSave}>
+                            Save
+                        </Button>
+                        <Button
+                            size="sm"
+                            variant="transparent"
+                            onClick={toggleEditable}
+                        >
+                            Cancel
+                        </Button>
+                    </>
+                ) : (
                     <Button
-                        variant="transparent"
-                        color="gray"
+                        size="sm"
+                        variant="link"
+                        color="secondary"
                         onClick={toggleEditable}
+                        className={styles.editButton}
                     >
-                        Cancel
+                        Edit
                     </Button>
-                </Flex>
-            ) : (
-                <Button
-                    variant="transparent"
-                    color="gray"
-                    onClick={toggleEditable}
-                >
-                    Edit
-                </Button>
-            )}
-        </Flex>
+                )}
+            </div>
+        </div>
     );
 }
 
@@ -243,49 +197,58 @@ function IssueDescription({
     };
 
     return (
-        <Box>
-            <Flex justify="between" mb="2">
-                <Heading size="3" my="auto">
-                    Description
-                </Heading>
-                <Flex gap="2">
-                    {!editable && (
-                        <Button
-                            variant="transparent"
-                            color="gray"
-                            onClick={toggleEditable}
-                        >
-                            Edit
-                        </Button>
-                    )}
-                </Flex>
-            </Flex>
+        <div className={styles.description}>
+            <div className={styles.descriptionHeading}>
+                <h2 className={styles.descriptionHeadingText}>Description</h2>
+                {!editable && (
+                    <Button
+                        color="secondary"
+                        size="sm"
+                        variant="link"
+                        onClick={toggleEditable}
+                        className={styles.editButton}
+                    >
+                        Edit
+                    </Button>
+                )}
+            </div>
 
             {editable ? (
                 <TextArea
-                    value={input}
+                    defaultValue={issue.description}
                     onChange={(e) => setInput(e.target.value)}
                     resize="vertical"
-                    className={styles["input-desc"]}
+                    className={styles.descriptionInput}
                 />
             ) : (
-                <Text>{issue.description}</Text>
+                <p className={styles.descriptionText}>{issue.description}</p>
             )}
 
             {editable && (
-                <Flex direction="row-reverse" gap="2" my="3">
-                    <Button variant="soft" onClick={onSave}>
+                <div className={styles.descriptionEditControls}>
+                    <Button size="sm" color="primary" onClick={onSave}>
                         Save
                     </Button>
                     <Button
+                        size="sm"
                         variant="transparent"
-                        color="gray"
                         onClick={toggleEditable}
                     >
                         Cancel
                     </Button>
-                </Flex>
+                </div>
             )}
-        </Box>
+        </div>
+    );
+}
+
+function IssuePropertyList({ issue }: { issue: Issue }) {
+    return (
+        <dl className={styles.propertyList}>
+            <dt>Status</dt>
+            <dd>{issue.closed ? "Closed" : "Open"}</dd>
+            <dt>Due Date</dt>
+            <dd>{issue.dueDate && dateTimeFormatter.format(issue.dueDate)}</dd>
+        </dl>
     );
 }

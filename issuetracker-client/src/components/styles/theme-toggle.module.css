@@ -1,0 +1,28 @@
+.switch {
+    width: 36px;
+    height: var(--space-5);
+    border-radius: var(--radius-3xl);
+    border: var(--border-1);
+    background-color: var(--background-light);
+    cursor: pointer;
+    padding: 2px;
+}
+
+.thumb {
+    display: flex;
+    height: 100%;
+    aspect-ratio: 1;
+    background-color: var(--sage-7);
+    border-radius: var(--radius-full);
+    transition: all 100ms;
+    align-items: center;
+    justify-content: center;
+}
+
+.thumb[data-state="checked"] {
+    transform: translateX(calc(100% - 6px))
+}
+
+.icon {
+    color: var(--foreground);
+}

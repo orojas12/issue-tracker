@@ -1,21 +1,21 @@
-import { forwardRef } from "react";
+import { ComponentPropsWithRef, forwardRef } from "react";
 import styles from "./styles/button.module.css";
 
 type ButtonProps = {
-    variant?: "solid" | "outline" | "soft" | "transparent";
+    variant?: "solid" | "outline" | "soft" | "transparent" | "link";
     color?: "primary" | "secondary" | "neutral" | "destructive";
     size?: "sm" | "md";
-} & React.HTMLAttributes<HTMLButtonElement>;
+} & ComponentPropsWithRef<"button">;
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     (props, ref) => {
-        const { variant, color, size, ...btnProps } = props;
+        const { variant, color, size, className, ...btnProps } = props;
 
         return (
             <button
                 ref={ref}
                 data-accent={color || "neutral"}
-                className={`${styles.btn} ${styles[size || "md"]} ${styles[variant || "solid"]}`}
+                className={`${styles.btn} ${styles[size || "md"]} ${styles[variant || "solid"]} ${className}`}
                 {...btnProps}
             />
         );

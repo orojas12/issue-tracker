@@ -7,12 +7,17 @@ const defaultOptions: RequestInit = {
     },
 };
 
-export function useMutate<T>(url: string, initOptions?: RequestInit) {
-    const [data, setData] = useState<T | null>(null);
+export function useMutate<RequestData, ResponseData>(
+    url: string,
+    initOptions?: RequestInit,
+) {
     const [isLoading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    const mutate = async (data: any, mutateOptions?: RequestInit) => {
+    const mutate = async (
+        data: RequestData,
+        mutateOptions?: RequestInit,
+    ): Promise<ResponseData | undefined> => {
         const options = mutateOptions || initOptions || defaultOptions;
         options.body = JSON.stringify(data);
         setLoading(true);
@@ -20,8 +25,7 @@ export function useMutate<T>(url: string, initOptions?: RequestInit) {
         try {
             const res = await fetch(url, options);
             if (res.ok) {
-                const data: T = await res.json();
-                setData(data);
+                return res.json();
             } else {
                 const error = await res.json();
                 throw new Error(
@@ -37,7 +41,6 @@ export function useMutate<T>(url: string, initOptions?: RequestInit) {
     };
 
     return {
-        data,
         isLoading,
         error,
         mutate,

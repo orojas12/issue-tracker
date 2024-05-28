@@ -1,10 +1,8 @@
-import { Button, Container, Flex, Heading, Separator } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 import { CreateUserRequest, User } from "@/modules/team/types";
 import { CreateUserDialog } from "./create-user";
 
-import { SearchField } from "@/components/search-field";
-import { Link } from "react-router-dom";
+import { Link, SearchField, Container, Button, Card } from "@/components";
 import styles from "./styles/user-list.module.css";
 
 export function UserManagement() {
@@ -42,29 +40,39 @@ export function UserManagement() {
     }, []);
 
     return (
-        <Container size="2" p="6">
-            <Flex direction="column" gap="5" align="stretch">
-                <Heading>Users</Heading>
-                <Flex justify="between">
-                    <SearchField
-                        value={search}
-                        placeholder="Search users..."
-                        onChange={(e) => setSearch(e.target.value)}
-                        onClear={() => setSearch("")}
-                    />
-                    <CreateUserDialog onCreate={createUser}>
-                        <Button>Create user...</Button>
-                    </CreateUserDialog>
-                </Flex>
-                <Separator size="4" />
-                <ul className={styles.list}>
-                    {filteredUsers.map((user) => (
-                        <li key={user.id} className={styles["list-item"]}>
-                            <Link to={user.username}>{user.username}</Link>
-                        </li>
-                    ))}
-                </ul>
-            </Flex>
+        <Container size="lg" className={styles.container}>
+            <h1>Users</h1>
+            <div className={styles.controls}>
+                <SearchField
+                    value={search}
+                    placeholder="Search users..."
+                    onChange={(e) => setSearch(e.target.value)}
+                    onClear={() => setSearch("")}
+                />
+                <CreateUserDialog onCreate={createUser}>
+                    <Button size="sm" color="primary">
+                        New User
+                    </Button>
+                </CreateUserDialog>
+            </div>
+            <UserList users={filteredUsers} />
         </Container>
+    );
+}
+
+export function UserList({ users }: { users: { username: string }[] }) {
+    return (
+        <ul className={styles.list}>
+            {users.map((user) => (
+                <li key={user.username} className={styles.listItem}>
+                    <Link href={user.username}>
+                        <Card className={styles.card}>
+                            <div className={styles.avatar}></div>
+                            <p>{user.username}</p>
+                        </Card>
+                    </Link>
+                </li>
+            ))}
+        </ul>
     );
 }

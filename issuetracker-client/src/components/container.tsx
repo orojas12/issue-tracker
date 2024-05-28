@@ -7,12 +7,13 @@ type ContainerProps = {
 } & React.HTMLAttributes<HTMLDivElement>;
 
 export function Container(props: ContainerProps) {
-    const { fluid, size, children, ...divProps } = props;
+    const { fluid, size, className, children, ...divProps } = props;
     return (
         <div
             className={`
-                ${fluid ? styles["container-fluid"] : styles["container"]} 
+                ${fluid ? styles.containerFluid : styles.container} 
                 ${size ? styles["container--" + size] : ""}
+                ${className}
             `}
             {...divProps}
         >

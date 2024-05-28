@@ -4,7 +4,7 @@ import "./styles/themes.css";
 import "./styles/base.css";
 
 import { Theme } from "@/theme";
-import { Outlet } from "react-router-dom";
+import { Outlet, NavLink } from "react-router-dom";
 import { Link } from "@/components/link";
 import { ThemeToggle } from "./components/theme-toggle";
 import { useState } from "react";
@@ -20,9 +20,9 @@ function App() {
             <Theme>
                 <div id="app" ref={setAppRootElement}>
                     <nav className="navbar">
-                        <Link to="/users">Users</Link>
-                        <Link to="/teams">Teams</Link>
-                        <Link to="/issues">Issues</Link>
+                        <NavLink to="/users">Users</NavLink>
+                        <NavLink to="/teams">Teams</NavLink>
+                        <NavLink to="/issues">Issues</NavLink>
                         <ThemeToggle />
                     </nav>
                     <Outlet />

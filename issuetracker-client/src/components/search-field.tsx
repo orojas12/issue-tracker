@@ -16,7 +16,8 @@ export function SearchField({
 }) {
     return (
         <TextField
-            className={styles["text-field"]}
+            size="sm"
+            className={styles.textField}
             placeholder={placeholder}
             value={value}
             onChange={onChange}

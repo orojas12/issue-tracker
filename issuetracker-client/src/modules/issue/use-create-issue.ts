@@ -2,7 +2,7 @@ import { useMutate } from "@/hooks/use-mutate";
 import type { CreateIssue, Issue } from "./types";
 
 export function useCreateIssue() {
-    const { data, isLoading, error, mutate } = useMutate<Issue>(
+    const { isLoading, error, mutate } = useMutate<CreateIssue, Issue>(
         `http://localhost:8080/issues`,
     );
 
@@ -11,13 +11,6 @@ export function useCreateIssue() {
     };
 
     return {
-        newIssue: data
-            ? {
-                  ...data,
-                  createdAt: new Date(data.createdAt),
-                  dueDate: data.dueDate ? new Date(data.dueDate) : null,
-              }
-            : null,
         isLoading,
         error,
         createIssue,

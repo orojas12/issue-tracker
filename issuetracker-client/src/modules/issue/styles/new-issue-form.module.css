@@ -1,18 +1,18 @@
 .form {
     display: flex;
     flex-direction: column;
-    gap: var(--space-6);
-    width: 100%;
+    gap: var(--space-5);
 }
 
-.input {
-    margin-top: var(--space-2);
+.dialog {
+    width: var(--space-14);
 }
 
-.date-label {
+.dateLabel {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    font-weight: var(--weight-medium);
 }
 
 .date {
@@ -22,14 +22,13 @@
     margin-top: var(--space-2);
 }
 
-.date-picker {
+.datePicker {
     padding: var(--space-2);
-    border: 1px solid;
-    border-color: var(--gray-7);
-    border-radius: var(--radius-2);
+    border: var(--border-1);
+    border-radius: var(--radius);
     font-weight: var(--font-weight-regular);
 }
 
-.date-picker:focus {
+.datePicker:focus {
     outline-color: var(--accent-8);
 }

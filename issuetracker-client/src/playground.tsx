@@ -6,11 +6,10 @@ import {
     DialogClose,
     DialogContent,
     DialogControls,
-    DialogDescription,
-    DialogTitle,
     DialogTrigger,
 } from "./components/dialog";
 import { TextField } from "./components/text-field";
+import { NewIssueForm } from "./modules/issue/new-issue-form";
 
 export function Playground() {
     return (
@@ -132,39 +131,7 @@ export function Playground() {
                     <TextField size="sm" variant="inset" />
                     <TextField size="sm" variant="shadow" />
                 </div>
-                <Dialog>
-                    <DialogTrigger>
-                        <Button color="primary">Open Dialog</Button>
-                    </DialogTrigger>
-                    <DialogContent
-                        title="New dialog"
-                        description="
-                            Lorem ipsum dolor sit amet, qui minim labore
-                            adipisicing minim sint cillum sint consectetur
-                            cupidatat.
-                        "
-                    >
-                        Lorem ipsum dolor sit amet, officia excepteur ex fugiat
-                        reprehenderit enim labore culpa sint ad nisi Lorem
-                        pariatur mollit ex esse exercitation amet. Nisi anim
-                        cupidatat excepteur officia. Reprehenderit nostrud
-                        nostrud ipsum Lorem est aliquip amet voluptate voluptate
-                        dolor minim nulla est proident. Nostrud officia pariatur
-                        ut officia. Sit irure elit esse ea nulla sunt ex
-                        occaecat reprehenderit commodo officia dolor Lorem duis
-                        laboris cupidatat officia voluptate. Culpa proident
-                        adipisicing id nulla nisi laboris ex in Lorem sunt duis
-                        officia eiusmod. Aliqua reprehenderit commodo ex non
-                        excepteur duis sunt velit enim. Voluptate laboris sint
-                        cupidatat ullamco ut ea consectetur et est culpa et
-                        culpa duis.
-                        <DialogControls>
-                            <DialogClose>
-                                <Button variant="outline">Close</Button>
-                            </DialogClose>
-                        </DialogControls>
-                    </DialogContent>
-                </Dialog>
+                <NewIssueForm />
             </Card>
         </Container>
     );

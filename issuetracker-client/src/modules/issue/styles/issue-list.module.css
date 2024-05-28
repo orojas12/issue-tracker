@@ -10,38 +10,38 @@
     gap: var(--space-4);
 }
 
-.list-wrapper {
-    overflow: hidden;
-    padding: 0;
-}
-
-.list,
-.list-header {
-    background-color: var(--color-panel);
-}
-
 .list {
     list-style: none;
     margin: 0;
     padding: 0;
+    background-color: var(--background-light);
+    border-radius: var(--radius);
+    border: var(--border-1);
 }
 
-.list-header {
-    border-bottom: 1px solid var(--gray-5);
+.listHeader {
+    border-bottom: var(--border-1);
+    padding: var(--space-4);
 }
 
-.list-item {
+.listItem {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     padding-block: var(--space-2);
     padding-inline: var(--space-4);
-    border-bottom: 1px solid var(--gray-5);
+    border-bottom: var(--border-1);
 }
 
-.list-item:last-child {
+.listItem:last-child {
     border-bottom: none;
 }
 
-.list-item:hover {
-    background-color: var(--gray-3);
+.listItem:hover {
+    background-color: var(--sage-3);
+}
+
+
+.listItem a:hover {
+    color: var(--accent-solid);
 }

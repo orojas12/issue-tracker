@@ -2,13 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.tsx";
-import { TeamDetails } from "@/modules/team/team-details.tsx";
 import { TeamsList } from "@/modules/team/team-list.tsx";
 import { UserDetails } from "@/modules/user/user-details.tsx";
 import { UserManagement } from "@/modules/user/user-list.tsx";
 import { IssueList } from "@/modules/issue/issue-list.tsx";
 import { IssueDetails } from "@/modules/issue/issue-details.tsx";
 import { Playground } from "./playground.tsx";
+import { TeamDetails } from "./modules/team/team-details.tsx";
 
 const router = createBrowserRouter([
     {

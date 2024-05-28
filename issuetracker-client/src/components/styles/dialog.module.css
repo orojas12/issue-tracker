@@ -5,12 +5,17 @@
     transform: translate(-50%, -50%);
     font-family: var(--family-default);
     font-size: var(--font-base);
-    background-color: var(--background-lighter);
+    background-color: var(--background-light);
+    color: var(--foreground);
     border-radius: var(--radius);
     padding: var(--space-6);
-    max-width: var(--space-14);
+    min-width: var(--space-13);
+    max-width: var(--space-15);
+    min-height: var(--space-11);
     max-height: var(--space-16);
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .header {
@@ -23,13 +28,14 @@
 
 .description {
     color: var(--foreground-muted);
+    font-size: var(--font-sm);
 }
 
 .controls {
     display: flex;
     justify-content: flex-end;
     gap: var(--space-4);
-    margin-top: var(--space-5);
+    margin-top: auto;
 }
 
 .overlay {

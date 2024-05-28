@@ -12,5 +12,17 @@
 .navbar {
     display: flex;
     justify-content: center;
+    align-items: center;
+    padding: var(--space-3);
     gap: var(--space-4);
+}
+
+.navbar a {
+    text-decoration: none;
+    color: var(--foreground-muted);
+}
+
+.navbar a.active {
+    color: var(--foreground);
+    font-weight: var(--weight-medium);
 }

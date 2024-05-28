@@ -25,10 +25,12 @@ export const DialogTrigger = ({ children }: { children: React.ReactNode }) => (
 export const DialogContent = ({
     title,
     description,
+    className,
     children,
 }: {
     title?: string;
     description?: string;
+    className?: string;
     children?: React.ReactNode;
 }) => {
     const appCtx = useContext(AppContext);
@@ -38,7 +40,7 @@ export const DialogContent = ({
     return (
         <Portal container={appCtx.appRootElement}>
             <Overlay className={styles.overlay} />
-            <Content className={styles.content}>
+            <Content className={styles.content + " " + className}>
                 <div className={styles.header}>
                     <Title className={styles.title}>{title}</Title>
                     <Description className={styles.description}>

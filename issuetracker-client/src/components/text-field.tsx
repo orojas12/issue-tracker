@@ -1,15 +1,24 @@
-import { forwardRef } from "react";
+import { ComponentPropsWithRef, forwardRef } from "react";
 import styles from "./styles/text-field.module.css";
+import { TextField as RTextField } from "@radix-ui/themes";
 
 type TextFieldProps = {
     variant?: "normal" | "soft" | "inset" | "shadow";
+    label?: string;
     size?: "sm" | "md";
-} & React.InputHTMLAttributes<HTMLInputElement>;
+} & Omit<ComponentPropsWithRef<"input">, "size">;
 
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
     (props, ref) => {
-        const { variant, size, className, ...inputProps } = props;
-        return (
+        const {
+            variant,
+            label: labelText,
+            size,
+            className,
+            ...inputProps
+        } = props;
+
+        const inputElement = (
             <input
                 ref={ref}
                 type="text"
@@ -17,6 +26,15 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
                 data-accent="secondary"
                 {...inputProps}
             />
+        );
+
+        return labelText ? (
+            <label className={styles.label}>
+                <span className={styles.labelText}>{labelText}</span>
+                {inputElement}
+            </label>
+        ) : (
+            inputElement
         );
     },
 );

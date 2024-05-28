@@ -1,12 +1,11 @@
 /* Themes */
 #app {
-    --background-lighter: var(--sage-1);
-    --background-light: var(--sage-2);
-    --background-base: var(--sage-3);
+    --background-light: var(--sage-1);
+    --background-base: var(--sage-2);
     --foreground: var(--sage-12);
     --foreground-muted: var(--sage-11);
-    --border-1: 1px solid var(--sage-7);
-    --border-2: 2px solid var(--sage-7);
+    --border-1: 1px solid var(--sage-6);
+    --border-2: 2px solid var(--sage-6);
     --radius: var(--radius-md);
     --radius-button: var(--radius-md);
     --radius-input: var(--radius-md);
@@ -33,7 +32,7 @@
     --accent-soft: var(--sage-4);
     --accent-soft-hover: var(--sage-5);
     --accent-soft-text: var(--sage-11);
-    --accent-outline: var(--sage-11);
+    --accent-outline: var(--sage-7);
     --accent-outline-hover: var(--sage-3);
     --accent-outline-text: var(--sage-11);
     --accent-ring: var(--sage-7);
@@ -47,7 +46,7 @@
     --accent-soft: var(--teal-4);
     --accent-soft-hover: var(--teal-5);
     --accent-soft-text: var(--teal-11);
-    --accent-outline: var(--teal-10);
+    --accent-outline: var(--teal-9);
     --accent-outline-hover: var(--teal-3);
     --accent-outline-text: var(--teal-10);
     --accent-ring: var(--teal-7);
@@ -61,7 +60,7 @@
     --accent-soft: var(--iris-4);
     --accent-soft-hover: var(--iris-5);
     --accent-soft-text: var(--iris-11);
-    --accent-outline: var(--iris-11);
+    --accent-outline: var(--iris-10);
     --accent-outline-hover: var(--iris-3);
     --accent-outline-text: var(--iris-11);
     --accent-ring: var(--iris-7);
@@ -74,7 +73,7 @@
     --accent-soft: var(--ruby-4);
     --accent-soft-hover: var(--ruby-5);
     --accent-soft-text: var(--ruby-11);
-    --accent-outline: var(--ruby-10);
+    --accent-outline: var(--ruby-9);
     --accent-outline-hover: var(--ruby-3);
     --accent-outline-text: var(--ruby-10);
 }

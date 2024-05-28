@@ -1,16 +1,71 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+}
+
 .list {
     list-style: none;
     margin: 0;
     padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    width: 100%;
 }
 
-.list-item:hover,
-.list-item:focus-within {
+@media screen and (min-width: 640px) {
+    .list {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .list {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .card {
+        padding: var(--space-4) var(--space-3);
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .list {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+.card {
+    border: var(--border-1);
+    padding: var(--space-5) var(--space-3);
+}
+
+.avatar {
+    background-color: lightgray;
+    height: var(--space-8);
+    width: var(--space-8);
+    border-radius: 100%;
+    margin: auto;
+}
+
+.card p {
+    margin-top: var(--space-3);
+    font-size: var(--font-sm);
+    text-align: center;
+}
+
+.listItem a:hover,
+.listItem a:focus-within {
     background-color: var(--gray-3);
 }
 
-.list-item a {
+.listItem a {
     display: block;
     text-decoration: none;
-    padding: var(--space-3);
 }

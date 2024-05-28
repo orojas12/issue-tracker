@@ -1,14 +1,5 @@
 import { Container } from "@/components/container";
-import {
-    Box,
-    Button,
-    Card,
-    Dialog,
-    Flex,
-    Heading,
-    Separator,
-    Text,
-} from "@radix-ui/themes";
+import { Box, Button, Dialog, Text } from "@radix-ui/themes";
 import { SearchField } from "@/components/search-field";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import type { CreateIssue, Issue } from "./types";
@@ -16,8 +7,8 @@ import type { CreateIssue, Issue } from "./types";
 import styles from "./styles/issue-list.module.css";
 import { IssueBadge } from "@/modules/issue/issue-badge";
 import { Link } from "@/components/link";
-import { CreateIssueForm } from "@/modules/issue/create-issue.tsx";
 import { useIssueList } from "./use-issue-list";
+import { NewIssueForm } from "./new-issue-form";
 
 const dateFormatter = Intl.DateTimeFormat(undefined, {
     year: "numeric",
@@ -28,81 +19,50 @@ const dateFormatter = Intl.DateTimeFormat(undefined, {
 export function IssueList() {
     const { issues, isLoading, error } = useIssueList();
     const [search, setSearch] = useState("");
-    const [dialogOpen, setDialogOpen] = useState(false);
 
     const filteredIssues = issues.filter((issue) =>
         issue.title.includes(search),
     );
 
-    const closeFormDialog = () => {
-        setDialogOpen(false);
-    };
-
     return (
         <Container size="lg">
             <div className={styles.wrapper}>
                 <h1>Issues</h1>
-                <div className="controls">
+                <div className={styles.controls}>
                     <SearchField
                         value={search}
                         placeholder="Search issues..."
                         onChange={(e) => setSearch(e.target.value)}
                         onClear={() => setSearch("")}
                     />
-                    <NewIssueDialog open={dialogOpen} setOpen={setDialogOpen}>
-                        <CreateIssueForm
-                            onSubmit={closeFormDialog}
-                            onCancel={() => setDialogOpen(false)}
-                        />
-                    </NewIssueDialog>
+                    <NewIssueForm />
                 </div>
-                <Card className={styles["list-wrapper"]}>
-                    <Box className={styles["list-header"]} p="4">
+                <ul className={styles.list}>
+                    <div data-accent="neutral" className={styles.listHeader}>
                         blah
-                    </Box>
-                    <ul className={styles.list}>
-                        {filteredIssues.map((issue) => (
-                            <IssueItem key={issue.id} issue={issue} />
-                        ))}
-                    </ul>
-                </Card>
+                    </div>
+                    {filteredIssues.map((issue) => (
+                        <IssueItem key={issue.id} issue={issue} />
+                    ))}
+                </ul>
             </div>
         </Container>
     );
 }
 
-interface NewIssueDialogProps {
-    open: boolean;
-    setOpen: (open: boolean) => void;
-    children: React.ReactNode;
-}
-function NewIssueDialog({ open, setOpen, children }: NewIssueDialogProps) {
-    return (
-        <Dialog.Root open={open} onOpenChange={setOpen}>
-            <Dialog.Trigger>
-                <Button>New Issue</Button>
-            </Dialog.Trigger>
-            <Dialog.Content>
-                <Dialog.Title mb="6">Create new issue</Dialog.Title>
-                {children}
-            </Dialog.Content>
-        </Dialog.Root>
-    );
-}
-
 function IssueItem({ issue }: { issue: Issue }) {
     return (
-        <li className={styles["list-item"]}>
-            <Link to={issue.id.toString()}>
+        <li data-accent="neutral" className={styles.listItem}>
+            <Link data-accent="secondary" href={issue.id.toString()}>
                 {issue.title.trim() || "[no title]"}
             </Link>
-            <Box flexGrow="1">
-                <Text mr="1" size="1">
+            <div className={styles.listItemDetails}>
+                <span className={styles.listItemDetailText}>
                     #{issue.id}{" "}
                     {"created on " + dateFormatter.format(issue.createdAt)}
-                </Text>
+                </span>
                 <IssueBadge closed={issue.closed} />
-            </Box>
+            </div>
         </li>
     );
 }

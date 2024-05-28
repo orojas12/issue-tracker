@@ -5,8 +5,13 @@
     border-radius: var(--radius-button);
     border: 1px solid transparent;
     font-weight: var(--weight-medium);
+    font-size: var(--font-sm);
+    letter-spacing: var(--letter-lg);
     cursor: pointer;
     user-select: none;
+    text-wrap: nowrap;
+    height: min-content;
+    width: min-content;
 }
 
 .btn:active {
@@ -16,6 +21,7 @@
 .sm {
     padding-block: var(--space-2);
     padding-inline: var(--space-4);
+    font-size: var(--font-sm);
 }
 
 .solid {
@@ -45,4 +51,27 @@
 
 .outline:hover {
     background-color: var(--accent-outline-hover);
+}
+
+.transparent {
+    background-color: transparent;
+    color: var(--accent-soft-text);
+}
+
+.transparent:hover {
+    background-color: var(--accent-soft);
+}
+
+.transparent:active {
+    background-color: var(--accent-soft-hover);
+}
+
+.link {
+    background-color: transparent;
+    padding: var(--space-1);
+    color: inherit;
+}
+
+.link:hover {
+    color: var(--accent-outline-text);
 }

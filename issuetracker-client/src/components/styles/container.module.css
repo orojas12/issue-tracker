@@ -1,9 +1,10 @@
 .container {
     width: 100%;
     margin: auto;
+    padding: var(--space-6) 0;
 }
 
-.container-fluid {
+.containerFluid {
     width: 100%;
     margin: auto;
 }

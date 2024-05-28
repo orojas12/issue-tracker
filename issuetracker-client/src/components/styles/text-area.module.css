@@ -1,15 +1,31 @@
-.text-field {
+.textarea {
     background-color: inherit;
     border: var(--border-1);
-    outline: 2px solid transparent;
     border-radius: var(--radius-input);
     padding: var(--space-3) var(--space-4);
     color: inherit;
     width: 100%;
+    min-height: var(--space-11);
 }
 
-.text-field:focus {
+.textarea:focus {
     outline: 2px solid var(--accent-ring);
+}
+
+.resize-none {
+    resize: none;
+}
+
+.resize-both {
+    resize: both;
+}
+
+.resize-vertical {
+    resize: vertical;
+}
+
+.resize-horizontal {
+    resize: horizontal;
 }
 
 .sm {
