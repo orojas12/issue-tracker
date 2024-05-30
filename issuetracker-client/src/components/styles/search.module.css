@@ -2,3 +2,13 @@
     background-color: var(--background-light);
     max-width: var(--space-14);
 }
+
+.searchIcon {
+    color: var(--foreground-muted);
+}
+
+.clearButton {
+    display: flex;
+    color: var(--foreground-muted);
+    padding: 0;
+}

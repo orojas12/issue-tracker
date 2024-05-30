@@ -1,5 +1,5 @@
 import { Button } from "./button";
-import { TextField } from "./text-field";
+import { TextField, TextFieldSlot } from "./text-field";
 import { Search, X } from "lucide-react";
 import styles from "./styles/search.module.css";
 
@@ -21,6 +21,21 @@ export function SearchField({
             placeholder={placeholder}
             value={value}
             onChange={onChange}
-        />
+        >
+            <TextFieldSlot side="left">
+                <Search size="1em" className={styles.searchIcon} />
+            </TextFieldSlot>
+            {value ? (
+                <TextFieldSlot side="right">
+                    <Button
+                        onClick={onClear}
+                        variant="link"
+                        className={styles.clearButton}
+                    >
+                        <X size="1em" />
+                    </Button>
+                </TextFieldSlot>
+            ) : null}
+        </TextField>
     );
 }

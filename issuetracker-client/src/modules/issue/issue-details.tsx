@@ -14,14 +14,7 @@ import {
 } from "@/components";
 import styles from "./styles/issue-details.module.css";
 import { useIssue } from "./use-issue.ts";
-
-const dateTimeFormatter = Intl.DateTimeFormat(undefined, {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-});
+import { LocalDateTimeFormatter } from "../util/date-format.ts";
 
 export function IssueDetails() {
     const { issueId } = useParams();
@@ -248,7 +241,9 @@ function IssuePropertyList({ issue }: { issue: Issue }) {
             <dt>Status</dt>
             <dd>{issue.closed ? "Closed" : "Open"}</dd>
             <dt>Due Date</dt>
-            <dd>{issue.dueDate && dateTimeFormatter.format(issue.dueDate)}</dd>
+            <dd>
+                {issue.dueDate && LocalDateTimeFormatter.format(issue.dueDate)}
+            </dd>
         </dl>
     );
 }

@@ -50,9 +50,7 @@ export function UserManagement() {
                     onClear={() => setSearch("")}
                 />
                 <CreateUserDialog onCreate={createUser}>
-                    <Button size="sm" color="primary">
-                        New User
-                    </Button>
+                    <Button color="primary">New User</Button>
                 </CreateUserDialog>
             </div>
             <UserList users={filteredUsers} />

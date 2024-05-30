@@ -1,0 +1,39 @@
+.sideDrawer {
+    position: fixed;
+    height: 100%;
+    width: 320px;
+    background-color: var(--sage-3);
+    top: 0;
+    left: 0;
+    z-index: 2;
+    border: var(--border-1);
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background-color: hsl(0, 0%, 0%, .3);
+}
+
+.trigger {
+    background-color: transparent;
+    border: none;
+    color: var(--foreground-muted);
+    border-radius: var(--radius);
+    cursor: pointer;
+    width: var(--space-6);
+    height: var(--space-6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.trigger:hover {
+    color: var(--foreground);
+}
+
+.triggerIcon {
+    display: block;
+}

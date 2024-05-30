@@ -1,0 +1,4 @@
+.content label {
+    display: block;
+    margin-bottom: var(--space-5);
+}

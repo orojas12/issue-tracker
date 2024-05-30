@@ -59,9 +59,7 @@ export function NewIssueForm() {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger>
-                <Button color="primary" size="sm">
-                    New Issue
-                </Button>
+                <Button color="primary">New Issue</Button>
             </DialogTrigger>
             <DialogContent
                 title="Create new issue"

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Team } from "./types";
 
-import styles from "./styles/team-list.module.css";
+import styles from "./styles/project-grid.module.css";
 import { SearchField, Container, Link, Card, Button } from "@/components";
+import { CreateProjectDialog } from "./create-project";
 
-export function TeamsList() {
+export function ProjectGrid() {
     const [teams, setTeams] = useState<Team[]>([]);
     const [search, setSearch] = useState("");
 
@@ -37,23 +38,23 @@ export function TeamsList() {
 
     return (
         <Container className={styles.container} size="lg">
-            <h1>Teams</h1>
+            <h1>Projects</h1>
             <div className={styles.controls}>
                 <SearchField
                     value={search}
-                    placeholder="Search teams..."
+                    placeholder="Search projects..."
                     onChange={(e) => setSearch(e.target.value)}
                     onClear={() => setSearch("")}
                 />
-                <Button size="sm" color="primary">
-                    New team
-                </Button>
+                <CreateProjectDialog onCreate={createTeam}>
+                    <Button color="primary">New project</Button>
+                </CreateProjectDialog>
             </div>
             <div className={styles.grid}>
                 {filteredTeams.map((team) => (
                     <Link
                         key={team.id}
-                        href={`/teams/${team.id}`}
+                        href={`/projects/${team.id}`}
                         className={styles.link}
                     >
                         <Card className={styles.card}>

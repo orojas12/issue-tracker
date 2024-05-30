@@ -1,28 +1,15 @@
 /* Set global styles */
 #app {
     position: relative;
-    min-height: 100vh;
+    height: 100vh;
     font-family: var(--family-default);
     font-size: var(--font-base);
     line-height: var(--line-base);
     background-color: var(--background-base);
     color: var(--foreground);
+    overflow-y: auto;
 }
 
-.navbar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: var(--space-3);
-    gap: var(--space-4);
-}
-
-.navbar a {
-    text-decoration: none;
-    color: var(--foreground-muted);
-}
-
-.navbar a.active {
-    color: var(--foreground);
-    font-weight: var(--weight-medium);
+#app.noscroll {
+    overflow-y: hidden;
 }

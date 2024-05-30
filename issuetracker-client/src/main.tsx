@@ -2,13 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.tsx";
-import { TeamsList } from "@/modules/team/team-list.tsx";
+import { ProjectGrid } from "@/modules/project/project-list.tsx";
 import { UserDetails } from "@/modules/user/user-details.tsx";
 import { UserManagement } from "@/modules/user/user-list.tsx";
 import { IssueList } from "@/modules/issue/issue-list.tsx";
 import { IssueDetails } from "@/modules/issue/issue-details.tsx";
 import { Playground } from "./playground.tsx";
-import { TeamDetails } from "./modules/team/team-details.tsx";
+import { ProjectDetails } from "./modules/project/project-details.tsx";
 
 const router = createBrowserRouter([
     {
@@ -16,12 +16,8 @@ const router = createBrowserRouter([
         element: <App />,
         children: [
             {
-                path: "teams",
-                element: <TeamsList />,
-            },
-            {
-                path: "teams/:teamId",
-                element: <TeamDetails />,
+                path: ":teamId",
+                element: <ProjectDetails />,
             },
             {
                 path: "users",
@@ -32,11 +28,11 @@ const router = createBrowserRouter([
                 element: <UserDetails />,
             },
             {
-                path: "issues",
+                path: ":projectId/issues",
                 element: <IssueList />,
             },
             {
-                path: "issues/:issueId",
+                path: ":projectId/issues/:issueId",
                 element: <IssueDetails />,
             },
             {

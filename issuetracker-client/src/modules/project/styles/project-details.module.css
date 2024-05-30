@@ -1,0 +1,32 @@
+.headerWrapper {
+    height: var(--space-12);
+    background-color: var(--sage-4);
+    display: flex;
+    align-items: center;
+}
+
+.header h1 {
+    font-size: var(--font-2xl);
+}
+
+.header h1,
+.header button {
+    margin-bottom: var(--space-2);
+}
+
+.header button {
+    margin-right: var(--space-4);
+}
+
+.header h2 {
+    font-size: var(--font-base);
+    color: var(--foreground-muted);
+    margin-bottom: var(--space-4);
+}
+
+.tabTitle {
+    font-size: var(--font-lg);
+    color: var(--foreground-muted);
+    font-weight: var(--weight-medium);
+    margin-bottom: var(--space-4);
+}

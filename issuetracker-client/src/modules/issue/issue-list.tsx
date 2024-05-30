@@ -27,7 +27,6 @@ export function IssueList() {
     return (
         <Container size="lg">
             <div className={styles.wrapper}>
-                <h1>Issues</h1>
                 <div className={styles.controls}>
                     <SearchField
                         value={search}

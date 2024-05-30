@@ -1,0 +1,53 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: var(--space-3);
+    gap: var(--space-4);
+}
+
+.navbar a {
+    text-decoration: none;
+    color: var(--foreground-muted);
+}
+
+.navbar a[aria-current="page"] {
+    color: var(--foreground);
+    font-weight: var(--weight-medium);
+}
+
+.navbarEnd {
+    margin-left: auto;
+    display: flex;
+    gap: var(--space-4);
+}
+
+.projectName {
+    font-weight: var(--weight-medium);
+}
+
+.drawerList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.drawerList ul {
+    color: var(--foreground);
+    font-size: var(--font-sm);
+    font-weight: var(--weight-normal);
+}
+
+.drawerList {
+    padding: var(--space-4);
+}
+
+.drawerListGroup {
+    color: var(--foreground-muted);
+    font-size: var(--font-xs);
+    font-weight: var(--weight-medium);
+    margin-bottom: var(--space-2);
+}
+
+.drawerListGroupTitle {
+    padding: var(--space-1);
+}

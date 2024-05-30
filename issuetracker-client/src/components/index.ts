@@ -13,3 +13,4 @@ export { Link } from "./link";
 export { TextArea } from "./text-area";
 export { ThemeToggle } from "./theme-toggle";
 export { Card } from "./card";
+export { SideDrawer } from "./side-drawer";

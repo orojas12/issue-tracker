@@ -40,7 +40,7 @@ export const DialogContent = ({
     return (
         <Portal container={appCtx.appRootElement}>
             <Overlay className={styles.overlay} />
-            <Content className={styles.content + " " + className}>
+            <Content className={styles.content + " " + className || ""}>
                 <div className={styles.header}>
                     <Title className={styles.title}>{title}</Title>
                     <Description className={styles.description}>
@@ -53,6 +53,16 @@ export const DialogContent = ({
     );
 };
 
-export const DialogControls = ({ children }: { children: React.ReactNode }) => {
-    return <div className={styles.controls}>{children}</div>;
+export const DialogControls = ({
+    children,
+    className,
+}: {
+    className?: string;
+    children: React.ReactNode;
+}) => {
+    return (
+        <div className={styles.controls + " " + className || ""}>
+            {children}
+        </div>
+    );
 };

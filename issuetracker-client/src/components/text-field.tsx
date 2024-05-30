@@ -1,6 +1,6 @@
 import { ComponentPropsWithRef, forwardRef } from "react";
+
 import styles from "./styles/text-field.module.css";
-import { TextField as RTextField } from "@radix-ui/themes";
 
 type TextFieldProps = {
     variant?: "normal" | "soft" | "inset" | "shadow";
@@ -15,17 +15,20 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
             label: labelText,
             size,
             className,
+            children,
             ...inputProps
         } = props;
 
         const inputElement = (
-            <input
-                ref={ref}
-                type="text"
-                className={`${styles["text-field"]} ${styles[size || ""]} ${styles[variant || ""]} ${className}`}
-                data-accent="secondary"
-                {...inputProps}
-            />
+            <div data-accent="secondary" className={styles.inputWrapper}>
+                <input
+                    ref={ref}
+                    type="text"
+                    className={`${styles.input} ${styles[size || ""]} ${styles[variant || ""]} ${className}`}
+                    {...inputProps}
+                />
+                {children}
+            </div>
         );
 
         return labelText ? (
@@ -38,5 +41,15 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
         );
     },
 );
+
+export function TextFieldSlot({
+    side,
+    children,
+}: {
+    side: "left" | "right";
+    children: React.ReactNode;
+}) {
+    return <div className={styles["slot-" + side]}>{children}</div>;
+}
 
 TextField.displayName = "TextField";
