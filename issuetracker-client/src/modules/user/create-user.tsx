@@ -1,6 +1,16 @@
-import { Button, Dialog, Flex, Text, TextField } from "@radix-ui/themes";
+import {
+    Button,
+    TextField,
+    Dialog,
+    DialogTrigger,
+    DialogContent,
+    DialogClose,
+    DialogControls,
+} from "@/components";
 import { useState } from "react";
-import { CreateUserRequest } from "@/modules/team/types";
+import type { CreateUserRequest } from "@/modules/team/types";
+
+import styles from "./styles/create-user.module.css";
 
 export function CreateUserDialog({
     children,
@@ -14,56 +24,47 @@ export function CreateUserDialog({
     const [lastName, setLastName] = useState("");
 
     return (
-        <Dialog.Root>
-            <Dialog.Trigger>{children}</Dialog.Trigger>
-            <Dialog.Content maxWidth="450px">
-                <Dialog.Title>Create new user</Dialog.Title>
-                <Dialog.Description size="2">
-                    Create a new user account
-                </Dialog.Description>
-                <Flex direction="column" gap="4" mt="4">
-                    <label>
-                        <Text>Username</Text>
-                        <TextField.Root
-                            placeholder="Enter username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                        />
-                    </label>
-                    <label>
-                        <Text>First Name</Text>
-                        <TextField.Root
-                            placeholder="Enter first name"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                        />
-                    </label>
-                    <label>
-                        <Text>Last Name</Text>
-                        <TextField.Root
-                            placeholder="Enter last name"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                        />
-                    </label>
-                </Flex>
-                <Flex gap="3" mt="4" justify="end">
-                    <Dialog.Close>
-                        <Button variant="soft" color="gray">
-                            Cancel
-                        </Button>
-                    </Dialog.Close>
-                    <Dialog.Close>
+        <Dialog>
+            <DialogTrigger>{children}</DialogTrigger>
+            <DialogContent
+                title="Create new user"
+                description="Create a new user account."
+                className={styles.content}
+            >
+                <TextField
+                    placeholder="Enter username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    label="Username"
+                />
+                <TextField
+                    placeholder="Enter first name"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    label="First Name"
+                />
+                <TextField
+                    placeholder="Enter last name"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    label="Last Name"
+                />
+                <DialogControls className={styles.controls}>
+                    <DialogClose>
+                        <Button variant="soft">Cancel</Button>
+                    </DialogClose>
+                    <DialogClose>
                         <Button
                             onClick={() =>
                                 onCreate({ username, firstName, lastName })
                             }
+                            color="primary"
                         >
                             Save
                         </Button>
-                    </Dialog.Close>
-                </Flex>
-            </Dialog.Content>
-        </Dialog.Root>
+                    </DialogClose>
+                </DialogControls>
+            </DialogContent>
+        </Dialog>
     );
 }

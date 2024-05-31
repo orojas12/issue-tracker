@@ -1,11 +1,14 @@
-.text-field {
-    padding-inline: var(--space-1);
+.textField {
+    background-color: var(--background-light);
+    max-width: var(--space-14);
 }
 
-.text-field input {
-    padding: var(--space-1);
+.searchIcon {
+    color: var(--foreground-muted);
 }
 
-.text-field button {
-    padding: var(--space-1);
+.clearButton {
+    display: flex;
+    color: var(--foreground-muted);
+    padding: 0;
 }

@@ -1,16 +1,21 @@
 package dev.oscarrojas.issuetracker.issue;
 
+import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static dev.oscarrojas.issuetracker.TestUtils.issue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -61,6 +66,60 @@ public class IssueServiceTest {
         assertEquals(issue.getDueDate(), result.dueDate());
     }
 
+    @Test
+    void createIssue_returnsCreatedIssue() {
+        CreateIssueDto dto = new CreateIssueDto("title", "desc", ZonedDateTime.now());
+        IssueDto expected = new IssueDto(null,
+                dto.title(),
+                dto.description(),
+                Instant.now(),
+                dto.dueDate(),
+                false);
+        when(issueDao.save(argThat((arg) -> {
+                    assertEquals(dto.title(), arg.getTitle());
+                    assertEquals(dto.description(), arg.getDescription());
+                    assertEquals(dto.dueDate(), arg.getDueDate());
+                    return true;
+                }
+        ))).thenAnswer(i -> i.getArgument(0));
+
+        IssueService service = new IssueService(issueDao);
+        IssueDto result = service.createIssue(dto);
+
+        assertEquals(expected.title(), result.title());
+        assertEquals(expected.description(), result.description());
+        assertEquals(expected.dueDate(), result.dueDate());
+        assertEquals(expected.closed(), result.closed());
+    }
+
+    @Test
+    void updateIssue_updatesIssue() throws NotFoundException {
+        UpdateIssueDto dto = new UpdateIssueDto("new title",
+                "new desc",
+                null,
+                true);
+        Issue issue = new Issue(1L, "title", "desc", Instant.now(), ZonedDateTime.now(), false);
+        when(issueDao.findById(issue.getId())).thenReturn(Optional.of(issue));
+        when(issueDao.save(issue)).thenAnswer(i -> i.getArgument(0));
+        IssueService service = new IssueService(issueDao);
+        IssueDto result = service.updateIssue(issue.getId(), dto);
+
+        assertEquals(issue.getId(), result.id());
+        assertEquals(dto.title(), result.title());
+        assertEquals(dto.description(), result.description());
+        assertEquals(dto.dueDate(), result.dueDate());
+        assertEquals(dto.closed(), result.closed());
+    }
+
+    @Test
+    void deleteIssue_deletesIssue() throws NotFoundException {
+        long id = 1L;
+        doNothing().when(issueDao).deleteById(id);
+        IssueService service = new IssueService(issueDao);
+
+        service.deleteIssue(id);
+    }
+
     static class TestIssueDao implements IssueDao {
 
         @Override
@@ -75,6 +134,11 @@ public class IssueServiceTest {
 
         @Override
         public Issue save(Issue issue) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void deleteById(long id) throws NotFoundException {
             throw new UnsupportedOperationException();
         }
     }

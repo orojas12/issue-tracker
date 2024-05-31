@@ -1,0 +1,15 @@
+/* Set global styles */
+#app {
+    position: relative;
+    height: 100vh;
+    font-family: var(--family-default);
+    font-size: var(--font-base);
+    line-height: var(--line-base);
+    background-color: var(--background-base);
+    color: var(--foreground);
+    overflow-y: auto;
+}
+
+#app.noscroll {
+    overflow-y: hidden;
+}

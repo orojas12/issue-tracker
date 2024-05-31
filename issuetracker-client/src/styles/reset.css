@@ -32,12 +32,6 @@ ol[role="list"] {
     list-style: none;
 }
 
-/* Set core body defaults */
-body {
-    min-height: 100vh;
-    line-height: 1.5;
-}
-
 /* Set shorter line heights on headings and interactive elements */
 h1,
 h2,
@@ -46,7 +40,7 @@ h4,
 button,
 input,
 label {
-    line-height: 1.1;
+    line-height: var(--line-sm);
 }
 
 /* Balance text wrapping on headings */
@@ -77,18 +71,4 @@ textarea,
 select {
     font-family: inherit;
     font-size: inherit;
-}
-
-/* Radix theme overrides */
-
-:root {
-    --cursor-button: pointer;
-    --cursor-checkbox: pointer;
-    --cursor-disabled: default;
-    --cursor-link: pointer;
-    --cursor-menu-item: pointer;
-    --cursor-radio: pointer;
-    --cursor-slider-thumb: grab;
-    --cursor-slider-thumb-active: grabbing;
-    --cursor-switch: pointer;
 }

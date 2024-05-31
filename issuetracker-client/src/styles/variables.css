@@ -1,0 +1,97 @@
+@import "@radix-ui/colors/sage.css";
+@import "@radix-ui/colors/sage-dark.css";
+@import "@radix-ui/colors/sage-alpha.css";
+@import "@radix-ui/colors/teal.css";
+@import "@radix-ui/colors/teal-alpha.css";
+@import "@radix-ui/colors/teal-dark.css";
+@import "@radix-ui/colors/iris.css";
+@import "@radix-ui/colors/iris-alpha.css";
+@import "@radix-ui/colors/iris-dark.css";
+@import "@radix-ui/colors/ruby.css";
+@import "@radix-ui/colors/ruby-alpha.css";
+@import "@radix-ui/colors/ruby-dark.css";
+
+/* Variables */
+:root {
+    /* Spacing */
+    --space-1: 4px;
+    --space-1-5: 6px;
+    --space-2: 8px;
+    --space-2-5: 10px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+    --space-8: 64px;
+    --space-9: 96px;
+    --space-10: 128px;
+    --space-11: 192px;
+    --space-12: 256px;
+    --space-13: 384px;
+    --space-14: 512px;
+    --space-15: 640px;
+    --space-16: 768px;
+
+    /* Font Family */
+    --family-default: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+    /* Font Size */
+    --font-xs: 12px;
+    --font-sm: 14px;
+    --font-base: 16px;
+    --font-lg: 18px;
+    --font-xl: 20px;
+    --font-2xl: 24px;
+    --font-3xl: 30px;
+    --font-4xl: 36px;
+    --font-5xl: 48px;
+    --font-6xl: 60px;
+    --font-7xl: 72px;
+
+    /* Font Weight */
+    --weight-light: 300;
+    --weight-normal: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+
+    /* Line Height */
+    --line-xs: 1;
+    --line-sm: 1.25;
+    --line-base: 1.5;
+    --line-lg: 1.75;
+    --line-xl: 2;
+
+    /* Letter Spacing */
+    --letter-xs: -0.05em;
+    --letter-sm: -0.025em;
+    --letter-base: 0em;
+    --letter-lg: 0.025em;
+    --letter-xl: 0.05em;
+
+    /* Box Shadow */
+    --shadow-1: 0 1px 3px hsla(0, 0%, 0%, .2);
+    --shadow-2: 0 4px 6px hsla(0, 0%, 0%, .2);
+    --shadow-3: 0 5px 15px hsla(0, 0%, 0%, .2);
+    --shadow-4: 0 10px 24px hsla(0, 0%, 0%, .2);
+    --shadow-5: 0 15px 35px hsla(0, 0%, 0%, .2);
+
+    /* Border Radius */
+    --radius-xs: 2px;
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --radius-xl: 12px;
+    --radius-2xl: 16px;
+    --radius-3xl: 24px;
+    --radius-capsule: 48px;
+    --radius-full: 50%;
+
+    /* Breakpoints */
+    --breakpoint-sm: 640px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-xl: 1280px;
+    --breakpoint-2xl: 1536px;
+}

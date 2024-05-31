@@ -1,12 +1,11 @@
 package dev.oscarrojas.issuetracker.issue;
 
+import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @RestController
@@ -24,9 +23,41 @@ public class IssueController {
         return issueService.getAllIssues();
     }
 
+    @PostMapping
+    public IssueDto createIssue(@RequestBody CreateIssueRequest body) {
+        ZonedDateTime datetime = null;
+        if (body.dueDate() != null && body.dueDateTimeZone() != null) {
+            datetime = ZonedDateTime.of(body.dueDate(), body.dueDateTimeZone());
+        }
+        var dto = new CreateIssueDto(
+                body.title(),
+                body.description(),
+                datetime
+        );
+        return issueService.createIssue(dto);
+    }
+
     @GetMapping("/{issueId}")
     public IssueDto getIssue(@PathVariable("issueId") long id) {
         return issueService.getIssue(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @PutMapping("/{issueId}")
+    public IssueDto updateIssue(@PathVariable("issueId") long id, @RequestBody UpdateIssueDto dto) {
+        try {
+            return issueService.updateIssue(id, dto);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
+    @DeleteMapping("/{issueId}")
+    public void deleteIssue(@PathVariable("issueId") long id) {
+        try {
+            issueService.deleteIssue(id);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
     }
 }

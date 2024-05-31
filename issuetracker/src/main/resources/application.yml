@@ -24,4 +24,3 @@ spring:
   jpa:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
 
-issuetracker:

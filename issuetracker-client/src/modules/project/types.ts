@@ -1,3 +1,8 @@
+export type Project = {
+    id: string;
+    name: string;
+};
+
 export type Team = {
     id: string;
     name: string;
@@ -7,14 +12,6 @@ export type Team = {
 export type TeamMember = {
     username: string;
     teamId: string;
-};
-
-export type User = {
-    id: string;
-    username: string;
-    firstName: string;
-    lastName: string;
-    dateCreated: Date;
 };
 
 export type CreateUserRequest = {

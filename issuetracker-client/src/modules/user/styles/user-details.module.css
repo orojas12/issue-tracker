@@ -1,0 +1,38 @@
+.header {
+    height: var(--space-12);
+    background-color: var(--sage-4);
+}
+
+.avatarWrapper {
+    display: flex;
+    align-items: center;
+    margin-top: calc(-1 * (var(--space-11) / 2))
+}
+
+.avatar {
+    height: var(--space-11);
+    aspect-ratio: 1;
+    border: 4px solid var(--background-base);
+    border-radius: var(--radius-full);
+    background-color: var(--sage-7)
+}
+
+.heading {
+    margin-top: var(--space-6);
+    margin-left: var(--space-4);
+}
+
+.heading h1 {
+    font-size: var(--font-2xl);
+}
+
+.properties {
+    margin-top: var(--space-8);
+    display: grid;
+    grid-template: 1fr / 1fr 1fr;
+}
+
+.properties dt {
+    color: var(--foreground-muted);
+    font-size: var(--font-sm);
+}

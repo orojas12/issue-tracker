@@ -1,0 +1,64 @@
+.inputWrapper .input {
+    background-color: transparent;
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 0;
+    order: 1;
+    color: inherit;
+}
+
+.inputWrapper {
+    background-color: var(--background-light);
+    color: inherit;
+    padding: var(--space-2) var(--space-3);
+    border: var(--border-1);
+    border-radius: var(--radius-input);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.inputWrapper:focus-within {
+    outline: 2px solid var(--accent-ring);
+}
+
+.sm {
+    padding: var(--space-2) var(--space-3);
+}
+
+.soft {
+    background-color: var(--accent-soft);
+    border: none;
+}
+
+.inset {
+    border: none;
+    background-color: var(--background-base);
+    box-shadow: var(--inset-shadow-top), var(--inset-shadow-bottom);
+}
+
+.shadow {
+    border: none;
+    box-shadow: var(--shadow-1);
+}
+
+.label {
+    display: block;
+}
+
+.labelText {
+    display: block;
+    margin-bottom: var(--space-1);
+    font-weight: var(--weight-medium);
+}
+
+.slot-left {
+    display: flex;
+    order: 0;
+}
+
+.slot-right {
+    display: flex;
+    order: 2;
+}

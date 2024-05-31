@@ -1,0 +1,116 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.issueNumber {
+    font-size: var(--font-base);
+    color: var(--foreground-muted);
+}
+
+.title {
+    display: flex;
+    align-items: baseline;
+}
+
+.titleInput,
+.titleText {
+    flex-grow: 1;
+}
+
+.titleInput {
+    background-color: var(--background-light);
+}
+
+.titleText {
+    font-size: var(--font-2xl);
+    text-wrap: wrap;
+}
+
+.titleControls {
+    display: flex;
+    gap: var(--space-2);
+    margin-left: var(--space-4);
+}
+
+.wrapper {
+    display: grid;
+    grid-template: auto / 3fr 1fr;
+    gap: var(--space-5);
+}
+
+.description {
+    grid-area: 1 / 1 / 2 / 2;
+    background-color: var(--background-light);
+    padding: var(--space-5);
+    border: var(--border-1);
+    border-radius: var(--radius);
+}
+
+.descriptionHeading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: var(--space-2);
+}
+
+.descriptionHeadingText {
+    font-size: var(--font-base);
+}
+
+.descriptionInput {
+    min-height: var(--space-15) !important;
+}
+
+.descriptionEditControls {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+}
+
+.propertyList {
+    grid-area: 1 / 2 / 2 / 3;
+    display: grid;
+    grid-template: max-content / max-content max-content;
+    gap: var(--space-3) var(--space-5);
+    font-size: var(--font-sm);
+    background-color: var(--background-light);
+    border: var(--border-1);
+    border-radius: var(--radius);
+    padding: var(--space-5);
+}
+
+.propertyList dt {
+    color: var(--foreground-muted);
+}
+
+.propertyList dd {
+    font-weight: var(--weight-medium);
+}
+
+.editButton {
+    color: var(--foreground-muted);
+}
+
+.actions {
+    grid-area: 2 / 2 / 3 / 3;
+    background-color: var(--background-light);
+    padding: var(--space-5);
+    border: var(--border-1);
+    border-radius: var(--radius);
+}
+
+.actions button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding-left: var(--space-1);
+}
+
+.deleteDialogContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

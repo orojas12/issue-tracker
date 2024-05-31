@@ -1,0 +1,60 @@
+.container {
+    width: 100%;
+    margin: auto;
+    padding: var(--space-6) 0;
+}
+
+.containerFluid {
+    width: 100%;
+    margin: auto;
+}
+
+.container--sm {
+    max-width: var(--breakpoint-sm);
+}
+
+.container--md {
+    max-width: var(--breakpoint-md);
+}
+
+.container--lg {
+    max-width: var(--breakpoint-lg);
+}
+
+.container--xl {
+    max-width: var(--breakpoint-xl);
+}
+
+.container--2xl {
+    max-width: var(--breakpoint-2xl);
+}
+
+@media screen and (min-width: 640px) {
+    .container {
+        width: var(--breakpoint-sm);
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .container {
+        width: var(--breakpoint-md);
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .container {
+        width: var(--breakpoint-lg);
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .container {
+        width: var(--breakpoint-xl);
+    }
+}
+
+@media screen and (min-width: 1536px) {
+    .container {
+        width: var(--breakpoint-2xl);
+    }
+}
