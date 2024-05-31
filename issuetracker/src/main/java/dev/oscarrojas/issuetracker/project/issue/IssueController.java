@@ -1,4 +1,4 @@
-package dev.oscarrojas.issuetracker.issue;
+package dev.oscarrojas.issuetracker.project.issue;
 
 import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -23,6 +23,11 @@ public class IssueController {
         return issueService.getAllIssues();
     }
 
+    @GetMapping
+    public List<IssueDto> getAllIssuesByProjectId(@RequestParam("projectId") String projectId) {
+        return issueService.getAllIssuesByProjectId(projectId);
+    }
+
     @PostMapping
     public IssueDto createIssue(@RequestBody CreateIssueRequest body) {
         ZonedDateTime datetime = null;
@@ -32,8 +37,7 @@ public class IssueController {
         var dto = new CreateIssueDto(
                 body.title(),
                 body.description(),
-                datetime
-        );
+                datetime);
         return issueService.createIssue(dto);
     }
 

@@ -1,4 +1,4 @@
-package dev.oscarrojas.issuetracker.issue;
+package dev.oscarrojas.issuetracker.project.issue;
 
 import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
 import org.springframework.stereotype.Repository;
@@ -37,9 +37,7 @@ public class IssueDaoJpa implements IssueDao {
                     String.format(
                             "Could not find team id '%s'. If this is a new team" +
                                     " please set team id to null before saving.",
-                            issue.getId()
-                    )
-            ));
+                            issue.getId())));
             model.setTitle(issue.getTitle());
             model.setDescription(issue.getDescription());
             if (issue.getDueDate() != null) {

@@ -1,4 +1,4 @@
-package dev.oscarrojas.issuetracker.issue;
+package dev.oscarrojas.issuetracker.project.issue;
 
 import dev.oscarrojas.issuetracker.IntegrationTestConfig;
 import dev.oscarrojas.issuetracker.IssueTracker;
@@ -22,9 +22,9 @@ import static dev.oscarrojas.issuetracker.TestUtils.issueModel;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@ContextConfiguration(classes = {IssueTracker.class, IntegrationTestConfig.class})
+@ContextConfiguration(classes = { IssueTracker.class, IntegrationTestConfig.class })
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import({IssueDaoJpa.class})
+@Import({ IssueDaoJpa.class })
 @Sql("/sqlite/schema.sql")
 public class IssueDaoJpaIT {
 
@@ -57,7 +57,8 @@ public class IssueDaoJpaIT {
                 assertEquals(model1.getDescription(), issue.getDescription());
                 assertEquals(model1.getCreatedAt(), issue.getCreatedAt());
                 if (model1.getDueDate() != null && model1.getDueDateTimeZone() != null) {
-                    assertEquals(ZonedDateTime.of(model1.getDueDate(), model1.getDueDateTimeZone()), issue.getDueDate());
+                    assertEquals(ZonedDateTime.of(model1.getDueDate(), model1.getDueDateTimeZone()),
+                            issue.getDueDate());
                 } else {
                     assertNull(issue.getDueDate());
                 }
@@ -68,7 +69,8 @@ public class IssueDaoJpaIT {
                 assertEquals(model2.getDescription(), issue.getDescription());
                 assertEquals(model2.getCreatedAt(), issue.getCreatedAt());
                 if (model2.getDueDate() != null && model2.getDueDateTimeZone() != null) {
-                    assertEquals(ZonedDateTime.of(model2.getDueDate(), model2.getDueDateTimeZone()), issue.getDueDate());
+                    assertEquals(ZonedDateTime.of(model2.getDueDate(), model2.getDueDateTimeZone()),
+                            issue.getDueDate());
                 } else {
                     assertNull(issue.getDueDate());
                 }
@@ -154,16 +156,15 @@ public class IssueDaoJpaIT {
                 model.getTitle(),
                 model.getDescription(),
                 model.getCreatedAt(),
-                model.getDueDate() != null && model.getDueDateTimeZone() != null ?
-                        ZonedDateTime.of(model.getDueDate(), model.getDueDateTimeZone()) :
-                        null,
+                model.getDueDate() != null && model.getDueDateTimeZone() != null
+                        ? ZonedDateTime.of(model.getDueDate(), model.getDueDateTimeZone())
+                        : null,
                 model.isClosed());
 
         issue.setTitle("new title");
         issue.setDescription("new description");
 
         Issue result = issueDao.save(issue);
-
 
         List<IssueModel> models = em.createQuery("select i from IssueModel i", IssueModel.class)
                 .getResultList();

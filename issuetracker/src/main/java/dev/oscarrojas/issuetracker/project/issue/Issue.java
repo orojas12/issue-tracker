@@ -1,4 +1,4 @@
-package dev.oscarrojas.issuetracker.issue;
+package dev.oscarrojas.issuetracker.project.issue;
 
 import jakarta.annotation.Nullable;
 

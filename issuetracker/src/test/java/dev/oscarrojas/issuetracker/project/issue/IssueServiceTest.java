@@ -1,4 +1,4 @@
-package dev.oscarrojas.issuetracker.issue;
+package dev.oscarrojas.issuetracker.project.issue;
 
 import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
 import org.junit.jupiter.api.Test;
@@ -50,6 +50,11 @@ public class IssueServiceTest {
     }
 
     @Test
+    void getAllIssuesByProjectId_shouldReturnAllIssuesInThatProject() {
+
+    }
+
+    @Test
     void getIssue_shouldReturnIssue() {
         Issue issue = issue(1L);
         when(issueDao.findById(issue.getId())).thenReturn(Optional.of(issue));
@@ -76,12 +81,11 @@ public class IssueServiceTest {
                 dto.dueDate(),
                 false);
         when(issueDao.save(argThat((arg) -> {
-                    assertEquals(dto.title(), arg.getTitle());
-                    assertEquals(dto.description(), arg.getDescription());
-                    assertEquals(dto.dueDate(), arg.getDueDate());
-                    return true;
-                }
-        ))).thenAnswer(i -> i.getArgument(0));
+            assertEquals(dto.title(), arg.getTitle());
+            assertEquals(dto.description(), arg.getDescription());
+            assertEquals(dto.dueDate(), arg.getDueDate());
+            return true;
+        }))).thenAnswer(i -> i.getArgument(0));
 
         IssueService service = new IssueService(issueDao);
         IssueDto result = service.createIssue(dto);

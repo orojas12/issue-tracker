@@ -1,4 +1,4 @@
-package dev.oscarrojas.issuetracker.issue;
+package dev.oscarrojas.issuetracker.project.issue;
 
 import dev.oscarrojas.issuetracker.data.SQLiteInstantConverter;
 import dev.oscarrojas.issuetracker.data.SQLiteLocalDateTimeConverter;
@@ -31,7 +31,8 @@ public class IssueModel {
     public IssueModel() {
     }
 
-    public IssueModel(Long id, String title, String description, Instant createdAt, LocalDateTime dueDate, ZoneId dueDateTimeZone, boolean closed) {
+    public IssueModel(Long id, String title, String description, Instant createdAt, LocalDateTime dueDate,
+            ZoneId dueDateTimeZone, boolean closed) {
         this.id = id;
         this.title = title;
         this.description = description;

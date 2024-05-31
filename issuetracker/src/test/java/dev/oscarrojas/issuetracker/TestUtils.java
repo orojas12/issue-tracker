@@ -1,7 +1,7 @@
 package dev.oscarrojas.issuetracker;
 
-import dev.oscarrojas.issuetracker.issue.Issue;
-import dev.oscarrojas.issuetracker.issue.IssueModel;
+import dev.oscarrojas.issuetracker.project.issue.Issue;
+import dev.oscarrojas.issuetracker.project.issue.IssueModel;
 import dev.oscarrojas.issuetracker.user.User;
 import dev.oscarrojas.issuetracker.user.UserBuilder;
 import dev.oscarrojas.issuetracker.user.UserModel;

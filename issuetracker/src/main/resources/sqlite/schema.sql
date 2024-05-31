@@ -1,29 +1,29 @@
-DROP TABLE IF EXISTS team_member;
-DROP TABLE IF EXISTS team;
-DROP TABLE IF EXISTS account;
 DROP TABLE IF EXISTS issue;
+DROP TABLE IF EXISTS contributor;
+DROP TABLE IF EXISTS project;
+DROP TABLE IF EXISTS account;
 
 CREATE TABLE account
 (
-    id           text PRIMARY KEY,
-    username     text UNIQUE NOT NULL,
-    first_name   text,
-    last_name    text,
-    date_created text
+    id          text PRIMARY KEY,
+    username    text UNIQUE NOT NULL,
+    first_name  text,
+    last_name   text,
+    created_at  text
 );
 
-CREATE TABLE team
+CREATE TABLE project
 (
-    id           text PRIMARY KEY,
-    name         text,
-    date_created text NOT NULL
+    id          text PRIMARY KEY,
+    name        text,
+    created_at  text NOT NULL
 );
 
-CREATE TABLE team_member
+CREATE TABLE contributor
 (
-    id         integer PRIMARY KEY,
-    team_id    text REFERENCES team (id) ON DELETE CASCADE ON UPDATE CASCADE    NOT NULL,
-    account_id text REFERENCES account (id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL
+    id          integer PRIMARY KEY,
+    project_id  text REFERENCES project (id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
+    account_id  text REFERENCES account (id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL
 );
 
 CREATE TABLE issue
@@ -32,12 +32,6 @@ CREATE TABLE issue
     title       text NOT NULL,
     description text,
     created_at  text NOT NULL,
-    due_date    text,
-    due_date_time_zone text,
     closed      integer,
-    CONSTRAINT CHK_due_date_has_time_zone CHECK (
-        (due_date NOT NULL AND due_date_time_zone NOT NULL)
-        OR
-        (due_date IS NULL AND due_date_time_zone IS NULL)
-    )
+    project_id  text REFERENCES project (id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL
 );

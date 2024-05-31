@@ -1,4 +1,4 @@
-package dev.oscarrojas.issuetracker.issue;
+package dev.oscarrojas.issuetracker.project.issue;
 
 import dev.oscarrojas.issuetracker.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -64,5 +64,10 @@ public class IssueService {
                 issue.getCreatedAt(),
                 issue.getDueDate(),
                 issue.isClosed());
+    }
+
+    public List<IssueDto> getAllIssuesByProjectId(String projectId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAllIssuesByProjectId'");
     }
 }
