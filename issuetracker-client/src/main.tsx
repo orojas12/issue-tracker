@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.tsx";
-import { ProjectGrid } from "@/modules/project/project-list.tsx";
 import { UserDetails } from "@/modules/user/user-details.tsx";
 import { UserManagement } from "@/modules/user/user-list.tsx";
 import { IssueList } from "@/modules/issue/issue-list.tsx";
@@ -16,7 +15,7 @@ const router = createBrowserRouter([
         element: <App />,
         children: [
             {
-                path: ":teamId",
+                path: "/projects/:teamId",
                 element: <ProjectDetails />,
             },
             {
@@ -28,11 +27,11 @@ const router = createBrowserRouter([
                 element: <UserDetails />,
             },
             {
-                path: ":projectId/issues",
+                path: "/projects/:projectId/issues",
                 element: <IssueList />,
             },
             {
-                path: ":projectId/issues/:issueId",
+                path: "/projects/:projectId/issues/:issueId",
                 element: <IssueDetails />,
             },
             {

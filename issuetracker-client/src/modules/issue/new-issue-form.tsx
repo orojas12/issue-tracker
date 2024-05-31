@@ -13,7 +13,7 @@ import { Button } from "@/components/button";
 import { TextArea } from "@/components/text-area";
 
 import styles from "./styles/new-issue-form.module.css";
-import { CreateIssue } from "./types";
+import type { CreateIssue } from "./types";
 
 function formatLocalDate(date: Date) {
     const offsetMillis = date.getTimezoneOffset() * 60000;
@@ -52,7 +52,7 @@ export function NewIssueForm() {
         };
         const result = await createIssue(newIssue);
         if (result) {
-            navigate("/issues/" + result.id);
+            navigate("/projects/28JBVIJP/issues/" + result.id);
         }
     };
 

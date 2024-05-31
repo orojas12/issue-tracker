@@ -14,7 +14,10 @@ import {
 } from "@/components";
 import styles from "./styles/issue-details.module.css";
 import { useIssue } from "./use-issue.ts";
-import { LocalDateTimeFormatter } from "../util/date-format.ts";
+import {
+    LocalDateFormatter,
+    LocalDateTimeFormatter,
+} from "../util/date-format.ts";
 
 export function IssueDetails() {
     const { issueId } = useParams();
@@ -54,7 +57,7 @@ export function IssueDetails() {
     const onDelete = async () => {
         if (!issue) return;
         await deleteIssue();
-        navigate("/issues", { replace: true });
+        navigate("/projects/28JBVIJP/issues", { replace: true });
     };
 
     const status = issue?.closed ? "Closed" : "Open";
@@ -240,9 +243,9 @@ function IssuePropertyList({ issue }: { issue: Issue }) {
         <dl className={styles.propertyList}>
             <dt>Status</dt>
             <dd>{issue.closed ? "Closed" : "Open"}</dd>
-            <dt>Due Date</dt>
+            <dt>Created On</dt>
             <dd>
-                {issue.dueDate && LocalDateTimeFormatter.format(issue.dueDate)}
+                {issue.createdAt && LocalDateFormatter.format(issue.createdAt)}
             </dd>
         </dl>
     );

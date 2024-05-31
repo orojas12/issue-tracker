@@ -45,10 +45,12 @@ function App() {
                         </SideDrawer>
                         <span className={styles.projectName}>Murphy Inc</span>
                         <div className={styles.navbarEnd}>
-                            <NavLink to="/28JBVIJP" end>
+                            <NavLink to="/projects/28JBVIJP" end>
                                 Project
                             </NavLink>
-                            <NavLink to="/28JBVIJP/issues">Issues</NavLink>
+                            <NavLink to="/projects/28JBVIJP/issues">
+                                Issues
+                            </NavLink>
                             <ThemeToggle />
                         </div>
                     </nav>
