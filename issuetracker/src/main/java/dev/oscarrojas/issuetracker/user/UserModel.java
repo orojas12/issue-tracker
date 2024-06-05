@@ -1,11 +1,9 @@
 package dev.oscarrojas.issuetracker.user;
 
 import dev.oscarrojas.issuetracker.data.SQLiteInstantConverter;
-import dev.oscarrojas.issuetracker.team.TeamMemberModel;
 import jakarta.persistence.*;
 
 import java.time.Instant;
-import java.util.Collection;
 
 @Entity
 @Table(name = "account")
@@ -18,24 +16,21 @@ public class UserModel {
     private String firstName;
     private String lastName;
     @Convert(converter = SQLiteInstantConverter.class)
-    private Instant dateCreated;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Collection<TeamMemberModel> teamMembers;
+    private Instant createdAt;
 
     public UserModel() {
     }
 
     public UserModel(String id,
-                     String username,
-                     String firstName,
-                     String lastName,
-                     Instant dateCreated) {
+            String username,
+            String firstName,
+            String lastName,
+            Instant createdAt) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.dateCreated = dateCreated;
+        this.createdAt = createdAt;
     }
 
     public String getUsername() {
@@ -46,12 +41,12 @@ public class UserModel {
         this.username = username;
     }
 
-    public Instant getDateCreated() {
-        return dateCreated;
+    public Instant getCreatedAt() {
+        return createdAt;
     }
 
-    public void setDateCreated(Instant dateCreated) {
-        this.dateCreated = dateCreated;
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String getId() {

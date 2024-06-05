@@ -15,8 +15,10 @@ CREATE TABLE account
 CREATE TABLE project
 (
     id          text PRIMARY KEY,
-    name        text,
-    created_at  text NOT NULL
+    name        text NOT NULL,
+    description text,
+    created_at  text NOT NULL,
+    account_id  text REFERENCES account (id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL
 );
 
 CREATE TABLE contributor
@@ -32,6 +34,6 @@ CREATE TABLE issue
     title       text NOT NULL,
     description text,
     created_at  text NOT NULL,
-    closed      integer,
+    open        integer NOT NULL,
     project_id  text REFERENCES project (id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL
 );

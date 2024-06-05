@@ -7,7 +7,7 @@ public class UserEntityModelMapper {
     public static User getEntity(UserModel model) {
         User user = new User();
         user.setUsername(model.getUsername());
-        user.setDateCreated(model.getDateCreated());
+        user.setDateCreated(model.getCreatedAt());
         return user;
     }
 
@@ -18,7 +18,7 @@ public class UserEntityModelMapper {
     public static UserModel getModel(User user) {
         UserModel model = new UserModel();
         model.setUsername(user.getUsername());
-        model.setDateCreated(user.getDateCreated());
+        model.setCreatedAt(user.getDateCreated());
         return model;
     }
 

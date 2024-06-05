@@ -58,8 +58,7 @@ public class UserDaoJpa implements UserDao {
                 user.getUsername(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getDateCreated()
-        ));
+                user.getDateCreated()));
 
         return toEntity(model);
     }
@@ -85,7 +84,6 @@ public class UserDaoJpa implements UserDao {
                 model.getUsername(),
                 model.getFirstName(),
                 model.getLastName(),
-                model.getDateCreated()
-        );
+                model.getCreatedAt());
     }
 }

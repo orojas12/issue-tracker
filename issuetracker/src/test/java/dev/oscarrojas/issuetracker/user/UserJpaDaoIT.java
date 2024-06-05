@@ -19,11 +19,11 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
-import static dev.oscarrojas.issuetracker.TestUtils.userModelWithUsername;
-import static dev.oscarrojas.issuetracker.TestUtils.userWithUsername;
+import static dev.oscarrojas.issuetracker.user.UserTestUtils.user;
+import static dev.oscarrojas.issuetracker.user.UserTestUtils.userModel;
 import static org.junit.jupiter.api.Assertions.*;
 
-@ContextConfiguration(classes = {IssueTracker.class, IntegrationTestConfig.class})
+@ContextConfiguration(classes = { IssueTracker.class, IntegrationTestConfig.class })
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @Import(UserDaoJpa.class)
@@ -38,12 +38,12 @@ public class UserJpaDaoIT {
 
     @Test
     void findByUsername_Username_returnsUser() {
-        UserModel userModel = em.persist(userModelWithUsername("user1"));
+        UserModel userModel = em.persist(userModel("user1"));
         Optional<User> userOpt = userDao.findByUsername(userModel.getUsername());
         assertTrue(userOpt.isPresent());
         User user = userOpt.get();
         assertEquals(userModel.getUsername(), user.getUsername());
-        assertEquals(userModel.getDateCreated(), user.getDateCreated());
+        assertEquals(userModel.getCreatedAt(), user.getDateCreated());
     }
 
     @Test
@@ -54,8 +54,8 @@ public class UserJpaDaoIT {
 
     @Test
     void findAll_returnsAllUsers() {
-        UserModel model1 = em.persist(userModelWithUsername("user1"));
-        UserModel model2 = em.persist(userModelWithUsername("user2"));
+        UserModel model1 = em.persist(userModel("user1"));
+        UserModel model2 = em.persist(userModel("user2"));
         List<User> users = userDao.findAll();
         boolean hasUser1 = false;
         boolean hasUser2 = false;
@@ -85,7 +85,7 @@ public class UserJpaDaoIT {
 
     @Test
     void save_persistsNewUserToDatabase() throws DuplicateElementException {
-        User user = userWithUsername("john1");
+        User user = user("john1");
         // a user with null id means it does not exist and should be created in db
         user.setId(null);
 
@@ -97,13 +97,13 @@ public class UserJpaDaoIT {
         assertEquals(user.getUsername(), model.getUsername());
         assertEquals(user.getFirstName(), model.getFirstName());
         assertEquals(user.getLastName(), model.getLastName());
-        assertEquals(user.getDateCreated(), model.getDateCreated());
+        assertEquals(user.getDateCreated(), model.getCreatedAt());
     }
 
     @Test
     void save_throwsDuplicateElementIfNewUserAlreadyExists() {
-        em.persistAndFlush(userModelWithUsername("john1"));
-        User user = userWithUsername("john1");
+        em.persistAndFlush(userModel("john1"));
+        User user = user("john1");
         user.setId(null);
 
         assertThrows(DuplicateElementException.class, () -> userDao.save(user));
@@ -111,12 +111,12 @@ public class UserJpaDaoIT {
 
     @Test
     void save_updatesExistingUserInDatabase() throws DuplicateElementException {
-        UserModel userModel = em.persistFlushFind(userModelWithUsername("john1"));
+        UserModel userModel = em.persistFlushFind(userModel("john1"));
         User user = new User(userModel.getId(),
                 userModel.getUsername(),
                 userModel.getFirstName(),
                 userModel.getLastName(),
-                userModel.getDateCreated());
+                userModel.getCreatedAt());
         user.setFirstName("Bob");
         user.setLastName("Smith");
 
@@ -127,31 +127,31 @@ public class UserJpaDaoIT {
         assertEquals(user.getUsername(), result.getUsername());
         assertEquals(user.getFirstName(), result.getFirstName());
         assertEquals(user.getLastName(), result.getLastName());
-        assertEquals(user.getDateCreated(), result.getDateCreated());
+        assertEquals(user.getDateCreated(), result.getCreatedAt());
     }
 
     @Test
     void save_throwsRuntimeExceptionIfUpdatingUserThatDoesNotExist() {
-        User user = userWithUsername("john1");
+        User user = user("john1");
 
         assertThrows(RuntimeException.class, () -> userDao.save(user));
     }
 
     @Test
     void deleteById_throwsNotFoundIfUserDoesNotExist() {
-        User user = userWithUsername("john1");
+        User user = user("john1");
 
         assertThrows(NotFoundException.class, () -> userDao.deleteById(user.getId()));
     }
 
     @Test
     void deleteById_userNotInDatabaseAfterDeletion() throws NotFoundException {
-        UserModel userModel = em.persistFlushFind(userModelWithUsername("john1"));
+        UserModel userModel = em.persistFlushFind(userModel("john1"));
         User user = new User(userModel.getId(),
                 userModel.getUsername(),
                 userModel.getFirstName(),
                 userModel.getLastName(),
-                userModel.getDateCreated());
+                userModel.getCreatedAt());
 
         userDao.deleteById(user.getId());
 

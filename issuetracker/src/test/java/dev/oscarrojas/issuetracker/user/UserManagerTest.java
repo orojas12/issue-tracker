@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static dev.oscarrojas.issuetracker.TestUtils.userWithUsername;
+import static dev.oscarrojas.issuetracker.user.UserTestUtils.user;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.when;
@@ -24,7 +24,7 @@ public class UserManagerTest {
 
     @Test
     void getUser_Username_returnsUserDetails() {
-        User user = userWithUsername("user1");
+        User user = user("user1");
         when(userDao.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
         UserManager userManager = new UserManager(userDao);
 
@@ -41,7 +41,7 @@ public class UserManagerTest {
 
     @Test
     void getUser_Username_returnsEmptyIfNotFound() {
-        User user = userWithUsername("user1");
+        User user = user("user1");
         when(userDao.findByUsername(user.getUsername())).thenReturn(Optional.empty());
         UserManager userManager = new UserManager(userDao);
 
@@ -52,7 +52,7 @@ public class UserManagerTest {
 
     @Test
     void getAllUsers_returnsAllUsers() {
-        List<User> users = Arrays.asList(userWithUsername("user1"), userWithUsername("user2"));
+        List<User> users = Arrays.asList(user("user1"), user("user2"));
         when(userDao.findAll()).thenReturn(users);
         UserManager userManager = new UserManager(userDao);
 
